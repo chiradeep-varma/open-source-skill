@@ -12,13 +12,22 @@
 
 <Two to four sentences on the problem it solves for its users (owning their data, running it themselves, changing it, no usage caps), stated positively and in the project's own terms.>
 
-## Quickstart
+## Run it
+
+**With the launcher (easiest).** If this folder is in your projects folder, open that folder, double-click **Start projects**, and press **Start** next to `<codename>`. The launcher installs everything on first start, fills in the secrets, and shows your sign-in details.
+
+**By hand, without Docker:** copy `.env.example` to `.env` and fill in the values it marks as required (each one says how to generate it). Then:
 
 ```bash
-<the one command, or the few commands, to a running instance>
+<install command, e.g. npm install>
+<start command, e.g. npm start>
 ```
 
-Then open <URL> and <first action>. For production setup see [docs/self-hosting.md](docs/self-hosting.md).
+Then open http://localhost:<port> and <first action>.
+
+**With Docker (optional):** `docker compose up -d`
+
+For running it on a server, see [docs/self-hosting.md](docs/self-hosting.md).
 
 ## Status
 

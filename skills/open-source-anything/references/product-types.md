@@ -23,7 +23,7 @@ SKILL.md's default path assumes a web application. Other kinds of target change 
 ## 1. SaaS and web apps
 
 - **Value lives in** the workflow, collaboration, integrations and convenience. It's usually well within reach of an open project.
-- **Architecture.** A single-tenant self-hosted default, with multi-tenancy only if a hosted offering is planned. One `docker compose up`, Postgres, and a background worker. Email and object storage go through pluggable adapters.
+- **Architecture.** A single-tenant self-hosted default, with multi-tenancy only if a hosted offering is planned. One native start command with no Docker required, SQLite, and in-process background jobs. Postgres, a separate worker or Docker Compose are optional additions when scale calls for them. Email and object storage go through pluggable adapters.
 - **Adoption levers.** An importer from the incumbent, a public demo instance or recorded walkthrough, and one-click deploy templates for popular platforms.
 - **Traps.**
   - Rebuilding every enterprise feature.

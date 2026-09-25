@@ -29,7 +29,9 @@ Adapt the layout to the stack's conventions. Keep the documents from the earlier
 ├── SECURITY.md
 ├── ROADMAP.md
 ├── CHANGELOG.md
-├── docker-compose.yml          # or the type-appropriate one-command start
+├── osa.json                    # how the launcher installs, starts and opens it
+├── package.json                # or the stack's equivalent: install and start commands
+├── docker-compose.yml          # optional; never the only way to run it
 ├── .env.example                # every setting, documented, with safe defaults
 ├── docs/
 │   ├── charter.md
@@ -84,7 +86,7 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
   - how to contribute;
   - the license;
   - a non-affiliation line if any other product is mentioned (for example, in the import section).
-- **Self-hosting guide.** Requirements, install, configuration reference (generated from `.env.example` if possible), reverse proxy and TLS, backups and restore, upgrades, and troubleshooting.
+- **Self-hosting guide.** Requirements, install (the launcher first, then the manual commands, then Docker as an option), configuration reference (generated from `.env.example` if possible), reverse proxy and TLS, backups and restore, upgrades, and troubleshooting.
 - **Importing guide.** How to export from the incumbent (in your own words), how to import, and what does and doesn't carry over.
 - **Architecture overview** for contributors: components, data model, where to start reading, and how to run the tests.
 - **API reference**, if there's an API. Generate it from the code or schema where possible.
@@ -115,7 +117,7 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
 - **Semantic versioning.** Before 1.0, say plainly that things may change. Keep a `CHANGELOG.md` in "Keep a Changelog" style.
 - **Releases.** Tag releases, automate release notes, attach artifacts and include upgrade notes for breaking changes.
 - **Packaging by type:**
-  - **Web services:** multi-architecture container images (amd64 and arm64, for homelabs and small ARM servers) on a public registry, a Compose file, and optionally a Helm chart or one-click deploy templates.
+  - **Web services:** first, the native path: `osa.json` plus plain install and start commands, which work without Docker. Container images (amd64 and arm64) and a Compose file are optional extras for people who prefer them, as are one-click deploy templates.
   - **CLIs and libraries:** the ecosystem's registries, plus static binaries where natural.
   - **Desktop:** signed installers and an update feed.
   - **Mobile:** store listings, and F-Droid if the build is fully free.
@@ -123,7 +125,7 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
 
 ## 8. Pre-launch checklist
 
-- [ ] Fresh-machine install following only the README succeeds.
+- [ ] A fresh copy starts through the launcher (`osa start`) with no manual steps, and the README's manual quickstart works without Docker.
 - [ ] License chosen, `LICENSE` present, SPDX identifiers in manifests, and a dependency license scan that comes back clean.
 - [ ] The project uses its random codename. No trace of the incumbent's name, logo or look. If the README mentions the incumbent, it has a non-affiliation line.
 - [ ] No plans, tiers, seat limits or paywalls copied from the incumbent. Every built feature is available to whoever runs it.

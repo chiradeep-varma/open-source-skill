@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Link not found · sunny-thicket</title>
+  <%- include('partials/head') %>
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <h1 class="brand">sunny-thicket</h1>
+    <% if (link) { %>
+      <p>This link has been disabled or has expired.</p>
+    <% } else { %>
+      <p>No link found for this code.</p>
+    <% } %>
+  </main>
+</body>
+</html>

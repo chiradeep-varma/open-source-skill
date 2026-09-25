@@ -1,0 +1,3 @@
+long_url,link,title,created_at,archived
+https://example.com/from-csv-1,https://bit.ly/csv-one,CSV Link One,2024-01-01T00:00:00Z,false
+https://example.com/from-csv-2,https://bit.ly/csv-two,CSV Link Two,2024-01-02T00:00:00Z,false

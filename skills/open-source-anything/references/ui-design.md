@@ -69,7 +69,7 @@ Then express the direction as **design tokens** in code (CSS custom properties, 
 
 - **An untouched component-library or framework-starter look**: stock grays, a default indigo or purple accent, default radius and shadow everywhere.
 - **Gradient washes**: purple-to-blue backgrounds, gradient headline text, glassmorphism with no reason for it.
-- **The SaaS card kit**: every piece of content in an identical rounded card with the same soft shadow, arranged in a uniform grid regardless of what the content is.
+- **The SaaS card kit**: every piece of content in an identical rounded container, arranged in a uniform grid regardless of what the content is. Swapping the shadow for a border doesn't fix it; the uniform container is the tell. Vary the structure by content: a table can sit directly on the page, a primary form can be a band, and related stats can share one row.
 - **Template chrome**: ALL-CAPS eyebrow labels, middle-dot metadata strings and arrows on every link, used as decoration rather than to convey information.
 - **Emoji and decorative icons** in headings, buttons and empty states.
 - **Marketing patterns inside a tool**: a hero section, a stat-tile "dashboard" with vanity numbers, and "Welcome back! 👋" where the user's work should be.
@@ -84,6 +84,8 @@ Any one of these can be right for a specific product. They become slop when they
 
 - **Tokens first**, then a small set of components (buttons, inputs, tables or lists, dialogs, toasts) that use only tokens. Screens are built from those components.
 - **Real content.** Seed data should look like the real thing: realistic names, long titles, empty fields and edge cases. Design against that data, not against three perfect rows.
+- **Charts and lists handle 0, 1 and many.** A chart with one data point shouldn't render as a solid block, and one with none should say so plainly.
+- **Never transform user data.** Don't capitalize, upper-case or otherwise restyle URLs, names, codes or anything the user typed. Truncate from the middle, or show the meaningful part (such as the hostname), so the useful information survives.
 - **Every state.** Empty (with one clear next action), loading, error (saying what happened and what to do), partial, long content, and permission-denied.
 - **Hierarchy.** Each screen has one primary action and one thing the eye lands on first. Secondary actions are visibly secondary.
 - **Density that matches the job.** Operator tools can be dense and fast. Public-facing pages, such as a booking page or a form, should be spacious and calm.
@@ -95,15 +97,24 @@ Any one of these can be right for a specific product. They become slop when they
 
 Don't judge the UI from code. Look at it.
 
-1. Use a browser automation tool to capture every core-loop screen at desktop and phone widths, and in dark mode if it exists. Include the empty and error states.
-2. Review each screenshot against:
-   - the direction's three words: does this screen feel like them?
-   - the slop list in §4: does any tell appear because it was a default?
-   - hierarchy: can you tell the primary action in one second?
-   - consistency: spacing, type sizes and radius drawn only from tokens?
-   - the incumbent: could a user mistake this for their product? If so, change it.
-3. Fix what fails, capture again, and record in the process log what changed and why.
-4. Save the final screenshots under `docs/design/screenshots/` for the README and for the user to judge.
+The same agent that designed and built the screens is reviewing them, so the review has to be structured to overcome that bias. A free-form "looks good" isn't a review.
+
+1. **Capture.** Use a browser automation tool to capture every core-loop screen at desktop (about 1280px) and phone (390px) widths, in dark mode if it exists, and with three data sets:
+   - empty;
+   - a single item;
+   - realistic, many items, with long values such as long URLs and long names.
+2. **Run the mechanical check.** At phone width, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug.
+3. **Critique before you approve.** For each screen, write down at least three concrete weaknesses before deciding what to fix, as a skeptical designer would. "None" isn't an acceptable answer on a first pass.
+4. **Record the review** in `docs/design/review.md`, one row per screen, with explicit answers for:
+   - each slop tell in §4: present or not, and if present, why it's a deliberate choice;
+   - the overflow check result;
+   - hierarchy: is the primary action obvious in one second?
+   - consistency: are spacing, type and radius drawn only from tokens?
+   - user data shown untransformed;
+   - charts and lists correct with the empty, single and many data sets;
+   - could a user mistake it for the incumbent's product?
+5. **Fix, capture again, and update the review.** Record in the process log what changed and why.
+6. **Save the final screenshots** under `docs/design/screenshots/` for the README and for the user to judge.
 
 ## 7. Products without a graphical UI
 

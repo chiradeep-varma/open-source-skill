@@ -33,7 +33,7 @@ These explain why the workflow looks the way it does. When a situation isn't cov
 
    Rivals belong in the market lens of the dossier and in the brief's positioning section, where they sharpen what makes this version different.
 6. **Start with a wedge.** Chasing feature parity with a company of hundreds of engineers fails. Ship the core loop that does the job first, then close the gaps that stop people from switching.
-7. **Build it for strangers to run and fork.** That means one-command self-hosting, few moving parts, open formats, an import path from the incumbent, and docs a newcomer can follow.
+7. **Build it for strangers to run and fork.** That means a one-click start from the launcher (or two plain commands) with no Docker required, few moving parts, open formats, an import path from the incumbent, and docs a newcomer can follow.
 8. **Be honest about what can't be open-sourced.** Some value lives in network effects, proprietary data, licensed content, regulatory licenses or physical operations. Say so plainly, and find the part software *can* deliver.
 9. **A design of its own, never slop.** Study how the product and its category look, and use that only as inspiration. Then commit to a deliberate visual direction of your own before writing UI code, and review real screenshots against it. A generic or lookalike interface undermines a solid build.
 
@@ -134,6 +134,7 @@ The charter pins down:
 - **Technical comfort.** This shapes how you talk (plain language, no unexplained jargon) and what you recommend. For someone who won't maintain code, design for the simplest operation there is (a one-click install, a desktop app, or a managed-host template), and explain every step.
 - **Assets**: accounts, data exports, screenshots, prior notes.
 - **Openness**: license leaning, public or private start, commercial intent.
+- **Where to build.** Recommend the shared projects folder, `~/Documents/open-source-anything/<codename>/`. Its exact path comes from `node scripts/osa/osa.js where`, run from this skill's directory. Explain the benefit in one line: every project saved there shows up in the launcher, where the user can start, stop and open it with one click and never has to install anything by hand. Ask, and if the user says "make the calls yourself", use it. The first time you build there, run `node scripts/osa/osa.js setup`, which creates the folder and a double-click "Start projects" file.
 - **Mode**.
 
 Save the charter as `docs/charter.md`, using `assets/templates/charter.md`.
@@ -240,7 +241,9 @@ Read `references/legal-and-licensing.md` before this phase. The essentials:
 
 Don't mirror the incumbent's internal architecture. It was built for multi-tenant hyperscale with a large operations team. Yours is built for a self-hoster with one server and a contributor with one evening. Design principles:
 
-- **Operability first.** Start with one command (Docker Compose, a single binary or an installer). Use the fewest services that do the job, such as Postgres or SQLite before adding a message broker. Make heavy components optional, keep config in environment variables, run migrations automatically, and document backups.
+- **Runs without Docker.** The main way to run the project is a native install command and start command that a non-developer could follow, such as `npm install` then `npm start`, or a Python virtual environment. Docker Compose can be an optional extra, but never the only path. Many users don't run Docker.
+- **Nothing else to install.** Prefer embedded storage (SQLite, local files) and in-process background jobs over services like Postgres, Redis or a message broker. Add a heavy component only when the charter's scale truly needs it, and keep it optional where you can.
+- **Starts cleanly from a fresh copy.** On first start the app creates its own data folders and runs its own migrations. It reads its port from `PORT`, reads settings from `.env`, and fails with a clear message, not a stack trace, if something required is missing.
 - **Openness by design.** Be API-first with webhooks, provide extension points where the domain calls for them, store data in open formats, offer full export, and build an importer from the incumbent (using the user's own exported data).
 - **Right-sized scale.** Handle the charter's expected scale comfortably, and don't block growth beyond it.
 - **Contributor-friendly.** Use a mainstream stack for the category, clear module boundaries, types, tests and a fast local dev loop.
@@ -270,11 +273,18 @@ Record each significant choice as a short architecture decision record in `docs/
 
 Open `references/build-and-release.md` now. It holds the scaffold, the definition of done and the verification loop.
 
-- **Scaffold** the repository where the user wants it (a new directory or repository; ask if it isn't obvious), including the community files it describes.
+- **Scaffold** the project where the charter says, which by default is the projects folder under its codename, including the community files `build-and-release.md` describes.
 - **Build vertical slices along the core loop.** Each slice goes through data model → logic → API → UI → tests. Then run it and walk through the workflow from the dossier, so every milestone is usable rather than half of everything.
 - **Verify against reality, not your intentions.** Run the app, click through the workflows with a browser automation tool where you have one, and exercise the importer with realistic data. Update the parity matrix's status column truthfully.
 - **Keep the discipline.** When you're unsure how the incumbent handles a case, go back to public behavior and docs, or design your own answer. Never go to their code.
 - **Automated tests for the core logic.** These cover the rules that make the product work, such as branching, validation, slot computation and permissions. Walking through by hand, or with curl, verifies the build but doesn't replace tests. Run the repository's test command and make sure it passes before you report the milestone.
+- **Launcher manifest, and a fresh-copy start.** Write `osa.json` at the project root, from `assets/templates/osa.json`; `scripts/osa/README.md` describes each field.
+  - List every secret the app needs in `env.generate`, so nobody generates secrets by hand.
+  - List the sign-in details the user needs in `env.reveal`.
+  - Give per-platform commands where macOS, Linux and Windows differ.
+  - Add `.osa/` to `.gitignore`.
+
+  Then prove a stranger's first click will work. Copy the project to a temporary folder without `.env`, dependencies, data or build output, and run `node scripts/osa/osa.js --home <that temporary parent folder> start <codename>`. It must install, start and answer. Then stop it with `osa stop`. Record the result in the process log. Also run `node scripts/osa/osa.js check <project>`.
 - **Screenshot review.** Use a browser automation tool to capture every core-loop screen at desktop and phone widths, including its empty and error states. Review each capture against the design direction and the slop list, and check that no one could mistake it for the incumbent's product. Fix what fails, and record what changed in the process log. Save the final captures in `docs/design/screenshots/`. Judge the UI from what it looks like, not from the code.
 - **No plans or paywalls.** Don't build tiers, seat limits, usage quotas or billing that mirror the incumbent. Operational settings a self-hoster needs, such as rate limits against abuse, are fine.
 - **Quality bar**: lint and typecheck, CI, realistic seed or demo data, clear errors, accessibility (labels, focus states, keyboard support for the core loop, AA contrast), and no secrets in the repository. The README must include:
@@ -293,11 +303,18 @@ Follow the checklist in `references/build-and-release.md`. It covers:
 - the LICENSE, CONTRIBUTING, Code of Conduct and SECURITY files;
 - issue templates, a changelog, versioned releases with container images or binaries, and docs.
 
+**Hand-off.** End by telling the user, in plain words, how to use what they now have:
+- open the projects folder and double-click "Start projects", then press **Start** next to the project;
+- the sign-in details, which the launcher also shows;
+- the manual route (the install and start commands);
+- Docker only as an option.
+
 Publishing, launch posts and directory listings are outward-facing and hard to undo, so the user decides when and where. Offer the options: Show HN, relevant subreddits and communities, curated "awesome" lists (meet their criteria first) and alternative-software directories. If the project is meant to last, discuss maintenance capacity and funding honestly.
 
 ## What you leave in the repository
 
 ```
+osa.json                        # how the launcher installs, starts and opens it
 docs/charter.md                 # intent, scope, assumptions
 docs/process-log.md             # what was actually done in each phase: fetches, checks, tests
 docs/research/dossier.md        # the eight lenses, sourced and dated
@@ -326,3 +343,4 @@ Read each one when its phase arrives, not all of them up front.
 | `references/releasing-your-own.md` | The user owns the product and wants to open-source it |
 | `assets/templates/` | Skeletons for the charter, dossier, parity matrix, one-page brief, provenance log, decision record, design direction and README |
 | `scripts/codename.py` | Phase 5: generates the project's random codename |
+| `scripts/osa/` | The launcher. Phase 2: `where` and `setup`. Phase 7: `start`, `stop` and `check` for the fresh-copy test. Its README describes `osa.json`. |

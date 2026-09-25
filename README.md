@@ -9,7 +9,7 @@
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-D97757)](#install)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Install](#install) · [How it works](#how-it-works) · [See it in action](#see-it-in-action) · [FAQ](#faq) · [Contributing](#contributing) · [Acknowledgements](#acknowledgements)
+[Install](#install) · [Run your projects](#run-your-projects) · [How it works](#how-it-works) · [See it in action](#see-it-in-action) · [FAQ](#faq) · [Contributing](#contributing) · [Acknowledgements](#acknowledgements)
 
 </div>
 
@@ -32,6 +32,7 @@ What it rebuilds is **the product, not the company**. For a URL shortener, that 
 - ⚖️ **Legally clean by construction.** It learns only from public behavior and documentation, never from the target's code. It keeps a provenance log, gives the project a random codename instead of a brand, and chooses a license with you.
 - 🎨 **Designs its own interface, never slop.** It researches how the product and its category look, uses that only as inspiration, and writes down a design direction (personality, type, color tokens, spacing, copy voice) before any UI code. Then it reviews real screenshots against an anti-slop checklist: no default component kits, gradient washes or identical cards everywhere.
 - 🏗️ **Builds for self-hosters.** One-command start, few moving parts, open formats, an importer from the product you're leaving, no plans or paywalls, and honest parity tracking.
+- ▶️ **One click to run.** Every project lands in one folder (`~/Documents/open-source-anything/`) and shows up in a small launcher page: press **Start** and it installs what's needed, fills in secrets, starts the app and shows your sign-in details. No Docker, no terminal.
 - 🚀 **Ships it properly.** README, docs, CI, community files and packaging. You decide when to publish.
 - 🧪 **Tested in public.** 11 logged test runs, from first-reply checks to full builds of a link shortener, a scheduler, Linear, Figma, the Nest thermostat, Typeform and Trello. Each one is fact-checked claim by claim and each drove a skill fix. See [`runs/`](runs/).
 
@@ -80,6 +81,28 @@ we want to open-source our internal feature-flag service
 
 You can also invoke it directly in Claude Code with `/open-source-anything` (or `/open-source-anything:open-source-anything` when installed as a plugin).
 
+## Run your projects
+
+Everything the skill builds is saved, by default, in one folder: `~/Documents/open-source-anything/`, one subfolder per project. The folder includes a **Start projects** file. Double-click it to get this page:
+
+![The project launcher](docs/launcher/projects.png)
+
+- **Start** installs what the project needs (first time only), generates its secrets and passwords, picks a free port, and waits until it's up.
+- **Open** takes you to it, and the sign-in details are shown right there.
+- **Stop** ends it cleanly. Projects keep running if you close the page.
+- If something fails, the launcher says so in plain words, with the log one click away.
+
+It needs only [Node.js](https://nodejs.org). No Docker and no per-project setup. Every project also has plain `install` and `start` commands, and Docker as an option, for people who prefer those.
+
+From a terminal, the same launcher is available as a command:
+
+```bash
+npx github:chiradeep-varma/open-source-skill           # open the launcher page
+npx github:chiradeep-varma/open-source-skill list      # or: start <name>, stop <name>, logs <name>
+```
+
+It's a single dependency-free Node script that ships inside the skill (`scripts/osa/`), so Claude uses it too: every build is test-started from a fresh copy through the launcher before it's handed over. [Launcher docs](skills/open-source-anything/scripts/osa/README.md).
+
 ## How it works
 
 ```mermaid
@@ -101,7 +124,7 @@ flowchart LR
 | **4. Synthesize** | Produces a concept model, domain model, value decomposition, parity matrix (Core / Switch-blocker / Differentiator / Later / Won't) and a one-sentence better-thesis. | Approve a one-page brief |
 | **5. Guardrails** | Defines what may and may not be reimplemented, sets up the provenance log, generates a random codename and recommends a license. | Approve the license |
 | **6. Design** | Designs an architecture for one server and one contributor, not hyperscale. Researches the category's UI for inspiration and writes its own design direction and tokens. Writes decision records and a milestone roadmap. | Approve the design |
-| **7. Build** | Builds vertical slices along the core loop, with automated tests. Each slice is run and walked through as a real user would, and every screen is screenshot-reviewed against the design direction and the slop list before it counts as done. | Review each milestone demo |
+| **7. Build** | Builds vertical slices along the core loop, with automated tests and a launcher manifest (`osa.json`), and proves a fresh copy starts with one click. Each slice is run and walked through as a real user would, and every screen is screenshot-reviewed against the design direction and the slop list before it counts as done. | Review each milestone demo |
 | **8. Release** | Prepares docs, CI, packaging, community files and launch material. | Decide when and where to publish |
 
 Say *"just build it"* and the skill makes the calls itself, recording every assumption in the charter so you can revisit it. The one thing it still confirms is an ambiguous product name.
@@ -157,11 +180,13 @@ skills/open-source-anything/
 │   ├── build-and-release.md          # scaffold, definition of done, docs, CI, packaging, launch
 │   └── releasing-your-own.md         # open-sourcing a project you already own
 ├── scripts/codename.py               # random project codenames (e.g. amber-otter)
+├── scripts/osa/                      # the project launcher: CLI and local start/stop page (no dependencies)
 └── assets/templates/                 # charter, dossier, parity matrix, brief, provenance, ADR, design direction, README
 evals/
 ├── evals.json                        # behavioral test prompts with assertions
 └── trigger-evals.json                # should / shouldn't trigger queries
 .claude-plugin/                       # plugin and marketplace manifests
+package.json                          # makes the launcher runnable with npx from GitHub
 ```
 
 Until it's used, the skill costs about 300 tokens of context. The full workflow loads when it triggers, and each reference file loads only when its phase arrives.
