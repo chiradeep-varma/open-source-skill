@@ -52,9 +52,9 @@ Checkpoints exist because a wrong turn early costs the most. If the user says "j
 - the pages you fetched, with URLs;
 - the skill files you opened;
 - the name-check queries and what they returned;
-- the checks and tests you ran.
+- the checks and tests you ran, including the test command and its result.
 
-Don't start Phase 7 until the log shows Phase 3's research floor was met. The log is how the user can see the work behind the plan, and how you can catch yourself skipping a step.
+Don't start Phase 7 until the log shows Phase 3's research floor was met, or states exactly which part couldn't be met and why (for example, the environment blocked page fetches). Never write "met" for something that wasn't. Phase 7 is done only when the log records the test command passing. The log is how the user can see the work behind the plan, and how you can catch yourself skipping a step.
 
 **Modes.** Infer the mode from the request and confirm it in the charter. It sets the depth of every phase.
 - **Brief**: Phases 1–6, meaning research, the plan, guardrails and design (decision records and roadmap), with no code.
@@ -161,6 +161,7 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
   A search-result snippet is at most `reported`. Being honest about the tag matters more than the tag being flattering.
   - Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries. When an aggregator and the vendor's own changelog or pricing page disagree, the vendor wins. Record the disagreement.
   - Record contradictions instead of silently resolving them.
+  - For facts that change often (prices, limits, licenses, status), prefer sources dated this year and record each source's date. Search results surface older articles just as readily as current ones.
   - **If a primary source is unreachable** (blocked, paywalled, removed), try an archived copy (the Wayback Machine) or ask the user to paste the page. If that fails too, tag the claim `reported`, say so in the dossier, and add it to a "verify before building" list in the brief.
   - **If you split research across subagents**, give each one:
     - this evidence standard and the tag definitions;
@@ -225,7 +226,7 @@ Read `references/legal-and-licensing.md` before this phase. The essentials:
   - GitHub;
   - the package registry you'll publish to.
 
-  If an active product or project in the same category, or an adjacent one, already uses the name, pick another and check again. Record the searches and their results in the provenance log, and point to the trademark registers in `references/legal-and-licensing.md` §5 before any public launch. Describe the relationship only in a factual way, for example "an open-source alternative to X", with a line saying the project is not affiliated with X.
+  If an active product or project in the same category, or an adjacent one, already uses the name, pick another and check again. Also compare the name with the category's major brands for sound-alikes ("Formstead" is too close to the form builder "Formstack"). Record the searches and their results in the provenance log, and point to the trademark registers in `references/legal-and-licensing.md` §5 before any public launch. Describe the relationship only in a factual way, for example "an open-source alternative to X", with a line saying the project is not affiliated with X.
 - **License.** Recommend one using the decision guide in the reference file and explain why in plain words. Open source means an OSI-approved license. If the user wants source-available terms, say plainly that the result won't be open source.
 - **If the user asks for an exact replica** (same look, a similar name, copied text or templates), explain the risk in a sentence or two. Then offer the closest safe version: familiar workflows and conventions, an importer, and the project's own visual identity and words. Familiarity is what helps users switch. Replication is not.
 - **Recommend a lawyer** when the stakes justify one: a commercial venture against a litigious incumbent, a user who used to work at the target, a patent-heavy domain, regulated operations, a game or a device. Your guidance is careful but it isn't legal advice.
@@ -238,7 +239,7 @@ Don't mirror the incumbent's internal architecture. It was built for multi-tenan
 - **Openness by design.** Be API-first with webhooks, provide extension points where the domain calls for them, store data in open formats, offer full export, and build an importer from the incumbent (using the user's own exported data).
 - **Right-sized scale.** Handle the charter's expected scale comfortably, and don't block growth beyond it.
 - **Contributor-friendly.** Use a mainstream stack for the category, clear module boundaries, types, tests and a fast local dev loop.
-- **Safe defaults.** Real authentication, a permissions model that matches the concept model, no default credentials, and telemetry off unless the user opts in.
+- **Safe defaults.** Real authentication, a permissions model that matches the concept model, no default credentials, and telemetry off unless the user opts in. If a required secret (a session key or admin password) is missing, refuse to start with a clear message rather than falling back to a hardcoded value.
 - **Local-first** where the product is personal or needs to work offline.
 
 Record each significant choice as a short architecture decision record in `docs/adr/`, using `assets/templates/adr.md` (context, decision, alternatives, consequences). Write `ROADMAP.md` with milestones along these lines: *M0* skeleton → *M1* core loop → *M2* switch-blockers, including import → *M3* differentiators → later tiers. `references/product-types.md` has type-specific architecture notes, and `references/architecture-inference.md` catalogs hard problems and the open-source building blocks for them.
@@ -251,7 +252,8 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
 - **Build vertical slices along the core loop.** Each slice goes through data model → logic → API → UI → tests. Then run it and walk through the workflow from the dossier, so every milestone is usable rather than half of everything.
 - **Verify against reality, not your intentions.** Run the app, click through the workflows with a browser automation tool where you have one, and exercise the importer with realistic data. Update the parity matrix's status column truthfully.
 - **Keep the discipline.** When you're unsure how the incumbent handles a case, go back to public behavior and docs, or design your own answer. Never go to their code.
-- **Quality bar**: tests on core logic, lint and typecheck, CI, seed or demo data, clear errors, accessibility basics, and no secrets in the repository. The README must include:
+- **Automated tests for the core logic.** These cover the rules that make the product work, such as branching, validation, slot computation and permissions. Walking through by hand, or with curl, verifies the build but doesn't replace tests. Run the repository's test command and make sure it passes before you report the milestone.
+- **Quality bar**: lint and typecheck, CI, seed or demo data, clear errors, accessibility basics, and no secrets in the repository. The README must include:
   - an honest status table;
   - the license;
   - a closing line such as *"Not affiliated with or endorsed by X. X is a trademark of its owner."*

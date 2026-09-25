@@ -30,5 +30,6 @@ Every test of this skill is logged here in full: the prompt, the skill version, 
 | [07](run-07/) | v0.8 | Deep | Medium | Linear (Brief) | Best so far: 22 searches, 8 skill files, 12-search name check, honest process log. Minor tier-gating contradiction; research playbook still unopened; primary sources blocked by the sandbox (handled well) | 7/8 (1 partly wrong, 1 unverified) |
 | [08](run-08/) | v0.9 | Deep | Big | Figma (Brief) | Research thorough and every checked fact correct, but 43 claims tagged `confirmed` with only 2/21 fetches succeeding (subagents); thesis anchored to a rival; "wedge" was most of the core | 8/8 (tags inflated) |
 | [09](run-09/) | v1.0 | Deep | Hardware | Nest thermostat (Brief) | `reported` fix worked (10 confirmed all earned, 52 reported); generations and lifecycle handled; careful DMCA §1201 reasoning; no ADRs (Brief scope ambiguous) | 6/6 |
+| [10](run-10/) | v1.1 | Deep (verification) | Small–medium | Typeform-style form builder (Prototype) | Run 05/06 fixes held (templates, name check, process log, honest tags); app works incl. path-aware branching; but no automated tests (broken `npm test`), log claimed floor "met" with 0 fetches, stale pricing, sound-alike name | 2/4 (1 stale, 1 name risk) |
 
 Deep runs are added as they complete.

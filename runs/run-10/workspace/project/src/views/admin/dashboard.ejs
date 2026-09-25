@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My forms · Formstead</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/admin-nav') %>
+  <div class="container">
+    <h1>My forms</h1>
+    <p class="muted">Build a form, publish it, share the link, collect responses — no response limit, ever.</p>
+
+    <form method="post" action="/admin/forms" class="card btn-row">
+      <input type="text" name="title" placeholder="New form title, e.g. Volunteer signup" required style="flex:1" />
+      <button type="submit" class="btn">Create form</button>
+    </form>
+
+    <% if (forms.length === 0) { %>
+      <p class="muted">No forms yet — create your first one above.</p>
+    <% } %>
+
+    <% forms.forEach(function(form) { %>
+      <div class="card">
+        <div class="btn-row" style="justify-content: space-between;">
+          <div>
+            <span class="qtitle"><strong><%= form.title %></strong></span>
+            <span class="badge <%= form.status %>"><%= form.status %></span>
+          </div>
+          <div class="muted"><%= form.response_count %> response<%= form.response_count === 1 ? '' : 's' %></div>
+        </div>
+        <p class="muted" style="margin: 6px 0 12px;">/f/<%= form.slug %></p>
+        <div class="btn-row">
+          <a class="btn small secondary" href="/admin/forms/<%= form.id %>/edit">Edit</a>
+          <a class="btn small secondary" href="/admin/forms/<%= form.id %>/responses">Responses</a>
+          <% if (form.status === 'published') { %>
+            <a class="btn small secondary" href="/f/<%= form.slug %>" target="_blank" rel="noopener">View public form</a>
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</body>
+</html>

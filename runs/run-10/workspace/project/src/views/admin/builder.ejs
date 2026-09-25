@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= form.title %> · Formstead</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/admin-nav') %>
+  <div class="container">
+    <p><a href="/admin">&larr; My forms</a></p>
+    <h1><%= form.title %> <span class="badge <%= form.status %>"><%= form.status %></span></h1>
+
+    <% if (form.status === 'published') { %>
+      <div class="card">
+        <strong>Public link:</strong>
+        <a href="<%= baseUrl %>/f/<%= form.slug %>" target="_blank" rel="noopener"><%= baseUrl %>/f/<%= form.slug %></a>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <h2>Form settings</h2>
+      <form method="post" action="/admin/forms/<%= form.id %>">
+        <div class="field">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" value="<%= form.title %>" required />
+        </div>
+        <div class="field">
+          <label for="description">Description (shown at the top of the form)</label>
+          <textarea id="description" name="description"><%= form.description %></textarea>
+        </div>
+        <div class="field">
+          <label for="thank_you_message">Thank-you message</label>
+          <textarea id="thank_you_message" name="thank_you_message"><%= form.thank_you_message %></textarea>
+        </div>
+        <div class="field">
+          <label for="webhook_url">Webhook URL (optional — we'll POST a JSON payload here on every new response)</label>
+          <input type="url" id="webhook_url" name="webhook_url" value="<%= form.webhook_url %>" placeholder="https://..." />
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="draft" <%= form.status === 'draft' ? 'selected' : '' %>>Draft (not publicly visible)</option>
+            <option value="published" <%= form.status === 'published' ? 'selected' : '' %>>Published (public link is live)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn">Save settings</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Questions</h2>
+      <% if (questions.length === 0) { %>
+        <p class="muted">No questions yet — add your first one below.</p>
+      <% } %>
+      <% questions.forEach(function(q, i) { %>
+        <div class="question-item">
+          <div class="btn-row" style="justify-content: space-between;">
+            <div>
+              <div class="qtitle"><%= i + 1 %>. <%= q.title %><% if (q.required) { %> <span class="q-required-mark">*</span><% } %></div>
+              <div class="qmeta"><%= questionTypes[q.type].label %><% if (q.options.length) { %> · <%= q.options.join(', ') %><% } %></div>
+            </div>
+            <div class="btn-row">
+              <form method="post" action="/admin/forms/<%= form.id %>/questions/<%= q.id %>/move" style="display:inline">
+                <input type="hidden" name="dir" value="up" />
+                <button type="submit" class="btn small secondary" <%= i === 0 ? 'disabled' : '' %>>&uarr;</button>
+              </form>
+              <form method="post" action="/admin/forms/<%= form.id %>/questions/<%= q.id %>/move" style="display:inline">
+                <input type="hidden" name="dir" value="down" />
+                <button type="submit" class="btn small secondary" <%= i === questions.length - 1 ? 'disabled' : '' %>>&darr;</button>
+              </form>
+            </div>
+          </div>
+
+          <details>
+            <summary>Edit question</summary>
+            <form method="post" action="/admin/forms/<%= form.id %>/questions/<%= q.id %>" style="margin-top:10px;">
+              <div class="field">
+                <label>Title</label>
+                <input type="text" name="title" value="<%= q.title %>" required />
+              </div>
+              <div class="field">
+                <label>Description (optional helper text)</label>
+                <input type="text" name="description" value="<%= q.description %>" />
+              </div>
+              <% if (questionTypes[q.type].hasOptions) { %>
+                <div class="field">
+                  <label>Options (one per line)</label>
+                  <textarea name="options"><%= q.options.join('\n') %></textarea>
+                </div>
+              <% } %>
+              <div class="field checkbox-field">
+                <input type="checkbox" id="req-<%= q.id %>" name="required" <%= q.required ? 'checked' : '' %> />
+                <label for="req-<%= q.id %>">Required</label>
+              </div>
+              <button type="submit" class="btn small">Save question</button>
+            </form>
+          </details>
+
+          <details>
+            <summary>Branching logic (<%= q.rules.length %> rule<%= q.rules.length === 1 ? '' : 's' %>)</summary>
+            <div style="margin-top:10px;">
+              <% q.rules.forEach(function(rule) { %>
+                <div class="rule-row">
+                  <span>If answer <%= rule.operator.replace('_', ' ') %> "<%= rule.value %>" &rarr;
+                    <% if (rule.target_is_end) { %> submit form
+                    <% } else { %>
+                      <% const target = questions.find(function(x){ return x.id === rule.target_question_id; }); %>
+                      jump to "<%= target ? target.title : '(deleted question)' %>"
+                    <% } %>
+                  </span>
+                  <form method="post" action="/admin/forms/<%= form.id %>/questions/<%= q.id %>/logic/<%= rule.id %>/delete">
+                    <button type="submit" class="btn small danger">Remove</button>
+                  </form>
+                </div>
+              <% }); %>
+
+              <form method="post" action="/admin/forms/<%= form.id %>/questions/<%= q.id %>/logic" class="rule-row">
+                <span>If answer</span>
+                <select name="operator">
+                  <option value="equals">equals</option>
+                  <option value="not_equals">does not equal</option>
+                  <option value="contains">contains</option>
+                </select>
+                <input type="text" name="value" placeholder="value" required />
+                <span>&rarr;</span>
+                <select name="target">
+                  <% questions.forEach(function(other) { if (other.id !== q.id) { %>
+                    <option value="<%= other.id %>">jump to: <%= other.title %></option>
+                  <% } }); %>
+                  <option value="end">submit form now</option>
+                </select>
+                <button type="submit" class="btn small secondary">Add rule</button>
+              </form>
+            </div>
+          </details>
+
+          <form method="post" action="/admin/forms/<%= form.id %>/questions/<%= q.id %>/delete" style="margin-top:10px;">
+            <button type="submit" class="btn small danger">Delete question</button>
+          </form>
+        </div>
+      <% }); %>
+
+      <h2 style="margin-top:24px;">Add a question</h2>
+      <form method="post" action="/admin/forms/<%= form.id %>/questions">
+        <div class="field">
+          <label>Title</label>
+          <input type="text" name="title" required />
+        </div>
+        <div class="field">
+          <label>Description (optional)</label>
+          <input type="text" name="description" />
+        </div>
+        <div class="field">
+          <label>Type</label>
+          <select name="type">
+            <% Object.keys(questionTypes).forEach(function(key) { %>
+              <option value="<%= key %>"><%= questionTypes[key].label %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="field">
+          <label>Options (one per line — only used for single/multiple choice)</label>
+          <textarea name="options" placeholder="Option A&#10;Option B"></textarea>
+        </div>
+        <div class="field checkbox-field">
+          <input type="checkbox" id="new-required" name="required" />
+          <label for="new-required">Required</label>
+        </div>
+        <button type="submit" class="btn">Add question</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <a href="/admin/forms/<%= form.id %>/responses" class="btn secondary">View responses &rarr;</a>
+      <form method="post" action="/admin/forms/<%= form.id %>/delete" style="margin-top:16px;" onsubmit="return confirm('Delete this form and all its responses? This cannot be undone.');">
+        <button type="submit" class="btn danger">Delete this form</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= form.title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="filler-body">
+  <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="filler-wrap">
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error-box"><%= error %></div>
+    <% } %>
+    <% if (form.description) { %>
+      <p class="muted" style="margin-bottom: 24px;"><%= form.description %></p>
+    <% } %>
+
+    <form method="post" action="/f/<%= form.slug %>/submit" id="formstead-form">
+      <input type="text" name="_hp" class="honeypot-field" tabindex="-1" autocomplete="off" />
+
+      <% questions.forEach(function(q, i) { %>
+        <% const val = (typeof prefill !== 'undefined' && prefill) ? (prefill[q.id] || '') : ''; %>
+        <div class="question-block" data-question-id="<%= q.id %>">
+          <div class="q-index">Question <%= i + 1 %> of <%= questions.length %></div>
+          <h2 class="q-title"><%= q.title %><% if (q.required) { %> <span class="q-required-mark">*</span><% } %></h2>
+          <% if (q.description) { %><p class="q-desc"><%= q.description %></p><% } %>
+
+          <% if (q.type === 'short_text' || q.type === 'email' || q.type === 'number' || q.type === 'date') { %>
+            <input
+              type="<%= q.type === 'short_text' ? 'text' : q.type %>"
+              name="q_<%= q.id %>"
+              value="<%= val %>"
+              <%= q.required ? 'required' : '' %>
+            />
+          <% } else if (q.type === 'long_text') { %>
+            <textarea name="q_<%= q.id %>" <%= q.required ? 'required' : '' %>><%= val %></textarea>
+          <% } else if (q.type === 'single_choice') { %>
+            <div class="choice-list">
+              <% q.options.forEach(function(opt) { %>
+                <label><input type="radio" name="q_<%= q.id %>" value="<%= opt %>" <%= val === opt ? 'checked' : '' %> <%= q.required ? 'required' : '' %> /> <%= opt %></label>
+              <% }); %>
+            </div>
+          <% } else if (q.type === 'multi_choice') { %>
+            <div class="choice-list">
+              <% q.options.forEach(function(opt) { %>
+                <label><input type="checkbox" name="q_<%= q.id %>" value="<%= opt %>" /> <%= opt %></label>
+              <% }); %>
+            </div>
+          <% } else if (q.type === 'yes_no') { %>
+            <div class="choice-list">
+              <label><input type="radio" name="q_<%= q.id %>" value="yes" <%= val === 'yes' ? 'checked' : '' %> <%= q.required ? 'required' : '' %> /> Yes</label>
+              <label><input type="radio" name="q_<%= q.id %>" value="no" <%= val === 'no' ? 'checked' : '' %> <%= q.required ? 'required' : '' %> /> No</label>
+            </div>
+          <% } else if (q.type === 'rating') { %>
+            <div class="rating-list">
+              <% for (let n = 1; n <= 5; n++) { %>
+                <label><input type="radio" name="q_<%= q.id %>" value="<%= n %>" <%= String(n) === val ? 'checked' : '' %> <%= q.required ? 'required' : '' %> /> <%= n %></label>
+              <% } %>
+            </div>
+          <% } %>
+
+          <div class="filler-nav-js hint">Press Enter to continue</div>
+        </div>
+      <% }); %>
+
+      <div class="filler-submit-fallback" style="margin-top: 20px;">
+        <button type="submit" class="btn">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="filler-nav filler-nav-js">
+    <button type="button" class="btn secondary" id="btn-back">Back</button>
+    <button type="button" class="btn" id="btn-next">Next</button>
+  </div>
+
+  <script>
+    window.__FORMSTEAD__ = {
+      questions: <%- JSON.stringify(questions.map(function(q){ return { id: q.id, required: !!q.required }; })) %>,
+      rulesByQuestion: <%- JSON.stringify(rulesByQuestion) %>
+    };
+  </script>
+  <script src="/js/form-filler.js"></script>
+</body>
+</html>
