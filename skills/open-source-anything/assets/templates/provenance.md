@@ -22,6 +22,16 @@
 - <incumbent>'s proprietary or source-available code (including any `ee/` directories)
 - Bulk-scraped content or user data
 
+## Name check
+
+| Date | Search (where / query) | Result |
+|---|---|---|
+| | e.g. web: "<name> <category>" | e.g. no active product in this category |
+| | GitHub: "<name>" | |
+| | Package registry: "<name>" | |
+
+Before a public launch, also search the trademark registers (see the legal reference, §5).
+
 ## Terms-of-service review
 
 | Date | Terms reviewed | Relevant clauses | Decision |

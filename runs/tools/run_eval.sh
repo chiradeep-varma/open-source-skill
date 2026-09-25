@@ -26,11 +26,8 @@ echo "workspace: $WORK"
 python3 "$TOOLS_DIR/trace_summary.py" "$OUT_DIR/transcript.jsonl" "$OUT_DIR/final.md" > "$OUT_DIR/trace.md"
 
 mkdir -p "$OUT_DIR/workspace"
-if command -v rsync >/dev/null; then
-  rsync -a --exclude '.git' --exclude 'node_modules' --exclude '.venv' --exclude 'venv' \
-        --exclude '__pycache__' --exclude '*.db' --exclude '*.sqlite*' --exclude '.pytest_cache' \
-        "$WORK"/ "$OUT_DIR/workspace"/
-else
-  cp -r "$WORK"/. "$OUT_DIR/workspace"/ && rm -rf "$OUT_DIR/workspace/.git"
-fi
+tar -C "$WORK" --exclude='.git' --exclude='node_modules' --exclude='.venv' --exclude='venv' \
+    --exclude='__pycache__' --exclude='*.db' --exclude='*.sqlite*' --exclude='.pytest_cache' \
+    --exclude='data' -cf - . | tar -C "$OUT_DIR/workspace" -xf -
+gzip -f "$OUT_DIR/transcript.jsonl"   # read with: zcat transcript.jsonl.gz
 echo "workspace kept at $WORK for manual verification"

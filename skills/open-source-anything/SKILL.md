@@ -45,6 +45,8 @@ These explain why the workflow looks the way it does. When a situation isn't cov
 
 Checkpoints exist because a wrong turn early costs the most. If the user says "just build it", respect that: make the calls yourself, write every assumption into the charter so it can be revisited, and keep going. The one exception is a genuinely ambiguous identity. That question is cheap to ask and very expensive to get wrong.
 
+**"Just build it" removes checkpoints, never phases.** Research, the name check, guardrails and verification all still happen; you just don't stop to ask. Skipping research is how a build ends up with the wrong priorities or a name someone else already uses.
+
 **Modes.** Infer the mode from the request and confirm it in the charter. It sets the depth of every phase.
 - **Brief**: research and a plan only, with no code.
 - **Prototype**: the core loop running locally, plus light docs. A reasonable scope for one session.
@@ -123,7 +125,9 @@ Save the charter as `docs/charter.md`, using `assets/templates/charter.md`.
 
 ## Phase 3: Research the target
 
-Build the **target dossier** (`assets/templates/dossier.md` → `docs/research/dossier.md`). Study the target through the lenses an investor and a rival engineer would both use:
+Open `references/research-playbook.md` and `assets/templates/dossier.md` now. The playbook says where to look for each lens, and the template is the shape of the output (`docs/research/dossier.md`).
+
+Build the **target dossier** by studying the target through the lenses an investor and a rival engineer would both use:
 
 1. **Identity and history.** Founding, pivots, funding or ownership, and key moments.
 2. **Concept and vision.** The problem it solves, its core insight, and its central idea (Notion's blocks, Figma's multiplayer canvas, Zapier's trigger-then-action). Also why it became possible when it did, and what the founders say they are building toward.
@@ -145,6 +149,14 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
   - insider or NDA information;
   - anything obtained by bypassing access controls;
   - bulk-scraped content or personal data.
+- **Research floor.** Meet this minimum even in "just build it" mode, and go beyond it when the sufficiency test below isn't met yet:
+
+| Mode | Minimum before synthesis |
+|---|---|
+| Prototype | The official site and docs; the pricing page (noting the billing basis); at least one user-voice source mined for love and pain themes (reviews, forums, HN, Reddit); two or three rivals for the competitive field; the name check (Phase 5). Typically 10–20 searches and fetches. |
+| Brief, Project | All of the above, plus the changelog, the API reference or export format, engineering sources for the technology lens, and a real review-mining pass (30 or more reviews across sources). |
+| Venture | All of the above, plus market sizing with visible arithmetic, business-model and traction sources, and regulation. |
+
 - **Sufficiency test.** You are done when you can:
   - explain why people pay for it;
   - sketch its core loop and data model;
@@ -155,7 +167,7 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
 
 ## Phase 4: Synthesize into a plan
 
-Turn the research into decisions:
+Open `assets/templates/parity-matrix.md` and `assets/templates/brief.md`, then turn the research into decisions:
 
 - **Concept model.** The primitives and how they relate. This is the product's logic. Your implementation should honor it, unless the better-thesis deliberately changes it; in that case, record the reason.
 - **Core loop and workflows**, written as user stories with acceptance criteria.
@@ -181,7 +193,13 @@ Read `references/legal-and-licensing.md` before this phase. The essentials:
   - a near-identical overall look;
   - trade secrets.
 - **Independent-creation discipline.** Implement only from your own dossier and specs. Keep `docs/legal/provenance.md` (template provided) listing which sources informed the work and confirming which were never accessed. This log is how the project proves independent creation. It matters more now that AI-assisted "clean-room" rewrites are publicly contested.
-- **Naming.** Choose a distinct name and check trademarks, domains and package names. Describe the relationship only in a factual way, for example "an open-source alternative to X", with a line saying the project is not affiliated with X.
+- **Naming.** Choose a distinct name, then **check it before using it anywhere**. Search:
+  - the name together with the product category;
+  - "<name> app";
+  - GitHub;
+  - the package registry you'll publish to.
+
+  If an active product or project in the same category already uses the name, pick another. Record the searches and their results in the provenance log, and point to the trademark registers in `references/legal-and-licensing.md` §5 before any public launch. Describe the relationship only in a factual way, for example "an open-source alternative to X", with a line saying the project is not affiliated with X.
 - **License.** Recommend one using the decision guide in the reference file and explain why in plain words. Open source means an OSI-approved license. If the user wants source-available terms, say plainly that the result won't be open source.
 - **If the user asks for an exact replica** (same look, a similar name, copied text or templates), explain the risk in a sentence or two. Then offer the closest safe version: familiar workflows and conventions, an importer, and the project's own visual identity and words. Familiarity is what helps users switch. Replication is not.
 - **Recommend a lawyer** when the stakes justify one: a commercial venture against a litigious incumbent, a user who used to work at the target, a patent-heavy domain, regulated operations, a game or a device. Your guidance is careful but it isn't legal advice.
@@ -197,11 +215,13 @@ Don't mirror the incumbent's internal architecture. It was built for multi-tenan
 - **Safe defaults.** Real authentication, a permissions model that matches the concept model, no default credentials, and telemetry off unless the user opts in.
 - **Local-first** where the product is personal or needs to work offline.
 
-Record each significant choice as a short architecture decision record in `docs/adr/` (context, decision, alternatives, consequences). Write `ROADMAP.md` with milestones along these lines: *M0* skeleton → *M1* core loop → *M2* switch-blockers, including import → *M3* differentiators → later tiers. `references/product-types.md` has type-specific architecture notes, and `references/architecture-inference.md` catalogs hard problems and the open-source building blocks for them.
+Record each significant choice as a short architecture decision record in `docs/adr/`, using `assets/templates/adr.md` (context, decision, alternatives, consequences). Write `ROADMAP.md` with milestones along these lines: *M0* skeleton → *M1* core loop → *M2* switch-blockers, including import → *M3* differentiators → later tiers. `references/product-types.md` has type-specific architecture notes, and `references/architecture-inference.md` catalogs hard problems and the open-source building blocks for them.
 
 ## Phase 7: Build
 
-- **Scaffold** the repository where the user wants it (a new directory or repository; ask if it isn't obvious), including the community files described in `references/build-and-release.md`.
+Open `references/build-and-release.md` now. It holds the scaffold, the definition of done and the verification loop.
+
+- **Scaffold** the repository where the user wants it (a new directory or repository; ask if it isn't obvious), including the community files it describes.
 - **Build vertical slices along the core loop.** Each slice goes through data model → logic → API → UI → tests. Then run it and walk through the workflow from the dossier, so every milestone is usable rather than half of everything.
 - **Verify against reality, not your intentions.** Run the app, click through the workflows with a browser automation tool where you have one, and exercise the importer with realistic data. Update the parity matrix's status column truthfully.
 - **Keep the discipline.** When you're unsure how the incumbent handles a case, go back to public behavior and docs, or design your own answer. Never go to their code.

@@ -7,6 +7,7 @@ Prints a Markdown summary covering run stats, whether the skill loaded, which re
 files were read, web searches, pages fetched, files written and commands run. If a second
 path is given, the agent's final reply is written there.
 """
+import gzip
 import json
 import sys
 from collections import Counter
@@ -21,7 +22,8 @@ def main():
     path = sys.argv[1]
     final_path = sys.argv[2] if len(sys.argv) > 2 else None
     calls, result = [], {}
-    with open(path, encoding="utf-8") as f:
+    opener = gzip.open if path.endswith(".gz") else open
+    with opener(path, "rt", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:

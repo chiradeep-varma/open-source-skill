@@ -139,7 +139,7 @@ You synthesize this from everything above. Ask what customers would lose if they
 4. Keep the themes' different meanings apart: pain themes feed the better-thesis, love themes define Core, and "can't leave because…" themes define Switch-blockers.
 5. Note each review's date and the reviewer's segment where available.
 
-**Pricing analysis.** Build a table of feature × tier and limit × tier, noting price per seat or per usage unit. Find the features that force upgrades; those are the pressure points an open alternative relieves.
+**Pricing analysis.** Build a table of feature × tier and limit × tier, noting price per seat or per usage unit. Always record the **billing basis** (monthly or annual), the currency and the date. Many vendors show both monthly and annual prices, so a number without its basis reads as wrong even when it's right. Find the features that force upgrades; those are the pressure points an open alternative relieves.
 
 **Changelog timeline.** Group the last 12–24 months of entries by theme. A theme that suddenly gets heavy investment shows the company's current bet.
 

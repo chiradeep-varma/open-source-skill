@@ -26,4 +26,6 @@ Every test of this skill is logged here in full: the prompt, the skill version, 
 | [03](run-03/) | v0.4 | First reply | n/a | Bolt, Arc, Calendly | The model's "does it already exist?" habit survived the refocus; platform-history error | 4/6 |
 | [04](run-04/) | v0.5 | First reply | n/a | Arc, Calendly, Nest | Evidence standard didn't reach chat replies; no device sub-scope; stale fact in the skill's own legal reference | 2/7 |
 
-Deep runs (05 onward) are listed as they complete.
+| [05](run-05/) | v0.6 | Deep | Small | Bitly-style link shortener (Prototype) | Research collapsed to 1 search under "just build it"; 0 reference files opened; name collided with a live shortener; the build itself fully worked | 3/6 (+2 misleading, 1 wrong) |
+
+Deep runs are added as they complete.

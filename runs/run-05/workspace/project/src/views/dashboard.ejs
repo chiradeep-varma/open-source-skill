@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trimly — Dashboard</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Trimly</h1>
+    <form method="post" action="/logout"><button class="link-btn" type="submit">Log out</button></form>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>New short link</h2>
+      <form id="create-form" class="row">
+        <input type="url" name="long_url" placeholder="https://example.com/a/very/long/url" required />
+        <input type="text" name="slug" placeholder="custom-slug (optional)" pattern="[a-zA-Z0-9_-]{3,64}" />
+        <button type="submit">Shorten</button>
+      </form>
+      <p id="create-error" class="error" hidden></p>
+    </section>
+
+    <section class="card">
+      <h2>Your links</h2>
+      <% if (links.length === 0) { %>
+        <p class="muted">No links yet — create one above.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr><th>Short link</th><th>Destination</th><th>Clicks</th><th>Created</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% links.forEach(function(link) { %>
+              <tr>
+                <td><a href="<%= baseUrl %>/<%= link.slug %>" target="_blank" rel="noopener"><%= link.slug %></a></td>
+                <td class="truncate" title="<%= link.long_url %>"><%= link.long_url %></td>
+                <td><a href="/dashboard/<%= link.slug %>"><%= link.click_count %></a></td>
+                <td><%= link.created_at.slice(0, 10) %></td>
+                <td>
+                  <button class="link-btn danger" data-delete="<%= link.slug %>">Delete</button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
