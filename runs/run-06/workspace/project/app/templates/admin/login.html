@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Sign in — SlotPilot{% endblock %}
+{% block content %}
+  <h1>Sign in to SlotPilot</h1>
+  <p class="muted">
+    Sign in with your firm Google account to manage your availability and meeting types.
+    This also connects your Google Calendar — SlotPilot reads your free/busy time and writes
+    bookings to it directly.
+  </p>
+  {% if request.query_params.get('error') == 'not_authorized' %}
+    <div class="flash">That Google account isn't on the team list. Ask an admin to add it to
+      <code>TEAM_EMAILS</code>.</div>
+  {% elif request.query_params.get('error') == 'no_refresh_token_reconsent_required' %}
+    <div class="flash">Google didn't return offline access this time. Remove SlotPilot's access
+      at <a href="https://myaccount.google.com/permissions" target="_blank">myaccount.google.com/permissions</a>
+      and sign in again so Google issues a fresh refresh token.</div>
+  {% endif %}
+  <a class="btn" href="/admin/oauth/start">Sign in with Google</a>
+{% endblock %}

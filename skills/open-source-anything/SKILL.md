@@ -47,6 +47,14 @@ Checkpoints exist because a wrong turn early costs the most. If the user says "j
 
 **"Just build it" removes checkpoints, never phases.** Research, the name check, guardrails and verification all still happen; you just don't stop to ask. Skipping research is how a build ends up with the wrong priorities or a name someone else already uses.
 
+**Keep a process log** in `docs/process-log.md`, adding an entry as you finish each phase. Record:
+- the pages you fetched, with URLs;
+- the skill files you opened;
+- the name-check queries and what they returned;
+- the checks and tests you ran.
+
+Don't start Phase 7 until the log shows Phase 3's research floor was met. The log is how the user can see the work behind the plan, and how you can catch yourself skipping a step.
+
 **Modes.** Infer the mode from the request and confirm it in the charter. It sets the depth of every phase.
 - **Brief**: research and a plan only, with no code.
 - **Prototype**: the core loop running locally, plus light docs. A reasonable scope for one session.
@@ -142,7 +150,10 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
 
 `references/research-playbook.md` lists where to look for each lens and how to judge each source. Key rules:
 
-- **Evidence standard.** Every material claim carries a source and an access date and is tagged `confirmed`, `inferred`, `assumption` or `memory` (from your own knowledge, still to be verified). Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries. Record contradictions instead of silently resolving them.
+- **Evidence standard.** Every material claim carries a source and an access date and is tagged `confirmed`, `inferred`, `assumption` or `memory` (from your own knowledge, still to be verified).
+  - **`confirmed` means you opened the source page itself and it says this.** A search-result snippet is a lead, not a confirmation. Fetch the page, or tag the claim `inferred`.
+  - Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries.
+  - Record contradictions instead of silently resolving them.
 - **Access rules.** Public material is fair game. The user's own account and data exports are useful for observing behavior and designing importers. First check the target's terms for clauses against reverse engineering or competitive use, and tell the user what you find.
 - **Never use**:
   - proprietary source code, including leaked, decompiled or de-minified code and source maps;
@@ -153,7 +164,7 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
 
 | Mode | Minimum before synthesis |
 |---|---|
-| Prototype | The official site and docs; the pricing page (noting the billing basis); at least one user-voice source mined for love and pain themes (reviews, forums, HN, Reddit); two or three rivals for the competitive field; the name check (Phase 5). Typically 10–20 searches and fetches. |
+| Prototype | The official site and docs; the pricing page (noting the billing basis); at least one user-voice source mined for love and pain themes (reviews, forums, HN, Reddit); two or three rivals for the competitive field; the name check (Phase 5). At least **5 fetched pages**, most of them primary, plus the searches that found them. |
 | Brief, Project | All of the above, plus the changelog, the API reference or export format, engineering sources for the technology lens, and a real review-mining pass (30 or more reviews across sources). |
 | Venture | All of the above, plus market sizing with visible arithmetic, business-model and traction sources, and regulation. |
 
@@ -193,13 +204,13 @@ Read `references/legal-and-licensing.md` before this phase. The essentials:
   - a near-identical overall look;
   - trade secrets.
 - **Independent-creation discipline.** Implement only from your own dossier and specs. Keep `docs/legal/provenance.md` (template provided) listing which sources informed the work and confirming which were never accessed. This log is how the project proves independent creation. It matters more now that AI-assisted "clean-room" rewrites are publicly contested.
-- **Naming.** Choose a distinct name, then **check it before using it anywhere**. Search:
-  - the name together with the product category;
+- **Naming.** Choose a distinct name, then **check it before using it anywhere**. Run each of these as a separate search, one name at a time (a combined OR query misses results):
+  - the name together with the product category, on the general web;
   - "<name> app";
   - GitHub;
   - the package registry you'll publish to.
 
-  If an active product or project in the same category already uses the name, pick another. Record the searches and their results in the provenance log, and point to the trademark registers in `references/legal-and-licensing.md` §5 before any public launch. Describe the relationship only in a factual way, for example "an open-source alternative to X", with a line saying the project is not affiliated with X.
+  If an active product or project in the same category, or an adjacent one, already uses the name, pick another and check again. Record the searches and their results in the provenance log, and point to the trademark registers in `references/legal-and-licensing.md` §5 before any public launch. Describe the relationship only in a factual way, for example "an open-source alternative to X", with a line saying the project is not affiliated with X.
 - **License.** Recommend one using the decision guide in the reference file and explain why in plain words. Open source means an OSI-approved license. If the user wants source-available terms, say plainly that the result won't be open source.
 - **If the user asks for an exact replica** (same look, a similar name, copied text or templates), explain the risk in a sentence or two. Then offer the closest safe version: familiar workflows and conventions, an importer, and the project's own visual identity and words. Familiarity is what helps users switch. Replication is not.
 - **Recommend a lawyer** when the stakes justify one: a commercial venture against a litigious incumbent, a user who used to work at the target, a patent-heavy domain, regulated operations, a game or a device. Your guidance is careful but it isn't legal advice.
@@ -225,7 +236,11 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
 - **Build vertical slices along the core loop.** Each slice goes through data model → logic → API → UI → tests. Then run it and walk through the workflow from the dossier, so every milestone is usable rather than half of everything.
 - **Verify against reality, not your intentions.** Run the app, click through the workflows with a browser automation tool where you have one, and exercise the importer with realistic data. Update the parity matrix's status column truthfully.
 - **Keep the discipline.** When you're unsure how the incumbent handles a case, go back to public behavior and docs, or design your own answer. Never go to their code.
-- **Quality bar**: tests on core logic, lint and typecheck, CI, seed or demo data, clear errors, accessibility basics, and no secrets in the repository.
+- **Quality bar**: tests on core logic, lint and typecheck, CI, seed or demo data, clear errors, accessibility basics, and no secrets in the repository. The README must include:
+  - an honest status table;
+  - the license;
+  - a closing line such as *"Not affiliated with or endorsed by X. X is a trademark of its owner."*
+- **Concurrency.** Where two users can race for the same thing (a booking slot, a username, an inventory item), enforce it in the database with a unique constraint or a transaction, not only with a check before the write.
 - At each milestone, show the user what works, what doesn't yet, and what's next.
 
 ## Phase 8: Release and sustain
@@ -242,6 +257,7 @@ Publishing, launch posts and directory listings are outward-facing and hard to u
 
 ```
 docs/charter.md                 # intent, scope, assumptions
+docs/process-log.md             # what was actually done in each phase: fetches, checks, tests
 docs/research/dossier.md        # the eight lenses, sourced and dated
 docs/product/parity-matrix.md   # features × tier × status
 docs/legal/provenance.md        # sources used; what was never accessed

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loading…</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="container">
+    <p class="muted">Detecting your time zone…</p>
+    <noscript>
+      <p>JavaScript is disabled. <a href="?tz={{ fallback_tz }}">Continue with {{ fallback_tz }}</a></p>
+    </noscript>
+  </main>
+  <script>
+    (function () {
+      var tz;
+      try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } catch (e) {
+        tz = "{{ fallback_tz }}";
+      }
+      var url = new URL(window.location.href);
+      url.searchParams.set("tz", tz);
+      window.location.replace(url.toString());
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Availability — SlotPilot{% endblock %}
+{% block content %}
+  <h1>Weekly availability</h1>
+  <form method="post" action="/admin/availability">
+    <label for="timezone">Time zone (IANA name, e.g. America/New_York, Europe/London)</label>
+    <input type="text" id="timezone" name="timezone" value="{{ user.timezone }}" required>
+
+    <h2>Days</h2>
+    {% for day in days %}
+      <div class="weekday-row">
+        <input type="checkbox" id="enabled_{{ day.index }}" name="enabled_{{ day.index }}" {% if day.enabled %}checked{% endif %}>
+        <label class="inline" for="enabled_{{ day.index }}">{{ day.label }}</label>
+        <input type="time" name="start_{{ day.index }}" value="{{ day.start }}">
+        <span>to</span>
+        <input type="time" name="end_{{ day.index }}" value="{{ day.end }}">
+      </div>
+    {% endfor %}
+
+    <button type="submit">Save availability</button>
+  </form>
+{% endblock %}

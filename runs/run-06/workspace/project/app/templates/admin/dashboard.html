@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SlotPilot{% endblock %}
+{% block content %}
+  <h1>Your meeting types</h1>
+  <p class="muted">Your booking page base: <code>{{ base_url }}/{{ user.slug }}/&lt;meeting-slug&gt;</code></p>
+
+  {% for et in event_types %}
+    <div class="card">
+      <strong>{{ et.name }}</strong> — {{ et.duration_minutes }} min
+      {% if not et.is_active %}<span class="muted">(inactive)</span>{% endif %}
+      <div class="muted">{{ base_url }}/{{ user.slug }}/{{ et.slug }}</div>
+      <div style="margin-top: 0.5rem;">
+        <a href="/admin/event-types/{{ et.id }}/edit">Edit</a>
+        &nbsp;·&nbsp;
+        <a href="/{{ user.slug }}/{{ et.slug }}" target="_blank">View booking page</a>
+      </div>
+    </div>
+  {% else %}
+    <p class="muted">No meeting types yet.</p>
+  {% endfor %}
+
+  <a class="btn" href="/admin/event-types/new">+ New meeting type</a>
+{% endblock %}

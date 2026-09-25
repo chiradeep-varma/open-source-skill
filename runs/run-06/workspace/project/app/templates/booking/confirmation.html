@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking confirmed</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="container">
+    {% if booking.status.value == 'canceled' %}
+      <h1>Booking canceled</h1>
+      <p>This meeting has been canceled. A cancellation notice was sent via calendar invite.</p>
+    {% else %}
+      <h1>You're booked!</h1>
+      <p>
+        <strong>{{ event_type.name }}</strong> with {{ host.name }}<br>
+        {{ booking.start_utc.strftime('%Y-%m-%d %H:%M UTC') }} ({{ event_type.duration_minutes }} min)
+      </p>
+      <p class="muted">A calendar invite with the details {% if event_type.location_type.value == 'google_meet' %}and a Google Meet link {% endif %}was sent to {{ booking.invitee_email }}.</p>
+      <form method="post" action="/b/{{ booking.cancel_token }}/cancel" onsubmit="return confirm('Cancel this booking?');">
+        <button type="submit" class="danger">Cancel this booking</button>
+      </form>
+    {% endif %}
+  </main>
+</body>
+</html>

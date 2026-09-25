@@ -29,6 +29,7 @@ def main():
 
     expected = {
         "Charter": "docs/charter.md",
+        "Process log": "docs/process-log.md",
         "Dossier": "docs/research/dossier.md",
         "Parity matrix": "docs/product/parity-matrix.md",
         "Provenance log": "docs/legal/provenance.md",
