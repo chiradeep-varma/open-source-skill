@@ -1,7 +1,7 @@
 # Target dossier: <incumbent product>
 
 > Research notes for building an independent open alternative. Contains facts, observations and analysis only. It contains no copied code, assets or substantial copied text.
-> Claim tags: `confirmed` (primary source or direct observation) · `inferred` (reasoned from signals) · `assumption` (unverified) · `memory` (from prior knowledge; verify).
+> Claim tags: `confirmed` (you opened the page and it says this) · `reported` (seen in search results or a secondary source; primary page not opened) · `inferred` (your reasoning from other evidence) · `assumption` (unverified) · `memory` (prior knowledge; verify).
 > Cite sources as [S#], listed at the bottom with access dates.
 
 _Research window: YYYY-MM-DD → YYYY-MM-DD · Mode: <Brief/Prototype/Project/Venture>_

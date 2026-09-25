@@ -160,7 +160,7 @@ You synthesize this from everything above. Ask what customers would lose if they
 ## 6. Recording findings
 
 - Write into `docs/research/dossier.md` (from the template) as you go, not at the end.
-- **Claim format:** the statement, then a tag (`confirmed`, `inferred`, `assumption` or `memory`), then the source reference, as in `[S12]`.
+- **Claim format:** the statement, then a tag, then the source reference, as in `[S12]`. The tags are `confirmed` (you opened the page), `reported` (search result or secondary source), `inferred`, `assumption` and `memory`. SKILL.md defines each one.
 - **Sources:** a numbered list at the bottom, each with URL, title, publication date if known, and access date.
 - Keep quotes short and attributed. The dossier is research notes, not a copy of their material.
 - End each lens with **"So what for the build"**: one to three bullets on how the lens changes what gets built. Research that doesn't change a decision can be cut.

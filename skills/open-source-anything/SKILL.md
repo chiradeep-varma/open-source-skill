@@ -24,6 +24,7 @@ These explain why the workflow looks the way it does. When a situation isn't cov
    - Don't open with a scan of existing alternatives.
    - Don't frame research as checking whether something "already exists".
    - Don't justify the build against other projects. The user doesn't need permission to build.
+   - Don't call the idea "not greenfield", or say a rival "already occupies" the space. Anchor the better-thesis in the incumbent's users and the charter's motive.
 
    Rivals belong in the market lens of the dossier and in the brief's positioning section, where they sharpen what makes this version different.
 6. **Start with a wedge.** Chasing feature parity with a company of hundreds of engineers fails. Ship the core loop that does the job first, then close the gaps that stop people from switching.
@@ -150,11 +151,23 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
 
 `references/research-playbook.md` lists where to look for each lens and how to judge each source. Key rules:
 
-- **Evidence standard.** Every material claim carries a source and an access date and is tagged `confirmed`, `inferred`, `assumption` or `memory` (from your own knowledge, still to be verified).
-  - **`confirmed` means you opened the source page itself and it says this.** A search-result snippet is a lead, not a confirmation. Fetch the page, or tag the claim `inferred`.
+- **Evidence standard.** Every material claim carries a source URL and an access date, and one tag. The tag records how you know it:
+  - `confirmed`: you opened the page itself and it says this.
+  - `reported`: you saw it in search results or a secondary source, but didn't open the primary page.
+  - `inferred`: your own reasoning from other evidence.
+  - `assumption`: unverified.
+  - `memory`: from your own knowledge, still to be verified.
+
+  A search-result snippet is at most `reported`. Being honest about the tag matters more than the tag being flattering.
   - Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries. When an aggregator and the vendor's own changelog or pricing page disagree, the vendor wins. Record the disagreement.
   - Record contradictions instead of silently resolving them.
-  - **If a primary source is unreachable** (blocked, paywalled, removed), try an archived copy (the Wayback Machine) or ask the user to paste the page. If that fails too, tag the claim `inferred`, say so in the dossier, and add it to a "verify before building" list in the brief.
+  - **If a primary source is unreachable** (blocked, paywalled, removed), try an archived copy (the Wayback Machine) or ask the user to paste the page. If that fails too, tag the claim `reported`, say so in the dossier, and add it to a "verify before building" list in the brief.
+  - **If you split research across subagents**, give each one:
+    - this evidence standard and the tag definitions;
+    - the access rules below;
+    - the requirement to return every finding as claim, tag and URL.
+
+    Before merging their findings, check the tags against which pages were actually fetched, and re-tag any that weren't.
 - **Access rules.** Public material is fair game. The user's own account and data exports are useful for observing behavior and designing importers. First check the target's terms for clauses against reverse engineering or competitive use, and tell the user what you find.
 - **Never use**:
   - proprietary source code, including leaked, decompiled or de-minified code and source maps;
@@ -188,6 +201,7 @@ Open `assets/templates/parity-matrix.md` and `assets/templates/brief.md`, then t
 - **Parity matrix** (`assets/templates/parity-matrix.md`). Every notable feature gets one of these tiers: *Core* (the job fails without it), *Switch-blocker* (people can't leave the incumbent without it; import usually sits here), *Differentiator* (the better-thesis), *Later*, or *Won't* (enterprise sprawl, or legally risky).
 - **Better-thesis.** One or two sentences, grounded in research such as review complaints, pricing pain or lock-in: *For [who] who [pain], [project] is a [category] that [benefit], unlike [incumbent], which [limitation].*
 - **Hard parts**, each with the approach and the proven open-source building blocks you'll use.
+- **Wedge test for M1.** The charter's team must be able to ship M1 in weeks, not quarters, and it must do one real job well enough that someone would choose it for that job today. If M1 lists most of the incumbent's core, it isn't a wedge yet. Cut it down to one workflow for one audience, and move the rest to later milestones.
 
 Show the user a **one-page brief** (`assets/templates/brief.md`): what the product is, why people use it, what we'll build, what we won't, the hard parts, the proposed name and license, and the milestones. The full dossier stays in the repository. Questions that come up here, such as competing theses or scope forks, deserve another round of questions.
 

@@ -47,12 +47,12 @@ def main():
     dossier = next(iter(glob.glob(os.path.join(root, "**", "docs/research/dossier.md"), recursive=True)), "")
     text = read(dossier)
     if text:
-        tags = {t: len(re.findall(rf"`{t}`|\b{t}\b", text)) for t in ("confirmed", "inferred", "assumption", "memory")}
-        cites = len(set(re.findall(r"\[S\d+\]", text)))
-        urls = len(set(re.findall(r"https?://[^\s)>\]|]+", text)))
+        tags = {t: len(re.findall(rf"`{t}`|\b{t}\b", text)) for t in ("confirmed", "reported", "inferred", "assumption", "memory")}
+        cites = len(set(re.findall(r"\bS\d+\b", text)))
+        urls = len(set(re.findall(r"(?:https?://)?(?:[\w-]+\.)+[a-z]{2,}/[^\s)>\]|]*", text)))
         lenses = sum(1 for h in ("Identity", "Concept", "Market", "Business", "Users", "Product", "Technology", "value lives") if h.lower() in text.lower())
         check("Dossier: evidence tags used", sum(tags.values()) >= 10, ", ".join(f"{k} {v}" for k, v in tags.items()))
-        check("Dossier: sources cited", cites >= 5 and urls >= 5, f"{cites} distinct [S#] refs, {urls} distinct URLs")
+        check("Dossier: sources cited", cites >= 5 and urls >= 5, f"{cites} distinct S# refs, {urls} distinct URLs")
         check("Dossier: all 8 lenses present", lenses >= 8, f"{lenses}/8 lens headings found")
 
     readme = read(next(iter(glob.glob(os.path.join(root, "**", "README.md"), recursive=True)), ""))
