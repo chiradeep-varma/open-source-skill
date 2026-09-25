@@ -1,0 +1,92 @@
+<%- include('../partials/header') %>
+
+<div class="banner tone-<%= bannerTone %>">
+  <span class="dot status-<%= overall %>"></span>
+  <h1 class="banner-title"><%= overallLabel %></h1>
+</div>
+
+<% if (activeMaintenances.length) { %>
+  <section class="admin-section">
+    <h2>Scheduled maintenance</h2>
+    <div class="incident-list">
+      <% activeMaintenances.forEach(function (m) { %>
+        <article class="incident-card">
+          <div class="incident-header">
+            <h3 class="incident-title"><a href="/incidents/<%= m.id %>"><%= m.title %></a></h3>
+            <span class="badge"><span class="dot status-<%= m.status %>"></span><%= m.status.replace('_', ' ') %></span>
+          </div>
+          <% var last = m.updates[m.updates.length - 1]; %>
+          <% if (last) { %><p><%= last.body %></p><% } %>
+        </article>
+      <% }); %>
+    </div>
+  </section>
+<% } %>
+
+<% if (activeIncidents.length) { %>
+  <section class="admin-section">
+    <h2>Active incidents</h2>
+    <div class="incident-list">
+      <% activeIncidents.forEach(function (incident) { %>
+        <article class="incident-card">
+          <div class="incident-header">
+            <h3 class="incident-title"><a href="/incidents/<%= incident.id %>"><%= incident.title %></a></h3>
+            <span class="badge"><span class="dot status-<%= incident.status %>"></span><%= incident.status %></span>
+          </div>
+          <span class="impact-tag"><%= incident.impact %> impact</span>
+          <ul class="timeline">
+            <% incident.updates.slice().reverse().forEach(function (u) { %>
+              <li>
+                <time><%= new Date(u.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) %></time>
+                <strong><%= u.status %></strong> — <%= u.body %>
+              </li>
+            <% }); %>
+          </ul>
+        </article>
+      <% }); %>
+    </div>
+  </section>
+<% } %>
+
+<section class="admin-section">
+  <h2>Components</h2>
+  <% if (componentGroups.length === 0 || componentGroups.every(function (g) { return g.items.length === 0; })) { %>
+    <div class="empty-state">No components have been added yet.</div>
+  <% } else { %>
+    <ul class="component-list">
+      <% componentGroups.forEach(function (g) { %>
+        <% if (g.group) { %><li class="component-group-label"><%= g.group %></li><% } %>
+        <% g.items.forEach(function (c) { %>
+          <li class="component-row">
+            <span class="component-name"><%= c.name %></span>
+            <span class="component-status"><span class="dot status-<%= c.status %>"></span><%= c.status.replace(/_/g, ' ') %></span>
+          </li>
+        <% }); %>
+      <% }); %>
+    </ul>
+  <% } %>
+</section>
+
+<section class="admin-section">
+  <div class="admin-section-header">
+    <h2>Recent history</h2>
+    <a href="/incidents">Full history &rarr;</a>
+  </div>
+  <% if (recentHistory.length === 0) { %>
+    <div class="empty-state">No past incidents to show.</div>
+  <% } else { %>
+    <div class="incident-list">
+      <% recentHistory.forEach(function (incident) { %>
+        <article class="incident-card">
+          <div class="incident-header">
+            <h3 class="incident-title"><a href="/incidents/<%= incident.id %>"><%= incident.title %></a></h3>
+            <span class="badge"><span class="dot status-<%= incident.status %>"></span><%= incident.status %></span>
+          </div>
+          <span class="impact-tag"><%= new Date(incident.created_at).toLocaleDateString('en-US', { dateStyle: 'medium' }) %></span>
+        </article>
+      <% }); %>
+    </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

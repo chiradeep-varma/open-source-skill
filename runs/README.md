@@ -35,6 +35,7 @@ Every test of this skill is logged here in full: the prompt, the skill version, 
 | [12](run-12/) | v1.4 | Deep (re-run of 05) | Small | Bitly-style link shortener (Prototype) | Owner's v1.4 changes held: random codename, no tiers, UI research, a design direction, a screenshot review that fixed a real bug. But the review was too lenient (card kit, one-point chart, phone overflow, capitalized URLs), and the only run path was Docker | not scored (design and run-path check) |
 | [13](run-13/) | v1.5 | Deep (launcher flow) | Small | Linktree-style page (Prototype) | The launcher flow worked end to end: projects folder, `osa setup`, valid `osa.json`, a pristine copy started with one command, 19/19 tests. But the hand-off skipped the launcher, and there was no written design review (`ui-design.md` unopened). LICENSE and CoC were typed from memory and wrong in substance (the AGPL lost a §13 sentence). Also a long-word overflow and a README claim the code contradicts | 3/4 (1 currency mix-up, +1 lookalike source) |
 | [14](run-14/) | v1.6 | Deep (v1.6 check) | Small | Doodle-style group poll (Prototype) | v1.6 fixes held: verbatim LICENSE and CoC, a written review with a claims check, the new hand-off, honest tags, 17/17 tests, launcher fresh-copy start. But it took no screenshots (it treated "browser tool" as a tool it had to be given, not a library it could run), so its source-level review missed a desktop table overflow. README lacked the launcher route; a public CoC contact; an unchecked "unlike X" claim | 3/5 (1 contested, 1 wrong thesis claim) |
+| [15](run-15/) | v1.7 | Deep (v1.7 check) | Small | Statuspage-style status page (Prototype) | Best run so far: `capture.js` used for 9 screens × 3 views with empty, many and long data, which found and fixed two real overflows; verbatim legal texts; the hand-off; 10/10 tests; the launcher's password signs in. But the README still had no launcher route (the template wasn't named in SKILL.md), the product's footer named the incumbent, and the overflow fix squeezed a status label | 3/4 (1 partly wrong) |
 
 ## What the runs taught
 
@@ -54,7 +55,8 @@ The skill's biggest problems weren't missing knowledge. They were **process inst
 | A requirement that lived only in a reference file (the written review) | "Open `ui-design.md` now" | Put what a run must produce **in SKILL.md and a template**. Runs read the templates every time; they open reference files inconsistently (Run 13 read all eight templates and skipped `ui-design.md`). |
 | Legal texts typed from memory when fetches were blocked | "Fetch the official text rather than writing it from memory" | A bundled **`fetch_text.py`** that works where WebFetch doesn't, with a placeholder as the only fallback. The from-memory AGPL had lost a sentence from §13 (Run 13). |
 | The launcher hand-off skipped | Hand-off bullets at the end of Phase 8 ("Release") | Its own section with a **message shape that leads with the launcher**, required for every mode that builds (Run 13 → held in 14) |
-| No screenshots: "no browser tool available" | "Use a browser automation tool" | A bundled **`capture.js`** that finds or installs Playwright and runs the overflow check itself. A browser library you can run counts as a tool (Run 14) |
+| No screenshots: "no browser tool available" | "Use a browser automation tool" | A bundled **`capture.js`** that finds or installs Playwright and runs the overflow check itself. A browser library you can run counts as a tool (Run 14 → held in 15, which found and fixed two overflows with it) |
+| A requirement only a template carried (the README's launcher route) | "The README must include…", with the template unnamed | **Name the template by path where the step happens.** Runs open the templates SKILL.md names, and skip the rest (Runs 14, 15) |
 
 **Self-audit.** The fact-checks also caught a stale fact in the skill's *own* legal reference. Cal.com was listed as an AGPL example, but it went proprietary in April 2026. It's fixed, and license examples now carry an "as of" date.
 
@@ -71,6 +73,7 @@ The skill's biggest problems weren't missing knowledge. They were **process inst
 | 11 | 4/4 | Incomplete name check |
 | 13 | 3/4 | A funding figure in the wrong currency; a lookalike domain cited as the incumbent |
 | 14 | 3/5 | A better-thesis claim contradicted by the vendor's help center; one contested free-tier claim |
+| 15 | 3/4 | One pricing-gate claim partly wrong (private pages have their own price list) |
 
 ## Known limitations of this evaluation
 

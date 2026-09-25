@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : siteTitle %></title>
+  <meta name="description" content="<%= siteDescription %>">
+  <link rel="alternate" type="application/rss+xml" title="<%= siteTitle %> status updates" href="/feed.xml">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="page">
+  <header class="site-header">
+    <a class="site-title" href="/"><%= siteTitle %></a>
+    <nav class="site-nav">
+      <a href="/incidents">History</a>
+      <a href="/feed.xml">RSS</a>
+      <% if (typeof isAdmin !== 'undefined' && isAdmin) { %>
+        <a href="/admin">Admin</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="link-button">Sign out</button>
+        </form>
+      <% } %>
+    </nav>
+  </header>
+  <main class="site-main">

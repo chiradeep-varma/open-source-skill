@@ -1,0 +1,73 @@
+<%- include('../partials/header') %>
+
+<p><a href="/admin">&larr; Admin</a></p>
+<h1><%= kind === 'maintenance' ? 'Schedule maintenance' : 'New incident' %></h1>
+<% if (typeof error !== 'undefined' && error) { %><div class="error-banner"><%= error %></div><% } %>
+
+<form method="post" action="/admin/incidents">
+  <div class="field">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" value="<%= values.title || '' %>" required autofocus placeholder="<%= kind === 'maintenance' ? 'Database upgrade' : 'API returning errors' %>">
+  </div>
+
+  <% if (kind === 'maintenance') { %>
+    <input type="hidden" name="impact" value="maintenance">
+    <div class="field">
+      <label for="scheduled_for">Starts</label>
+      <input type="datetime-local" id="scheduled_for" name="scheduled_for" value="<%= values.scheduled_for || '' %>">
+    </div>
+    <div class="field">
+      <label for="scheduled_until">Ends</label>
+      <input type="datetime-local" id="scheduled_until" name="scheduled_until" value="<%= values.scheduled_until || '' %>">
+    </div>
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <% maintenanceStatuses.forEach(function (s) { %>
+          <option value="<%= s %>"><%= s.replace('_', ' ') %></option>
+        <% }); %>
+      </select>
+    </div>
+  <% } else { %>
+    <div class="field">
+      <label for="impact">Impact</label>
+      <select id="impact" name="impact">
+        <% impacts.filter(function (i) { return i !== 'maintenance'; }).forEach(function (i) { %>
+          <option value="<%= i %>"><%= i %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <% incidentStatuses.forEach(function (s) { %>
+          <option value="<%= s %>"><%= s %></option>
+        <% }); %>
+      </select>
+    </div>
+  <% } %>
+
+  <div class="field">
+    <label>Affected components</label>
+    <div class="checkbox-list">
+      <% if (components.length === 0) { %>
+        <span class="hint">No components yet — you can still post this, or <a href="/admin/components/new">add a component first</a>.</span>
+      <% } %>
+      <% components.forEach(function (c) { %>
+        <label><input type="checkbox" name="component_ids" value="<%= c.id %>"> <%= c.name %></label>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="body">Initial update</label>
+    <textarea id="body" name="body" required placeholder="<%= kind === 'maintenance' ? 'We will be upgrading the database, expect brief slowdowns.' : 'We are investigating reports of errors from the API.' %>"><%= values.body || '' %></textarea>
+  </div>
+
+  <div class="actions">
+    <button type="submit">Post</button>
+    <a class="button secondary" href="/admin">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

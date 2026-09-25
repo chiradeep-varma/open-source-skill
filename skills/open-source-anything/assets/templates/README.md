@@ -16,14 +16,14 @@
 
 **With the launcher (easiest).** If this folder is in your projects folder, open that folder, double-click **Start projects**, and press **Start** next to `<codename>`. The launcher installs everything on first start, fills in the secrets, and shows your sign-in details.
 
-**By hand, without Docker:** copy `.env.example` to `.env` and fill in the values it marks as required (each one says how to generate it). Then:
+**By hand, without Docker:**
 
 ```bash
 <install command, e.g. npm install>
 <start command, e.g. npm start>
 ```
 
-Then open http://localhost:<port> and <first action>.
+Then open http://localhost:<port> and <first action>. On first start the app creates its database and any missing secrets, and prints your sign-in details. Settings you can change are in `.env.example`.
 
 **With Docker (optional):** `docker compose up -d`
 

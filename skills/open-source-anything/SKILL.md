@@ -137,7 +137,7 @@ The charter pins down:
 - **Technical comfort.** This shapes how you talk (plain language, no unexplained jargon) and what you recommend. For someone who won't maintain code, design for the simplest operation there is (a one-click install, a desktop app, or a managed-host template), and explain every step.
 - **Assets**: accounts, data exports, screenshots, prior notes.
 - **Openness**: license leaning, public or private start, commercial intent.
-- **Where to build.** Recommend the shared projects folder, `~/Documents/open-source-anything/<codename>/`. Its exact path comes from `node scripts/osa/osa.js where`, run from this skill's directory. Explain the benefit in one line: every project saved there shows up in the launcher, where the user can start, stop and open it with one click and never has to install anything by hand. Ask, and if the user says "make the calls yourself", use it. The first time you build there, run `node scripts/osa/osa.js setup`, which creates the folder and a double-click "Start projects" file. If the user picks another folder, run `node scripts/osa/osa.js add <folder>` once the project exists, so the launcher still lists it. In a cloud or remote session, where the user can only see files in your working directory, build there instead and follow the hand-off's route for getting the project onto their computer.
+- **Where to build.** Recommend the shared projects folder, `~/Documents/open-source-anything/<codename>/`. Its exact path comes from `node scripts/osa/osa.js where`, run from this skill's directory. Explain the benefit in one line: every project saved there shows up in the launcher, where the user can start, stop and open it with one click and never has to install anything by hand. Ask, and if the user says "make the calls yourself", use it. Each time you build there, run `node scripts/osa/osa.js setup`. The first time, it creates the folder and a double-click "Start projects" file; after that, it refreshes the folder's copy of the launcher to the current version. If the user picks another folder, run `node scripts/osa/osa.js add <folder>` once the project exists, so the launcher still lists it. In a cloud or remote session, where the user can only see files in your working directory, build there instead and follow the hand-off's route for getting the project onto their computer.
 - **Mode**.
 
 Save the charter as `docs/charter.md`, using `assets/templates/charter.md`.
@@ -237,6 +237,7 @@ Read `references/legal-and-licensing.md` before this phase. The essentials:
   - It must never contain or echo the incumbent's name or marks.
   - Describe the project by what it does ("a self-hosted URL shortener"), not by the incumbent's name.
   - Mention the incumbent only where that's factually needed, such as an importer or a compatibility note. Where you do, add a line saying the project isn't affiliated with it.
+  - The product itself never names the incumbent: not in its pages, footer, emails or page titles. People who run it publish those pages to their own audience. The README and docs are where the incumbent and the non-affiliation line go.
 - **License.** Recommend one using the decision guide in the reference file and explain why in plain words. Open source means an OSI-approved license. If the user wants source-available terms, say plainly that the result won't be open source.
 - **If the user asks for an exact replica** (same look, a similar name, copied text or templates), explain the risk in a sentence or two. Then offer the closest safe version: familiar workflows and conventions, an importer, a codename, and a visual design of the project's own (Phase 6). Familiarity is what helps users switch. Replication is not.
 - **Recommend a lawyer** when the stakes justify one: a commercial venture against a litigious incumbent, a user who used to work at the target, a patent-heavy domain, regulated operations, a game or a device. Your guidance is careful but it isn't legal advice.
@@ -251,7 +252,7 @@ Don't mirror the incumbent's internal architecture. It was built for multi-tenan
 - **Openness by design.** Be API-first with webhooks, provide extension points where the domain calls for them, store data in open formats, offer full export, and build an importer from the incumbent (using the user's own exported data).
 - **Right-sized scale.** Handle the charter's expected scale comfortably, and don't block growth beyond it.
 - **Contributor-friendly.** Use a mainstream stack for the category, clear module boundaries, types, tests and a fast local dev loop.
-- **Safe defaults.** Real authentication, a permissions model that matches the concept model, no default credentials, and telemetry off unless the user opts in. If a required secret (a session key or admin password) is missing, refuse to start with a clear message rather than falling back to a hardcoded value.
+- **Safe defaults.** Real authentication, a permissions model that matches the concept model, no default credentials, and telemetry off unless the user opts in. If a required secret (a session key or admin password) is missing on first start, generate a strong one, save it (to `.env` or the data folder), and print the sign-in details once in the console. Never fall back to a fixed value, and never ask the user to invent one: that's what keeps the manual route to two commands.
 - **Local-first** where the product is personal or needs to work offline.
 
 **Design the interface.** Anything with a UI gets a deliberate visual design of its own. Open `references/ui-design.md` and `assets/templates/design-direction.md` now.
@@ -294,7 +295,7 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
   - Load each data set through the app's UI or API, then run `node scripts/capture.js --name <screen>-<data set> <url>`. It saves the captures to `docs/design/screenshots/` and checks every width for sideways scrolling (`scrollWidth <= innerWidth`). Pass `--cookie` for signed-in pages.
   - A browser library you run yourself counts as a browser tool. The script finds Playwright or says how to install it in a scratch folder. Write "no screenshots" only after that fails, and say why. In testing, a review written from the source code predicted a results table would wrap; captured with real data, it ran 270px off a desktop screen.
   - Write `docs/design/review.md` from `assets/templates/design-review.md`: three weaknesses per screen before any verdict, explicit answers on the slop list and the incumbent's look, what you fixed, and the claims check.
-  - You built these screens, so an unwritten "looks good" misses what a stranger sees at once. Judge from the captures, not the code. Save the final ones in `docs/design/screenshots/`.
+  - You built these screens, so an unwritten "looks good" misses what a stranger sees at once. Judge from the captures, not the code, and look at each one: the overflow check can't see a squeezed label, text broken mid-word or overlapping controls. Save the final captures in `docs/design/screenshots/`.
 - **No plans or paywalls.** Don't build tiers, seat limits, usage quotas or billing that mirror the incumbent. Operational settings a self-hoster needs, such as rate limits against abuse, are fine.
 - **Quality bar**: lint and typecheck, CI, realistic seed or demo data, clear errors, accessibility (labels, focus states, keyboard support for the core loop, AA contrast), and no secrets in the repository. The README must include:
   - what the project does, in its own terms;
@@ -304,7 +305,7 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
   - the license;
   - if it mentions the incumbent anywhere, a line such as *"Not affiliated with or endorsed by X. X is a trademark of its owner."*
 
-  Every claim in the README must be true of the running app. Check each one, using the claims check in the review template. In testing, a README promised that branding removal was included while the public page carried a footer credit that couldn't be turned off.
+  Write the README from `assets/templates/README.md`, which lays these out in order. Every claim in the README must be true of the running app. Check each one, using the claims check in the review template. In testing, a README promised that branding removal was included while the public page carried a footer credit that couldn't be turned off.
 - **Concurrency.** Where two users can race for the same thing (a booking slot, a username, an inventory item), enforce it in the database with a unique constraint or a transaction, not only with a check before the write.
 - At each milestone, show the user what works, what doesn't yet, and what's next.
 

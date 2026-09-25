@@ -40,6 +40,7 @@ Captures: `screenshots/<file>.png`, …
 | Spacing, type sizes and radius drawn only from the tokens? | |
 | User data shown exactly as entered (no case changes; truncation keeps the useful part)? | |
 | Lists and charts right with empty, one, many and long data? | |
+| Looking at the captures themselves: anything squeezed, broken mid-word, overlapping or clipped? (The overflow check can't see these.) | |
 | Empty and error states designed, each with one clear next step? | |
 | Could someone mistake it for the incumbent's product? | |
 

@@ -104,9 +104,10 @@ The same agent that designed and built the screens is reviewing them, so the rev
    - a single item;
    - many items, at realistic volume;
    - long: the longest value the validation allows in every text field, plus an unbroken string such as a URL. Real people paste these, and they're what breaks layouts. In testing, a public page looked fine with typical data and scrolled sideways on a phone once a bio held one long word.
-2. **Run the mechanical check.** At phone width, with the long data set, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug. Text that users write usually needs `overflow-wrap: anywhere`, and wide tables need a scroll container of their own at every width. `scripts/capture.js` captures desktop, phone and dark mode and runs this check for you.
-3. **Critique before you approve.** For each screen, write down at least three concrete weaknesses before deciding what to fix, as a skeptical designer would. "None" isn't an acceptable answer on a first pass.
-4. **Record the review** in `docs/design/review.md`, starting from `assets/templates/design-review.md`. For each screen, give explicit answers for:
+2. **Run the mechanical check.** At phone width, with the long data set, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug. Put `overflow-wrap: anywhere` on the elements that hold text users write (titles, names, bodies, URLs), not on the whole page, and give their flex containers `min-width: 0`. Keep short labels such as status badges on one line (`white-space: nowrap; flex-shrink: 0`). Page-wide `anywhere` lets a flex item shrink to a sliver, and in testing it broke a status label into "majo / r / outa / ge". Wide tables need a scroll container of their own at every width. `scripts/capture.js` captures desktop, phone and dark mode and runs this check for you.
+3. **Look at every capture, not just the numbers.** The overflow check only catches sideways scrolling. Squeezed labels, text broken mid-word, overlapping controls and clipped content pass it, so find them by eye.
+4. **Critique before you approve.** For each screen, write down at least three concrete weaknesses before deciding what to fix, as a skeptical designer would. "None" isn't an acceptable answer on a first pass.
+5. **Record the review** in `docs/design/review.md`, starting from `assets/templates/design-review.md`. For each screen, give explicit answers for:
    - each slop tell in §4: present or not, and if present, why it's a deliberate choice;
    - the overflow check result;
    - hierarchy: is the primary action obvious in one second?
@@ -116,8 +117,8 @@ The same agent that designed and built the screens is reviewing them, so the rev
    - could a user mistake it for the incumbent's product?
 
    The template ends with a claims check: each README claim, and where the running app proves it.
-5. **Fix, capture again, and update the review.** Record in the process log what changed and why.
-6. **Save the final screenshots** under `docs/design/screenshots/` for the README and for the user to judge.
+6. **Fix, capture again, and update the review.** Record in the process log what changed and why.
+7. **Save the final screenshots** under `docs/design/screenshots/` for the README and for the user to judge.
 
 ## 7. Products without a graphical UI
 

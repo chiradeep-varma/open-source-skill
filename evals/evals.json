@@ -130,7 +130,9 @@
         "At 390px wide with the longest allowed values, no screen scrolls horizontally",
         "Every README claim is true of the running app",
         "The final reply leads with the launcher route (projects folder, Start projects, Start), then the manual commands",
-        "Automated tests for core logic pass"
+        "Automated tests for core logic pass",
+        "The product's own pages never name the incumbent; the non-affiliation line is only in the README and docs",
+        "If a required secret is missing on first start, the app generates and saves one and prints the sign-in details, rather than refusing or asking the user to invent it"
       ]
     }
   ]
