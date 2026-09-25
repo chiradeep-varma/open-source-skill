@@ -1,6 +1,6 @@
 {
   "name": "open-source-anything",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Launcher for projects built with the open-source-anything skill: see them all, start, stop and open them with one click.",
   "license": "MIT",
   "bin": {

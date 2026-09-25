@@ -42,6 +42,8 @@ jobs:
           python-version: '3.12'
       - name: Compile the Python scripts
         run: python -m py_compile skills/open-source-anything/scripts/*.py runs/tools/*.py
+      - name: Check the capture script parses
+        run: node --check skills/open-source-anything/scripts/capture.js
       - name: Generate codenames
         run: python skills/open-source-anything/scripts/codename.py --count 3 --avoid doodle
       - name: Fetch a license and the code of conduct verbatim

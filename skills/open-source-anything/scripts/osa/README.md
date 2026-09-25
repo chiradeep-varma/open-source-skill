@@ -96,7 +96,8 @@ Commands can be a string, or per platform: `{ "default": "...", "win32": "..." }
 ## How it works
 
 - Per-project state lives in `<project>/.osa/`: `run.json` (PID and port), `state.json` (what was installed), and `logs/`. Add `.osa/` to `.gitignore`.
-- Apps start in their own process group, so stopping ends the whole tree. Windows uses `taskkill /T`.
+- Apps outlive the launcher. On macOS and Linux each app leads its own process group, so stopping ends the whole tree. On Windows a small keeper process (`lib/keeper.js`) runs each app with a hidden console and copies its output to the log; stopping uses `taskkill /T`.
+- A run record from before the computer last started is ignored, so a reused process ID is never mistaken for your app.
 - The launcher page listens on `127.0.0.1` only. Every action needs a per-session token and a matching `Host` header, so other websites can't start or stop your projects.
 
 ## Development
@@ -105,4 +106,4 @@ Commands can be a string, or per platform: `{ "default": "...", "win32": "..." }
 npm test   # from the repository root: unit tests plus integration tests that start and stop real processes
 ```
 
-Tested on Linux with Node 22. The macOS and Windows code paths (`open`, `.command`, `taskkill`, `.cmd`) follow the platforms' documented behavior but haven't been exercised on those systems yet.
+CI runs these tests on Linux, macOS and Windows with Node 18 and 22, and installs the CLI globally on each. The tests start and stop real processes, check the logs, and cover the Windows keeper process. What CI can't exercise is a person double-clicking **Start projects** in Finder or Explorer, and the browser opening; those follow each platform's documented behavior.

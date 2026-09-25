@@ -1,0 +1,20 @@
+{
+  "name": "rustic-fjord",
+  "version": "0.1.0",
+  "description": "A free, self-hosted group-scheduling poll tool. Not affiliated with or endorsed by Doodle.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server.js",
+    "migrate": "node --disable-warning=ExperimentalWarning src/migrate.js",
+    "test": "node --disable-warning=ExperimentalWarning --test"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  }
+}

@@ -4,7 +4,7 @@
 
 ## How the captures were made
 
-- Tool and script: <e.g. Playwright, `scripts/screenshots.js`>
+- Tool: `node scripts/capture.js` from the skill (Playwright), or <what you used instead, and why>
 - Widths: desktop 1280px and phone 390px. Dark mode: <yes, captured / not in this design>
 - Data sets, each loaded before capturing:
   - **empty**: a new install with nothing in it;
@@ -14,11 +14,11 @@
 
 ## Mechanical checks
 
-The overflow check runs on every screen, at phone width, with the **long** data set: `document.documentElement.scrollWidth <= window.innerWidth`.
+The overflow check runs on every screen, at both widths, with the **long** data set: `document.documentElement.scrollWidth <= window.innerWidth`. `capture.js` prints one line per width; paste them here.
 
-| Screen | Data set | scrollWidth / innerWidth | Pass |
+| Screen | Data set | Desktop (1280px) | Phone (390px) |
 |---|---|---|---|
-| | long | / 390 | |
+| | long | fits / OVERFLOW, widest element | fits / OVERFLOW, widest element |
 
 ## Screen by screen
 

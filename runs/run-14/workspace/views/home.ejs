@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>rustic-fjord — find a time for your group</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">rustic-fjord</a>
+      <span class="tagline">a free, self-hosted scheduling poll</span>
+    </header>
+
+    <h1>Find a time that works for everyone</h1>
+    <p class="lede">Propose a few times, share one link. No account needed to vote, no ads, ever.</p>
+
+    <% if (typeof errors !== 'undefined' && errors.length) { %>
+      <div class="errors">
+        <strong>Please fix the following:</strong>
+        <ul>
+          <% errors.forEach(function (e) { %><li><%= e %></li><% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form class="card" method="post" action="/polls" id="create-form">
+      <div class="field">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required maxlength="140"
+          value="<%= (typeof formValues !== 'undefined' && formValues.title) || '' %>"
+          placeholder="Team sync, birthday dinner, project kickoff…" />
+      </div>
+      <div class="field">
+        <label for="description">Description <span class="hint">(optional)</span></label>
+        <textarea id="description" name="description" maxlength="2000"><%= (typeof formValues !== 'undefined' && formValues.description) || '' %></textarea>
+      </div>
+      <div class="field">
+        <label for="location">Location <span class="hint">(optional)</span></label>
+        <input type="text" id="location" name="location" maxlength="200"
+          value="<%= (typeof formValues !== 'undefined' && formValues.location) || '' %>"
+          placeholder="Video call link, address, or leave blank" />
+      </div>
+
+      <label>Proposed times</label>
+      <div id="option-rows">
+        <div class="option-row">
+          <div class="field">
+            <input type="datetime-local" class="starts-at-local" required />
+            <input type="hidden" name="startsAt" class="starts-at-utc" />
+          </div>
+          <div class="field duration">
+            <select name="durationMinutes">
+              <option value="30">30 min</option>
+              <option value="60" selected>1 hour</option>
+              <option value="90">1.5 hours</option>
+              <option value="120">2 hours</option>
+            </select>
+          </div>
+          <button type="button" class="ghost small remove-row" title="Remove this time">Remove</button>
+        </div>
+      </div>
+      <button type="button" class="secondary small" id="add-row">+ Add another time</button>
+      <p class="hint">Times are shown to each participant in their own local timezone.</p>
+
+      <input type="hidden" name="timezone" id="timezone" value="UTC" />
+
+      <div style="margin-top: 24px;">
+        <button type="submit">Create poll</button>
+      </div>
+    </form>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

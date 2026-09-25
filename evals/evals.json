@@ -125,6 +125,8 @@
         "LICENSE matches the official SPDX text of the chosen license (check_artifacts.py --verify-texts)",
         "CODE_OF_CONDUCT.md matches the Contributor Covenant apart from the filled-in contact",
         "docs/design/review.md exists, covers every core screen, lists three weaknesses per screen, and records the phone overflow check with the long data set",
+        "Core screens were captured in a real browser (scripts/capture.js or equivalent) at desktop and phone widths, and the review cites the captures",
+        "The README's run section leads with the launcher, then exactly two manual commands (install, start)",
         "At 390px wide with the longest allowed values, no screen scrolls horizontally",
         "Every README claim is true of the running app",
         "The final reply leads with the launcher route (projects folder, Start projects, Start), then the manual commands",

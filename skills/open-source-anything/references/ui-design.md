@@ -104,7 +104,7 @@ The same agent that designed and built the screens is reviewing them, so the rev
    - a single item;
    - many items, at realistic volume;
    - long: the longest value the validation allows in every text field, plus an unbroken string such as a URL. Real people paste these, and they're what breaks layouts. In testing, a public page looked fine with typical data and scrolled sideways on a phone once a bio held one long word.
-2. **Run the mechanical check.** At phone width, with the long data set, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug. Text that users write usually needs `overflow-wrap: anywhere`.
+2. **Run the mechanical check.** At phone width, with the long data set, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug. Text that users write usually needs `overflow-wrap: anywhere`, and wide tables need a scroll container of their own at every width. `scripts/capture.js` captures desktop, phone and dark mode and runs this check for you.
 3. **Critique before you approve.** For each screen, write down at least three concrete weaknesses before deciding what to fix, as a skeptical designer would. "None" isn't an acceptable answer on a first pass.
 4. **Record the review** in `docs/design/review.md`, starting from `assets/templates/design-review.md`. For each screen, give explicit answers for:
    - each slop tell in §4: present or not, and if present, why it's a deliberate choice;

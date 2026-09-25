@@ -211,7 +211,7 @@ Open `assets/templates/parity-matrix.md` and `assets/templates/brief.md`, then t
 - **Domain model.** Entities, relationships and invariants.
 - **Value decomposition.** For each source of value, say whether an open version can match it, beat it, substitute for it or not reach it, and why.
 - **Parity matrix** (`assets/templates/parity-matrix.md`). Every notable feature gets one of these tiers: *Core* (the job fails without it), *Switch-blocker* (people can't leave the incumbent without it; import usually sits here), *Differentiator* (the better-thesis), *Later*, or *Won't* (enterprise sprawl, or legally risky). These tiers are build priorities, not price plans. Anything you build is available to everyone who runs it. A feature the incumbent reserves for a paid plan is simply a feature here.
-- **Better-thesis.** One or two sentences, grounded in research such as review complaints, pricing pain or lock-in: *For [who] who [pain], [project] is a [category] that [benefit], unlike [incumbent], which [limitation].*
+- **Better-thesis.** One or two sentences, grounded in research such as review complaints, pricing pain or lock-in: *For [who] who [pain], [project] is a [category] that [benefit], unlike [incumbent], which [limitation].* Check the limitation against the incumbent's own docs or help center before relying on it. It's the claim the whole plan leans on, and in testing one ("requires an account to create a poll") was contradicted by the vendor's help center.
 - **Hard parts**, each with the approach and the proven open-source building blocks you'll use.
 - **Wedge test for M1.** The charter's team must be able to ship M1 in weeks, not quarters, and it must do one real job well enough that someone would choose it for that job today. If M1 lists most of the incumbent's core, it isn't a wedge yet. Cut it down to one workflow for one audience, and move the rest to later milestones.
 
@@ -290,13 +290,15 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
   - Add `.osa/` to `.gitignore`.
 
   Then prove a stranger's first click will work. Copy the project to a temporary folder without `.env`, dependencies, data or build output, and run `node scripts/osa/osa.js --home <that temporary parent folder> start <codename>`. It must install, start and answer. Then stop it with `osa stop`. Record the result in the process log. Also run `node scripts/osa/osa.js check <project>`.
-- **Screenshot review, written down.** Use a browser automation tool to capture every core-loop screen at desktop and phone widths, including empty and error states, with four data sets: empty, one item, many, and long (the longest values validation allows, plus an unbroken string such as a URL).
-  - At phone width with the long data, check every screen for sideways scrolling: `document.documentElement.scrollWidth <= window.innerWidth`.
+- **Screenshot review, written down.** Capture every core-loop screen at desktop and phone widths, including empty and error states, with four data sets: empty, one item, many, and long (the longest values validation allows, plus an unbroken string such as a URL).
+  - Load each data set through the app's UI or API, then run `node scripts/capture.js --name <screen>-<data set> <url>`. It saves the captures to `docs/design/screenshots/` and checks every width for sideways scrolling (`scrollWidth <= innerWidth`). Pass `--cookie` for signed-in pages.
+  - A browser library you run yourself counts as a browser tool. The script finds Playwright or says how to install it in a scratch folder. Write "no screenshots" only after that fails, and say why. In testing, a review written from the source code predicted a results table would wrap; captured with real data, it ran 270px off a desktop screen.
   - Write `docs/design/review.md` from `assets/templates/design-review.md`: three weaknesses per screen before any verdict, explicit answers on the slop list and the incumbent's look, what you fixed, and the claims check.
   - You built these screens, so an unwritten "looks good" misses what a stranger sees at once. Judge from the captures, not the code. Save the final ones in `docs/design/screenshots/`.
 - **No plans or paywalls.** Don't build tiers, seat limits, usage quotas or billing that mirror the incumbent. Operational settings a self-hoster needs, such as rate limits against abuse, are fine.
 - **Quality bar**: lint and typecheck, CI, realistic seed or demo data, clear errors, accessibility (labels, focus states, keyboard support for the core loop, AA contrast), and no secrets in the repository. The README must include:
   - what the project does, in its own terms;
+  - how to run it: the launcher first (open the projects folder, double-click **Start projects**, press **Start**), then by hand with exactly two commands, install and start. The app runs its own migrations, so there's no third step to remember. Docker comes last, as an option;
   - a screenshot;
   - an honest status table;
   - the license;
@@ -362,4 +364,5 @@ Read each one when its phase arrives, not all of them up front.
 | `assets/templates/` | Skeletons for the charter, dossier, parity matrix, one-page brief, provenance log, decision record, design direction, design review, README and `osa.json` |
 | `scripts/codename.py` | Phase 5: generates the project's random codename |
 | `scripts/fetch_text.py` | Phase 7: fetches the exact LICENSE and CODE_OF_CONDUCT.md texts |
+| `scripts/capture.js` | Phase 7: screenshots at desktop, phone and dark, with the overflow check |
 | `scripts/osa/` | The launcher. Phase 2: `where` and `setup`. Phase 7: `start`, `stop` and `check` for the fresh-copy test. Its README describes `osa.json`. |

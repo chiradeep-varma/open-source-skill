@@ -182,6 +182,7 @@ skills/open-source-anything/
 │   └── releasing-your-own.md         # open-sourcing a project you already own
 ├── scripts/codename.py               # random project codenames (e.g. amber-otter)
 ├── scripts/fetch_text.py             # exact LICENSE and Code of Conduct texts, never typed from memory
+├── scripts/capture.js                # screenshots at desktop, phone and dark, with the overflow check
 ├── scripts/osa/                      # the project launcher: CLI and local start/stop page (no dependencies)
 └── assets/templates/                 # charter, dossier, parity matrix, brief, provenance, ADR, design direction and review, README, osa.json
 evals/
