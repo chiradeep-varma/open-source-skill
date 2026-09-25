@@ -57,7 +57,7 @@ Checkpoints exist because a wrong turn early costs the most. If the user says "j
 Don't start Phase 7 until the log shows Phase 3's research floor was met. The log is how the user can see the work behind the plan, and how you can catch yourself skipping a step.
 
 **Modes.** Infer the mode from the request and confirm it in the charter. It sets the depth of every phase.
-- **Brief**: research and a plan only, with no code.
+- **Brief**: Phases 1–6, meaning research, the plan, guardrails and design (decision records and roadmap), with no code.
 - **Prototype**: the core loop running locally, plus light docs. A reasonable scope for one session.
 - **Project**: a public-ready open-source project, with docs, tests, CI, packaging and community files.
 - **Venture**: a Project plus market sizing, a sustainability model (hosted offering, open core, support) and positioning.
