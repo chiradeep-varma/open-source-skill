@@ -95,7 +95,7 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
 ## 5. Community files
 
 - **CONTRIBUTING.md.** Dev setup, how to run tests, the coding conventions, how to propose changes, the DCO sign-off (or the CLA, with the reason for it), and "good first issue" guidance.
-- **CODE_OF_CONDUCT.md.** Use the Contributor Covenant. Fetch the current official text rather than writing it from memory, and fill in the enforcement contact.
+- **CODE_OF_CONDUCT.md.** Use the Contributor Covenant: `python3 scripts/fetch_text.py coc --contact <how to report> -o CODE_OF_CONDUCT.md` fetches the current official text and fills in the contact. Never write it from memory.
 - **SECURITY.md.** A private reporting channel (for example, the forge's private vulnerability reporting, or an email address), supported versions, and the response process.
 - **Issue and pull-request templates.** Bug report (version, environment, steps), feature request (the problem before the solution), and a pull-request checklist.
 - **Optional:** `GOVERNANCE.md` (who decides, and how maintainers are added), `CODEOWNERS` and a funding file.
@@ -126,10 +126,11 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
 ## 8. Pre-launch checklist
 
 - [ ] A fresh copy starts through the launcher (`osa start`) with no manual steps, and the README's manual quickstart works without Docker.
-- [ ] License chosen, `LICENSE` present, SPDX identifiers in manifests, and a dependency license scan that comes back clean.
+- [ ] License chosen, `LICENSE` fetched verbatim with `scripts/fetch_text.py`, SPDX identifiers in manifests, and a dependency license scan that comes back clean.
 - [ ] The project uses its random codename. No trace of the incumbent's name, logo or look. If the README mentions the incumbent, it has a non-affiliation line.
 - [ ] No plans, tiers, seat limits or paywalls copied from the incumbent. Every built feature is available to whoever runs it.
-- [ ] A design direction exists (`docs/design/direction.md`), and final screenshots of the core screens are in `docs/design/screenshots/` after a review against the slop list.
+- [ ] A design direction exists (`docs/design/direction.md`), the written review (`docs/design/review.md`) covers every core screen with the long data set and passes the phone overflow check, and final screenshots are in `docs/design/screenshots/`.
+- [ ] Every claim in the README is true of the running app (the review's claims check).
 - [ ] No incumbent assets, text or code anywhere. Provenance log up to date.
 - [ ] Any claims about other products are true, dated and sourced. The project doesn't define itself by comparison.
 - [ ] Security basics in place, and `SECURITY.md` published.

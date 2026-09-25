@@ -99,20 +99,23 @@ Don't judge the UI from code. Look at it.
 
 The same agent that designed and built the screens is reviewing them, so the review has to be structured to overcome that bias. A free-form "looks good" isn't a review.
 
-1. **Capture.** Use a browser automation tool to capture every core-loop screen at desktop (about 1280px) and phone (390px) widths, in dark mode if it exists, and with three data sets:
+1. **Capture.** Use a browser automation tool to capture every core-loop screen at desktop (about 1280px) and phone (390px) widths, in dark mode if it exists, and with four data sets:
    - empty;
    - a single item;
-   - realistic, many items, with long values such as long URLs and long names.
-2. **Run the mechanical check.** At phone width, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug.
+   - many items, at realistic volume;
+   - long: the longest value the validation allows in every text field, plus an unbroken string such as a URL. Real people paste these, and they're what breaks layouts. In testing, a public page looked fine with typical data and scrolled sideways on a phone once a bio held one long word.
+2. **Run the mechanical check.** At phone width, with the long data set, check that no screen scrolls horizontally: `document.documentElement.scrollWidth <= window.innerWidth`. Treat any overflow as a bug. Text that users write usually needs `overflow-wrap: anywhere`.
 3. **Critique before you approve.** For each screen, write down at least three concrete weaknesses before deciding what to fix, as a skeptical designer would. "None" isn't an acceptable answer on a first pass.
-4. **Record the review** in `docs/design/review.md`, one row per screen, with explicit answers for:
+4. **Record the review** in `docs/design/review.md`, starting from `assets/templates/design-review.md`. For each screen, give explicit answers for:
    - each slop tell in §4: present or not, and if present, why it's a deliberate choice;
    - the overflow check result;
    - hierarchy: is the primary action obvious in one second?
    - consistency: are spacing, type and radius drawn only from tokens?
    - user data shown untransformed;
-   - charts and lists correct with the empty, single and many data sets;
+   - charts and lists correct with the empty, single, many and long data sets;
    - could a user mistake it for the incumbent's product?
+
+   The template ends with a claims check: each README claim, and where the running app proves it.
 5. **Fix, capture again, and update the review.** Record in the process log what changed and why.
 6. **Save the final screenshots** under `docs/design/screenshots/` for the README and for the user to judge.
 

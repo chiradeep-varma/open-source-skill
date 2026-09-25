@@ -50,6 +50,8 @@ These explain why the workflow looks the way it does. When a situation isn't cov
 | 7. Build | Working software with tests | Demo at each milestone |
 | 8. Release | Public-ready repository | The user decides when to publish |
 
+Every mode that builds software ends with the hand-off message described at the end of this file, including Prototypes that are never published.
+
 Checkpoints exist because a wrong turn early costs the most. If the user says "just build it", respect that: make the calls yourself, write every assumption into the charter so it can be revisited, and keep going. The one exception is a genuinely ambiguous identity. That question is cheap to ask and very expensive to get wrong.
 
 **"Just build it" removes checkpoints, never phases.** Research, guardrails, the design direction and verification all still happen; you just don't stop to ask. Skipping them is how a build ends up with the wrong priorities or a generic interface.
@@ -58,9 +60,10 @@ Checkpoints exist because a wrong turn early costs the most. If the user says "j
 - the pages you fetched, with URLs;
 - the skill files you opened;
 - the UI screenshots you reviewed, and what you changed because of them;
-- the checks and tests you ran, including the test command and its result.
+- the checks and tests you ran, including the test command and its result;
+- where LICENSE and CODE_OF_CONDUCT.md came from.
 
-Don't start Phase 7 until the log shows Phase 3's research floor was met, or states exactly which part couldn't be met and why (for example, the environment blocked page fetches). Never write "met" for something that wasn't. Phase 7 is done only when the log records the test command passing. The log is how the user can see the work behind the plan, and how you can catch yourself skipping a step.
+Don't start Phase 7 until the log shows Phase 3's research floor was met, or states exactly which part couldn't be met and why (for example, the environment blocked page fetches). Never write "met" for something that wasn't. Phase 7 is done only when the log records the test command passing and `docs/design/review.md` exists. The log is how the user can see the work behind the plan, and how you can catch yourself skipping a step.
 
 **Modes.** Infer the mode from the request and confirm it in the charter. It sets the depth of every phase.
 - **Brief**: Phases 1–6, meaning research, the plan, guardrails and design (decision records and roadmap), with no code.
@@ -134,7 +137,7 @@ The charter pins down:
 - **Technical comfort.** This shapes how you talk (plain language, no unexplained jargon) and what you recommend. For someone who won't maintain code, design for the simplest operation there is (a one-click install, a desktop app, or a managed-host template), and explain every step.
 - **Assets**: accounts, data exports, screenshots, prior notes.
 - **Openness**: license leaning, public or private start, commercial intent.
-- **Where to build.** Recommend the shared projects folder, `~/Documents/open-source-anything/<codename>/`. Its exact path comes from `node scripts/osa/osa.js where`, run from this skill's directory. Explain the benefit in one line: every project saved there shows up in the launcher, where the user can start, stop and open it with one click and never has to install anything by hand. Ask, and if the user says "make the calls yourself", use it. The first time you build there, run `node scripts/osa/osa.js setup`, which creates the folder and a double-click "Start projects" file.
+- **Where to build.** Recommend the shared projects folder, `~/Documents/open-source-anything/<codename>/`. Its exact path comes from `node scripts/osa/osa.js where`, run from this skill's directory. Explain the benefit in one line: every project saved there shows up in the launcher, where the user can start, stop and open it with one click and never has to install anything by hand. Ask, and if the user says "make the calls yourself", use it. The first time you build there, run `node scripts/osa/osa.js setup`, which creates the folder and a double-click "Start projects" file. If the user picks another folder, run `node scripts/osa/osa.js add <folder>` once the project exists, so the launcher still lists it.
 - **Mode**.
 
 Save the charter as `docs/charter.md`, using `assets/templates/charter.md`.
@@ -167,6 +170,7 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
 
   A search-result snippet is at most `reported`. Being honest about the tag matters more than the tag being flattering.
   - Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries. When an aggregator and the vendor's own changelog or pricing page disagree, the vendor wins. Record the disagreement.
+  - Check who published a source before citing it. Only the incumbent's own domain speaks for the product; a lookalike domain is usually a rival (in testing, a competitor at `thelinktree.com` was cited as Linktree's feature list). Record the currency of any amount, because a local-currency report of the same funding round looks like a different number.
   - Record contradictions instead of silently resolving them.
   - For facts that change often (prices, limits, licenses, status), prefer sources dated this year and record each source's date. Search results surface older articles just as readily as current ones.
   - **If a primary source is unreachable** (blocked, paywalled, removed), try an archived copy (the Wayback Machine) or ask the user to paste the page. If that fails too, tag the claim `reported`, say so in the dossier, and add it to a "verify before building" list in the brief.
@@ -274,6 +278,7 @@ Record each significant choice as a short architecture decision record in `docs/
 Open `references/build-and-release.md` now. It holds the scaffold, the definition of done and the verification loop.
 
 - **Scaffold** the project where the charter says, which by default is the projects folder under its codename, including the community files `build-and-release.md` describes.
+- **Standard texts are fetched, never typed.** Write the license with `python3 scripts/fetch_text.py license <SPDX id> -o LICENSE`, adding `--holder "The <codename> contributors"` for MIT, BSD or ISC. Write the code of conduct with `python3 scripts/fetch_text.py coc --contact <how to report> -o CODE_OF_CONDUCT.md`. Legal text written from memory drifts: in testing, a remembered AGPL dropped a sentence from section 13, the network clause it was chosen for. If the script can't reach any source, write a one-line placeholder naming the license and its official URL, and tell the user.
 - **Build vertical slices along the core loop.** Each slice goes through data model → logic → API → UI → tests. Then run it and walk through the workflow from the dossier, so every milestone is usable rather than half of everything.
 - **Verify against reality, not your intentions.** Run the app, click through the workflows with a browser automation tool where you have one, and exercise the importer with realistic data. Update the parity matrix's status column truthfully.
 - **Keep the discipline.** When you're unsure how the incumbent handles a case, go back to public behavior and docs, or design your own answer. Never go to their code.
@@ -285,7 +290,10 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
   - Add `.osa/` to `.gitignore`.
 
   Then prove a stranger's first click will work. Copy the project to a temporary folder without `.env`, dependencies, data or build output, and run `node scripts/osa/osa.js --home <that temporary parent folder> start <codename>`. It must install, start and answer. Then stop it with `osa stop`. Record the result in the process log. Also run `node scripts/osa/osa.js check <project>`.
-- **Screenshot review.** Use a browser automation tool to capture every core-loop screen at desktop and phone widths, including its empty and error states. Review each capture against the design direction and the slop list, and check that no one could mistake it for the incumbent's product. Fix what fails, and record what changed in the process log. Save the final captures in `docs/design/screenshots/`. Judge the UI from what it looks like, not from the code.
+- **Screenshot review, written down.** Use a browser automation tool to capture every core-loop screen at desktop and phone widths, including empty and error states, with four data sets: empty, one item, many, and long (the longest values validation allows, plus an unbroken string such as a URL).
+  - At phone width with the long data, check every screen for sideways scrolling: `document.documentElement.scrollWidth <= window.innerWidth`.
+  - Write `docs/design/review.md` from `assets/templates/design-review.md`: three weaknesses per screen before any verdict, explicit answers on the slop list and the incumbent's look, what you fixed, and the claims check.
+  - You built these screens, so an unwritten "looks good" misses what a stranger sees at once. Judge from the captures, not the code. Save the final ones in `docs/design/screenshots/`.
 - **No plans or paywalls.** Don't build tiers, seat limits, usage quotas or billing that mirror the incumbent. Operational settings a self-hoster needs, such as rate limits against abuse, are fine.
 - **Quality bar**: lint and typecheck, CI, realistic seed or demo data, clear errors, accessibility (labels, focus states, keyboard support for the core loop, AA contrast), and no secrets in the repository. The README must include:
   - what the project does, in its own terms;
@@ -293,6 +301,8 @@ Open `references/build-and-release.md` now. It holds the scaffold, the definitio
   - an honest status table;
   - the license;
   - if it mentions the incumbent anywhere, a line such as *"Not affiliated with or endorsed by X. X is a trademark of its owner."*
+
+  Every claim in the README must be true of the running app. Check each one, using the claims check in the review template. In testing, a README promised that branding removal was included while the public page carried a footer credit that couldn't be turned off.
 - **Concurrency.** Where two users can race for the same thing (a booking slot, a username, an inventory item), enforce it in the database with a unique constraint or a transaction, not only with a check before the write.
 - At each milestone, show the user what works, what doesn't yet, and what's next.
 
@@ -303,13 +313,21 @@ Follow the checklist in `references/build-and-release.md`. It covers:
 - the LICENSE, CONTRIBUTING, Code of Conduct and SECURITY files;
 - issue templates, a changelog, versioned releases with container images or binaries, and docs.
 
-**Hand-off.** End by telling the user, in plain words, how to use what they now have:
-- open the projects folder and double-click "Start projects", then press **Start** next to the project;
-- the sign-in details, which the launcher also shows;
-- the manual route (the install and start commands);
-- Docker only as an option.
-
 Publishing, launch posts and directory listings are outward-facing and hard to undo, so the user decides when and where. Offer the options: Show HN, relevant subreddits and communities, curated "awesome" lists (meet their criteria first) and alternative-software directories. If the project is meant to last, discuss maintenance capacity and funding honestly.
+
+## The hand-off message
+
+Every build ends with a reply that gets the user from "it's built" to "it's running" without a terminal, because many of the people this skill serves never open one. Lead with the launcher, not with commands. Use this shape:
+
+> **<codename> is ready**: <one line on what it does>. It's in your projects folder at `<path>`.
+>
+> **To use it:** open that folder, double-click **Start projects**, press **Start** next to <codename>, then **Open**. <Sign in with the details the launcher shows under the project, if there are any.>
+>
+> **Without the launcher:** `<install command>`, then `<start command>`, then open http://localhost:<port>.
+>
+> **What works:** <the core loop, and the test result>. **Not yet:** <the honest gaps>. <One question about what to build next.>
+
+If you built it where the user can't double-click it, such as a cloud or remote session, say so first. Then tell them how to get it running on their computer: copy the `<codename>` folder into their projects folder (`~/Documents/open-source-anything/`), run `npx github:chiradeep-varma/open-source-skill setup` once to add the Start projects file, and follow the same steps. Mention Docker only as an option.
 
 ## What you leave in the repository
 
@@ -322,7 +340,7 @@ docs/brief.md                   # the one-page plan the user approves
 docs/product/parity-matrix.md   # features × tier × status
 docs/legal/provenance.md        # sources used; what was never accessed
 docs/adr/NNNN-*.md              # architecture decisions
-docs/design/                    # ui-research.md, direction.md, screenshots/
+docs/design/                    # ui-research.md, direction.md, review.md, screenshots/
 ROADMAP.md  README.md  LICENSE  CONTRIBUTING.md  CODE_OF_CONDUCT.md  SECURITY.md
 <the software itself>
 ```
@@ -341,6 +359,7 @@ Read each one when its phase arrives, not all of them up front.
 | `references/ui-design.md` | Phases 6–7: UI research, the design direction, the slop list, the screenshot review loop |
 | `references/build-and-release.md` | Phases 7–8: repository scaffold, quality bar, docs, packaging, launch, sustainability |
 | `references/releasing-your-own.md` | The user owns the product and wants to open-source it |
-| `assets/templates/` | Skeletons for the charter, dossier, parity matrix, one-page brief, provenance log, decision record, design direction and README |
+| `assets/templates/` | Skeletons for the charter, dossier, parity matrix, one-page brief, provenance log, decision record, design direction, design review, README and `osa.json` |
 | `scripts/codename.py` | Phase 5: generates the project's random codename |
+| `scripts/fetch_text.py` | Phase 7: fetches the exact LICENSE and CODE_OF_CONDUCT.md texts |
 | `scripts/osa/` | The launcher. Phase 2: `where` and `setup`. Phase 7: `start`, `stop` and `check` for the fresh-copy test. Its README describes `osa.json`. |

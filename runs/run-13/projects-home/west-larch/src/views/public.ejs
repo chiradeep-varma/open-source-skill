@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="<%= profile.theme %>">
+<%- include('partials/head', { title }) %>
+<body>
+  <main class="public-page">
+    <% if (profile.avatar_url) { %>
+      <img class="public-page__avatar" src="<%= profile.avatar_url %>" alt="" loading="lazy">
+    <% } %>
+    <h1><%= profile.display_name || profile.username %></h1>
+    <p class="public-page__handle">@<%= profile.username %></p>
+    <% if (profile.bio) { %><p class="public-page__bio"><%= profile.bio %></p><% } %>
+
+    <ul class="public-links">
+      <% links.forEach(function(link) { %>
+        <li>
+          <a class="public-link" href="/l/<%= link.id %>" rel="noopener" target="_blank"><%= link.title %></a>
+        </li>
+      <% }) %>
+      <% if (links.length === 0) { %>
+        <li class="empty-state">No links yet.</li>
+      <% } %>
+    </ul>
+
+    <footer class="public-page__footer">
+      <a href="/">Made with west-larch</a>
+    </footer>
+  </main>
+</body>
+</html>

@@ -192,7 +192,7 @@ For a SaaS alternative, default to **AGPL-3.0** when the user wants hosted forks
 - Code with no license is all rights reserved. Don't use it.
 - Scan dependencies in CI with ScanCode, `licensee`, or ecosystem tools (license checkers for npm, `pip-licenses`, `cargo-deny`, `go-licenses`). Consider REUSE/SPDX headers.
 
-**Step 6. Apply it.** Put the full license text in `LICENSE` and the SPDX identifier in every package manifest. Keep the NOTICE files of Apache-licensed dependencies where required, and list third-party asset licenses in `docs/legal/` or a `THIRD_PARTY_NOTICES` file.
+**Step 6. Apply it.** Put the full license text in `LICENSE`, fetched with `python3 scripts/fetch_text.py license <SPDX id> -o LICENSE` rather than written from memory, and the SPDX identifier in every package manifest. Leave the text unchanged; the "How to Apply" appendix of the GPL family describes the notice that goes in source files, not something to fill in inside `LICENSE`. Keep the NOTICE files of Apache-licensed dependencies where required, and list third-party asset licenses in `docs/legal/` or a `THIRD_PARTY_NOTICES` file.
 
 ## 11. When to recommend a lawyer
 

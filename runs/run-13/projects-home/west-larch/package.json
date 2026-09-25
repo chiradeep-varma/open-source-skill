@@ -1,0 +1,25 @@
+{
+  "name": "west-larch",
+  "version": "0.1.0",
+  "description": "A self-hosted link-in-bio page builder.",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "cookie-session": "^2.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "qrcode": "^1.5.4"
+  }
+}

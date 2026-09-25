@@ -180,8 +180,9 @@ skills/open-source-anything/
 │   ├── build-and-release.md          # scaffold, definition of done, docs, CI, packaging, launch
 │   └── releasing-your-own.md         # open-sourcing a project you already own
 ├── scripts/codename.py               # random project codenames (e.g. amber-otter)
+├── scripts/fetch_text.py             # exact LICENSE and Code of Conduct texts, never typed from memory
 ├── scripts/osa/                      # the project launcher: CLI and local start/stop page (no dependencies)
-└── assets/templates/                 # charter, dossier, parity matrix, brief, provenance, ADR, design direction, README
+└── assets/templates/                 # charter, dossier, parity matrix, brief, provenance, ADR, design direction and review, README, osa.json
 evals/
 ├── evals.json                        # behavioral test prompts with assertions
 └── trigger-evals.json                # should / shouldn't trigger queries
@@ -287,6 +288,9 @@ This skill stands on other people's work.
 
 **Standards and conventions the skill points to**
 [Open Source Definition (OSI)](https://opensource.org/osd) · [Contributor Covenant](https://www.contributor-covenant.org/) · [Developer Certificate of Origin](https://developercertificate.org/) · [Keep a Changelog](https://keepachangelog.com/) · [Semantic Versioning](https://semver.org/) · [REUSE](https://reuse.software/) · [OpenSSF Scorecard](https://scorecard.dev/) · [Fair Source / FSL](https://fair.io/licenses/)
+
+**Texts the skill fetches**
+`scripts/fetch_text.py` downloads license texts from the [SPDX License List data](https://github.com/spdx/license-list-data) (with the [spdx-license-list](https://github.com/sindresorhus/spdx-license-list) npm package by Sindre Sorhus as a fallback) and the [Contributor Covenant](https://github.com/EthicalSource/contributor_covenant), stewarded by the Organization for Ethical Source. Nothing from them is bundled in this repository.
 
 **Research sources behind the guidance**
 - Legal: *[SAS Institute v. World Programming](https://en.wikipedia.org/wiki/SAS_Institute_Inc_v_World_Programming_Ltd)* (CJEU C-406/10); *[Bowers v. Baystate](https://en.wikipedia.org/wiki/Bowers_v._Baystate_Technologies,_Inc.)*; *[Sony v. Connectix](https://en.wikipedia.org/wiki/Sony_Computer_Entertainment,_Inc._v._Connectix_Corp.)*; [clean-room design](https://en.wikipedia.org/wiki/Clean-room_design); the [hiQ v. LinkedIn settlement analysis](https://www.morganlewis.com/blogs/sourcingatmorganlewis/2022/12/linkedin-v-hiq-landmark-data-scraping-suit-provides-guidance-to-data-scrapers-and-web-operators) (Morgan Lewis); the [US Copyright Office AI report, Part 2](https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf); *[Thaler v. Perlmutter](https://media.cadc.uscourts.gov/opinions/docs/2025/03/23-5233.pdf)* (D.C. Cir. 2025); the [EU Cyber Resilience Act reporting obligations](https://digital-strategy.ec.europa.eu/en/policies/cra-reporting).

@@ -1,0 +1,18 @@
+{
+  "name": "west-larch",
+  "summary": "A self-hosted link-in-bio page builder",
+  "kind": "web",
+  "requires": { "node": ">=20" },
+  "install": "npm install",
+  "start": "npm start",
+  "port": 3000,
+  "portEnv": "PORT",
+  "open": "/",
+  "env": {
+    "example": ".env.example",
+    "file": ".env",
+    "generate": ["SESSION_SECRET"],
+    "reveal": [],
+    "set": { "BASE_URL": "http://localhost:{port}" }
+  }
+}

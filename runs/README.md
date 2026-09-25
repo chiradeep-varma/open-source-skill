@@ -32,6 +32,8 @@ Every test of this skill is logged here in full: the prompt, the skill version, 
 | [09](run-09/) | v1.0 | Deep | Hardware | Nest thermostat (Brief) | `reported` fix worked (10 confirmed all earned, 52 reported); generations and lifecycle handled; careful DMCA §1201 reasoning; no ADRs (Brief scope ambiguous) | 6/6 |
 | [10](run-10/) | v1.1 | Deep (verification) | Small–medium | Typeform-style form builder (Prototype) | Run 05/06 fixes held (templates, name check, process log, honest tags); app works incl. path-aware branching; but no automated tests (broken `npm test`), log claimed floor "met" with 0 fetches, stale pricing, sound-alike name | 2/4 (1 stale, 1 name risk) |
 | [11](run-11/) | v1.2 | Deep (confirmation) | Medium | Trello-style board (Prototype) | v1.2 fixes held (16/16 tests, refuses to start without a secret, honest tags, README lines); most complete build; common-word name "Corkboard" check incomplete; skill files unopened | 4/4 (+1 incomplete name check) |
+| [12](run-12/) | v1.4 | Deep (re-run of 05) | Small | Bitly-style link shortener (Prototype) | Owner's v1.4 changes held: random codename, no tiers, UI research, a design direction, a screenshot review that fixed a real bug. But the review was too lenient (card kit, one-point chart, phone overflow, capitalized URLs), and the only run path was Docker | not scored (design and run-path check) |
+| [13](run-13/) | v1.5 | Deep (launcher flow) | Small | Linktree-style page (Prototype) | The launcher flow worked end to end: projects folder, `osa setup`, valid `osa.json`, a pristine copy started with one command, 19/19 tests. But the hand-off skipped the launcher, and there was no written design review (`ui-design.md` unopened). LICENSE and CoC were typed from memory and wrong in substance (the AGPL lost a §13 sentence). Also a long-word overflow and a README claim the code contradicts | 3/4 (1 currency mix-up, +1 lookalike source) |
 
 ## What the runs taught
 
@@ -46,7 +48,11 @@ The skill's biggest problems weren't missing knowledge. They were **process inst
 | "Does it already exist?" habit | Removing the instruction | An explicit contrary instruction: don't open with alternatives, don't justify the build against others, anchor the thesis in the incumbent's users (Runs 03, 08) |
 | Wrong facts in chat (Arc "dropped Linux", Nest "can't be reflashed") | The evidence standard, dossier only | The evidence standard now applies to **what you tell the user** (Run 04) |
 | Names colliding (Trimly, SlotPilot, Corkboard) | "Check the name" | Separate searches per location, a sound-alike check, and prefer coined names (Runs 05, 06, 10, 11). **Superseded in v1.4 by an owner decision:** no name research at all. Projects get a random codename (`scripts/codename.py`), because what users call it later is up to them. |
-| No tests in a working prototype | "Tests on core logic" in the quality bar | The **passing test command must appear in the process log** before Phase 7 counts as done (Run 10 → held in 11) |
+| No tests in a working prototype | "Tests on core logic" in the quality bar | The **passing test command must appear in the process log** before Phase 7 counts as done (Run 10 → held in 11 and 13) |
+| A lenient UI self-review | "Review the screenshots against the slop list" | A **written review from a template**: three weaknesses per screen first, a mechanical overflow check, four data sets including long values, and a claims check (Runs 12, 13) |
+| A requirement that lived only in a reference file (the written review) | "Open `ui-design.md` now" | Put what a run must produce **in SKILL.md and a template**. Runs read the templates every time; they open reference files inconsistently (Run 13 read all eight templates and skipped `ui-design.md`). |
+| Legal texts typed from memory when fetches were blocked | "Fetch the official text rather than writing it from memory" | A bundled **`fetch_text.py`** that works where WebFetch doesn't, with a placeholder as the only fallback. The from-memory AGPL had lost a sentence from §13 (Run 13). |
+| The launcher hand-off skipped | Hand-off bullets at the end of Phase 8 ("Release") | Its own section with a **message shape that leads with the launcher**, required for every mode that builds (Run 13) |
 
 **Self-audit.** The fact-checks also caught a stale fact in the skill's *own* legal reference. Cal.com was listed as an AGPL example, but it went proprietary in April 2026. It's fixed, and license examples now carry an "as of" date.
 
@@ -61,11 +67,13 @@ The skill's biggest problems weren't missing knowledge. They were **process inst
 | 09 | 6/6 | None |
 | 10 | 2/4 | Stale pricing snippets, sound-alike name |
 | 11 | 4/4 | Incomplete name check |
+| 13 | 3/4 | A funding figure in the wrong currency; a lookalike domain cited as the incumbent |
 
 ## Known limitations of this evaluation
 
 - **This sandbox blocked most primary sites** (vendor sites, GitHub pages, G2, web.archive.org). Most research ran on search snippets. The skill handled that honestly from Run 07 on, but the `confirmed` path was rarely exercised. Runs with open web access should show more `confirmed` evidence.
 - **Headless runs can't answer questions**, so the checkpoints and the grilling after the first reply were tested only through "make the calls yourself". Runs 01–04 test the first reply itself.
 - **Docker, OAuth and real hardware couldn't be exercised** here. Those parts were verified only by the agents' own reasoning and file checks.
-- **Reference files are opened inconsistently** (Runs 07–10 yes; 05, 06 and 11 no). SKILL.md therefore carries every requirement a run must meet; the reference files add depth.
+- **Reference files are opened inconsistently** (Runs 07–10 and 12 yes; 05, 06, 11 and 13 no, or only some). SKILL.md and the templates therefore carry every requirement a run must meet; the reference files add depth.
+- **The launcher's macOS and Windows paths** (`.command`, `.cmd`, `open`, `taskkill`) haven't been exercised; every launcher run so far was on Linux.
 - Each deep run is a single sample, so a behavior that passed once may still vary.

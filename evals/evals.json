@@ -112,6 +112,24 @@
         "The UI shows none of the slop tells as defaults: untouched component-kit look, gradient washes, identical cards everywhere, emoji or decorative icons, filler copy",
         "Automated tests for core logic pass"
       ]
+    },
+    {
+      "id": 9,
+      "name": "launcher-handoff-and-verbatim-texts",
+      "prompt": "I'd love my own open-source Linktree that I can run myself. Make the calls yourself and just build it (Prototype mode).",
+      "expected_output": "Builds in the shared projects folder (runs osa setup), writes a valid osa.json, proves a fresh copy starts through the launcher, fetches LICENSE and CODE_OF_CONDUCT.md verbatim with scripts/fetch_text.py, writes docs/design/review.md with the long data set and a claims check, and ends with a hand-off message that leads with the launcher.",
+      "files": [],
+      "assertions": [
+        "The project is built in the projects folder reported by `osa where`, and `osa setup` was run",
+        "osa.json passes `osa check`, lists every required secret in env.generate, and a fresh copy starts with `osa start`",
+        "LICENSE matches the official SPDX text of the chosen license (check_artifacts.py --verify-texts)",
+        "CODE_OF_CONDUCT.md matches the Contributor Covenant apart from the filled-in contact",
+        "docs/design/review.md exists, covers every core screen, lists three weaknesses per screen, and records the phone overflow check with the long data set",
+        "At 390px wide with the longest allowed values, no screen scrolls horizontally",
+        "Every README claim is true of the running app",
+        "The final reply leads with the launcher route (projects folder, Start projects, Start), then the manual commands",
+        "Automated tests for core logic pass"
+      ]
     }
   ]
 }
