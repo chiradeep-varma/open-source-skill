@@ -4,6 +4,7 @@
 
 **Name any product. Claude figures out exactly what it is, studies it the way a rival founder would, and builds you an open-source version of the *product*: what it does, with a design of its own, without the company's brand, look or pricing.**
 
+[![Tests](https://github.com/chiradeep-varma/open-source-skill/actions/workflows/test.yml/badge.svg)](https://github.com/chiradeep-varma/open-source-skill/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-SKILL.md-8A2BE2)](skills/open-source-anything/SKILL.md)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-D97757)](#install)
@@ -262,6 +263,7 @@ Runs go one after another, from first-reply tests to full builds of targets rang
 - `evals/trigger-evals.json` holds should-trigger and near-miss should-not-trigger queries for tuning the skill description.
 - Both follow the format used by Anthropic's [skill-creator](https://github.com/anthropics/skills).
 - [`runs/tools/run_eval.sh`](runs/tools/run_eval.sh) reproduces any run.
+- CI runs the launcher's tests on Linux, macOS and Windows, and checks that the skill's scripts fetch license texts verbatim ([`.github/workflows/test.yml`](.github/workflows/test.yml)).
 
 ## Contributing
 
