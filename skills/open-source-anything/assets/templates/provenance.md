@@ -21,16 +21,19 @@
 - Leaked, internal or NDA material
 - <incumbent>'s proprietary or source-available code (including any `ee/` directories)
 - Bulk-scraped content or user data
+- The incumbent's logo, color palette, typefaces, icon set, illustrations or UI copy
 
-## Name check
+## Codename
 
-| Date | Search (where / query) | Result |
+`<codename>`, generated at random (`scripts/codename.py`) on YYYY-MM-DD. It contains no part of the incumbent's name or marks. The user may rename the project at any time.
+
+## UI inspiration sources
+
+The interface was designed independently. These sources were looked at for *patterns* (screens, flows, conventions) only. No screenshots, assets, colors, typefaces, icons or copy were taken from them.
+
+| Date | Source | What it informed |
 |---|---|---|
-| | e.g. web: "<name> <category>" | e.g. no active product in this category |
-| | GitHub: "<name>" | |
-| | Package registry: "<name>" | |
-
-Before a public launch, also search the trademark registers (see the legal reference, §5).
+| | e.g. the incumbent's help-center screenshots | the list of screens in the core loop |
 
 ## Terms-of-service review
 

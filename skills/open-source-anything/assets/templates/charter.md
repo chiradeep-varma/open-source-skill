@@ -1,4 +1,4 @@
-# Project charter: <working name>
+# Project charter: <codename>
 
 > Written in Phase 2 and revised whenever an answer changes. For every item, record whether it came from the **user** or is an **assumption** you made. Assumptions stay visible until the user confirms or replaces them.
 
@@ -49,7 +49,6 @@ _Last updated: YYYY-MM-DD_
 | License leaning | | |
 | Commercial intent | none / later / now | |
 | Public from day one? | | |
-| Name ideas | | |
 
 ## Open questions
 

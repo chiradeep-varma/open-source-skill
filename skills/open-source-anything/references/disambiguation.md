@@ -134,7 +134,6 @@ Choose the questions whose answers you can't infer and that would change the pla
 **Openness**
 - "Any license preference, or do you want a recommendation? And do you intend to make money from it, now or later?" (See the license guide.)
 - "Public from day one, or private until it works?"
-- "Any name ideas?" Reassure them that you'll check it doesn't collide with the incumbent's trademark.
 
 **Mode**
 - "Do you want a researched plan, a working prototype, a public-ready project, or a project plus a business plan?"

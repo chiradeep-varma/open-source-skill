@@ -34,12 +34,17 @@ def main():
         "Parity matrix": "docs/product/parity-matrix.md",
         "Provenance log": "docs/legal/provenance.md",
         "Roadmap": "ROADMAP.md",
+        "Design direction": "docs/design/direction.md",
         "README": "README.md",
         "LICENSE": "LICENSE",
     }
     for label, rel in expected.items():
         hits = glob.glob(os.path.join(root, "**", rel), recursive=True)
         check(label, bool(hits), hits[0].replace(root, ".") if hits else "missing")
+
+    shots = [f for f in glob.glob(os.path.join(root, "**", "docs", "design", "screenshots", "*"), recursive=True)
+             if f.lower().endswith((".png", ".jpg", ".jpeg", ".webp"))]
+    check("Reviewed UI screenshots", len(shots) > 0, f"{len(shots)} in docs/design/screenshots/")
 
     adrs = glob.glob(os.path.join(root, "**", "docs", "adr", "*.md"), recursive=True)
     check("ADRs", len(adrs) > 0, f"{len(adrs)} found")
@@ -59,7 +64,11 @@ def main():
     if readme:
         first_heading = next((l for l in readme.splitlines() if l.startswith("# ")), "")
         check("Name doesn't contain incumbent's mark", incumbent.lower() not in first_heading.lower(), first_heading.strip())
-        check("Non-affiliation line", bool(re.search(r"not affiliated|no affiliation|unaffiliated", readme, re.I)), "")
+        mentions = incumbent.lower() in readme.lower()
+        has_line = bool(re.search(r"not affiliated|no affiliation|unaffiliated", readme, re.I))
+        check("Non-affiliation line if the incumbent is mentioned", has_line or not mentions,
+              "incumbent mentioned" if mentions else "incumbent not mentioned")
+        check("No pricing tiers in README", not re.search(r"\b(pro|premium|business|enterprise) (plan|tier)\b|per seat|/mo\b", readme, re.I), "")
 
     print("| Check | Result | Detail |\n|---|---|---|")
     for name, res, detail in rows:

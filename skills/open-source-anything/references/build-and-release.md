@@ -33,13 +33,16 @@ Adapt the layout to the stack's conventions. Keep the documents from the earlier
 ├── .env.example                # every setting, documented, with safe defaults
 ├── docs/
 │   ├── charter.md
+│   ├── process-log.md
+│   ├── brief.md
 │   ├── research/dossier.md
 │   ├── product/parity-matrix.md
 │   ├── legal/provenance.md
 │   ├── adr/0001-*.md
+│   ├── design/                 # ui-research.md, direction.md, screenshots/
 │   ├── self-hosting.md         # install, configure, upgrade, back up and restore
 │   ├── architecture.md         # your design, for contributors
-│   └── importing-from-<incumbent>.md
+│   └── importing.md
 ├── .github/                    # or the forge's equivalent
 │   ├── ISSUE_TEMPLATE/
 │   ├── pull_request_template.md
@@ -64,23 +67,23 @@ For every vertical slice:
 1. **Start it the way a user would**, with the documented one-command start and a clean state.
 2. **Walk through the workflow from the dossier**, step by step. Use a browser automation tool for web UIs, drive the CLI for command-line tools, and hit the API for services.
 3. **Break it on purpose.** Try empty states, large inputs, concurrent edits (where relevant), bad input, a restart in the middle of a job, and an upgrade from the previous version.
-4. **Compare with the concept model.** Does it behave the way the product's logic says it should? Where it deliberately differs, the difference belongs in the better-thesis or an ADR.
-5. **Record the result.** Update the parity matrix status and note known gaps.
+4. **Look at it.** For anything with a UI, capture the screens and review them against the design direction and the slop list (`ui-design.md` §6).
+5. **Compare with the concept model.** Does it behave the way the product's logic says it should? Where it deliberately differs, the difference belongs in the better-thesis or an ADR.
+6. **Record the result.** Update the parity matrix status and note known gaps.
 
 Show the user a short demo at each milestone: a screenshot, recording or transcript, plus what works, what doesn't yet, and what's next.
 
 ## 4. Documentation set
 
 - **README.md** (template in `assets/templates/README.md`). The README should cover, in order:
-  - what it is, and who it's for;
-  - why it exists (the better-thesis);
-  - a screenshot or demo;
+  - what it does, and who it's for, in its own terms (the codename, not the incumbent's name);
+  - why it exists (the better-thesis, stated positively);
+  - a screenshot from `docs/design/screenshots/`;
   - a quickstart under five minutes;
-  - a feature status table;
-  - an honest comparison with the incumbent;
+  - a feature status table, noting that every feature is available to whoever runs it;
   - how to contribute;
   - the license;
-  - the non-affiliation line.
+  - a non-affiliation line if any other product is mentioned (for example, in the import section).
 - **Self-hosting guide.** Requirements, install, configuration reference (generated from `.env.example` if possible), reverse proxy and TLS, backups and restore, upgrades, and troubleshooting.
 - **Importing guide.** How to export from the incumbent (in your own words), how to import, and what does and doesn't carry over.
 - **Architecture overview** for contributors: components, data model, where to start reading, and how to run the tests.
@@ -122,9 +125,11 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
 
 - [ ] Fresh-machine install following only the README succeeds.
 - [ ] License chosen, `LICENSE` present, SPDX identifiers in manifests, and a dependency license scan that comes back clean.
-- [ ] Name checked for conflicts (see the legal reference). Non-affiliation line in the README.
+- [ ] The project uses its random codename. No trace of the incumbent's name, logo or look. If the README mentions the incumbent, it has a non-affiliation line.
+- [ ] No plans, tiers, seat limits or paywalls copied from the incumbent. Every built feature is available to whoever runs it.
+- [ ] A design direction exists (`docs/design/direction.md`), and final screenshots of the core screens are in `docs/design/screenshots/` after a review against the slop list.
 - [ ] No incumbent assets, text or code anywhere. Provenance log up to date.
-- [ ] Comparison claims are true, dated and sourced.
+- [ ] Any claims about other products are true, dated and sourced. The project doesn't define itself by comparison.
 - [ ] Security basics in place, and `SECURITY.md` published.
 - [ ] Screenshots and a demo made from your own seed data, not the incumbent's content.
 - [ ] Parity matrix status is honest, with known limitations listed.

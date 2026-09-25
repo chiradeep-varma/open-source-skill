@@ -22,7 +22,9 @@
 2. …
 3. …
 
-**Name and license (proposed).** <name> (conflict check: <result>) · <SPDX>, because <one-line reason>.
+**Codename and license (proposed).** `<codename>` (random, rename any time) · <SPDX>, because <one-line reason>.
+
+**Design direction.** <three personality words> · <one line on the look, and how it differs from the incumbent's>
 
 **Milestones.** M0 skeleton → M1 <core loop> → M2 <switch-blockers> → M3 <differentiators>
 

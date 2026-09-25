@@ -2,7 +2,7 @@
 
 # open-source-anything
 
-**Name any product. Claude figures out exactly what it is, studies it the way a rival founder would, and builds you an open-source version, without copying anything it shouldn't.**
+**Name any product. Claude figures out exactly what it is, studies it the way a rival founder would, and builds you an open-source version of the *product*: what it does, with a design of its own, without the company's brand, look or pricing.**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-SKILL.md-8A2BE2)](skills/open-source-anything/SKILL.md)
@@ -21,14 +21,17 @@ Everyone has looked at a product and thought *"I could do that better, and I'd o
 
 **open-source-anything** is an [Agent Skill](https://code.claude.com/docs/en/skills) that gives Claude that whole playbook. Point it at a SaaS app, a desktop or mobile app, a developer tool, an infrastructure service, an AI product, a device, a game or a protocol, and it works through eight phases, from *"which one do you mean?"* to a public-ready repository.
 
+What it rebuilds is **the product, not the company**. For a URL shortener, that means shortening, redirecting and click analytics. It doesn't mean the company's name, logo, interface or pricing plans. The result gets a random codename (like a branch name, e.g. `amber-otter`), its own deliberate visual design, and every feature available to whoever runs it.
+
 ## Highlights
 
 - 🎯 **Pins down the right target.** It searches before asking and spots name collisions. "Bolt" is a CMS, an AI app builder, a checkout company and a ride-hailing app. Nothing gets built until it knows which one you mean.
 - 🔥 **Grills you, efficiently.** It asks only the questions that change the plan, a few at a time, each with a recommended answer you can simply accept.
 - 🔬 **Researches like a rival founder.** It builds a sourced, dated dossier through eight lenses: identity, concept and vision, market, business model, users and jobs, product, technology, and where the value really lives.
 - 🧠 **Understands the machinery.** It infers the architecture from public signals (engineering blogs, API design, status pages, limits and quotas) and maps each hard problem to proven open building blocks.
-- ⚖️ **Legally clean by construction.** It learns only from public behavior and documentation, never from the target's code. It keeps a provenance log, picks trademark-safe names, and chooses a license with you.
-- 🏗️ **Builds for self-hosters.** One-command start, few moving parts, open formats, an importer from the product you're leaving, and honest parity tracking.
+- ⚖️ **Legally clean by construction.** It learns only from public behavior and documentation, never from the target's code. It keeps a provenance log, gives the project a random codename instead of a brand, and chooses a license with you.
+- 🎨 **Designs its own interface, never slop.** It researches how the product and its category look, uses that only as inspiration, and writes down a design direction (personality, type, color tokens, spacing, copy voice) before any UI code. Then it reviews real screenshots against an anti-slop checklist: no default component kits, gradient washes or identical cards everywhere.
+- 🏗️ **Builds for self-hosters.** One-command start, few moving parts, open formats, an importer from the product you're leaving, no plans or paywalls, and honest parity tracking.
 - 🚀 **Ships it properly.** README, docs, CI, community files and packaging. You decide when to publish.
 - 🧪 **Tested in public.** 11 logged test runs, from first-reply checks to full builds of a link shortener, a scheduler, Linear, Figma, the Nest thermostat, Typeform and Trello. Each one is fact-checked claim by claim and each drove a skill fix. See [`runs/`](runs/).
 
@@ -94,11 +97,11 @@ flowchart LR
 |---|---|---|
 | **1. Identify** | Searches the name, detects collisions, and writes a one-line fingerprint (maker, URL, category, status) for each candidate. | Confirm the product |
 | **2. Charter** | Covers motive, audience, what "better" means, must-have workflows, constraints, technical comfort, license and mode (Brief, Prototype, Project or Venture). | Confirm intent and scope |
-| **3. Research** | Builds a dossier where every claim is sourced, dated and tagged `confirmed`, `inferred`, `assumption` or `memory`. | Nothing; research keeps moving |
+| **3. Research** | Builds a dossier where every claim is sourced, dated and tagged `confirmed`, `reported`, `inferred`, `assumption` or `memory`. Pricing is studied as context only. | Nothing; research keeps moving |
 | **4. Synthesize** | Produces a concept model, domain model, value decomposition, parity matrix (Core / Switch-blocker / Differentiator / Later / Won't) and a one-sentence better-thesis. | Approve a one-page brief |
-| **5. Guardrails** | Defines what may and may not be reimplemented, sets up the provenance log, checks name conflicts and recommends a license. | Approve the name and license |
-| **6. Design** | Designs an architecture for one server and one contributor, not hyperscale. Writes decision records and a milestone roadmap. | Approve the design |
-| **7. Build** | Builds vertical slices along the core loop, each run and walked through as a real user would before it counts as done. | Review each milestone demo |
+| **5. Guardrails** | Defines what may and may not be reimplemented, sets up the provenance log, generates a random codename and recommends a license. | Approve the license |
+| **6. Design** | Designs an architecture for one server and one contributor, not hyperscale. Researches the category's UI for inspiration and writes its own design direction and tokens. Writes decision records and a milestone roadmap. | Approve the design |
+| **7. Build** | Builds vertical slices along the core loop, with automated tests. Each slice is run and walked through as a real user would, and every screen is screenshot-reviewed against the design direction and the slop list before it counts as done. | Review each milestone demo |
 | **8. Release** | Prepares docs, CI, packaging, community files and launch material. | Decide when and where to publish |
 
 Say *"just build it"* and the skill makes the calls itself, recording every assumption in the charter so you can revisit it. The one thing it still confirms is an ambiguous product name.
@@ -107,10 +110,13 @@ Say *"just build it"* and the skill makes the calls itself, recording every assu
 
 ```
 docs/charter.md                 # intent, scope, every assumption
+docs/process-log.md             # what was actually done: fetches, checks, tests, screenshot reviews
+docs/brief.md                   # the one-page plan
 docs/research/dossier.md        # the eight lenses, sourced and dated
 docs/product/parity-matrix.md   # every feature × tier × honest status
 docs/legal/provenance.md        # what informed the work, and what was never touched
 docs/adr/NNNN-*.md              # architecture decisions
+docs/design/                    # UI research, design direction, reviewed screenshots
 ROADMAP.md  README.md  LICENSE  CONTRIBUTING.md  CODE_OF_CONDUCT.md  SECURITY.md
 <the software itself>
 ```
@@ -127,7 +133,7 @@ This is an excerpt from a real test run, lightly condensed.
 >
 > | Ask | Risk | Safe alternative |
 > |---|---|---|
-> | Name it **"Notion Open"** | Uses Notion's trademark in your product name | A distinct name. Describe the relationship factually ("an open-source alternative to Notion") in the tagline, not the name |
+> | Name it **"Notion Open"** | Uses Notion's trademark in your product name | A name with no trace of theirs |
 > | **Same icons** | Proprietary artwork; copying it is asset infringement, not idea reuse | An open icon library styled to the same minimalist *feel* |
 > | **Copy the template gallery** | Templates are authored content | An original gallery covering the *same categories*, so users feel at home through convention, not copied content |
 > | "Same UI" generally | Layout conventions are fair game; a pixel-identical clone risks trade-dress claims | Match the *interaction patterns* (blocks, `/` commands, nested pages) with your own visual identity |
@@ -145,11 +151,13 @@ skills/open-source-anything/
 │   ├── disambiguation.md             # collision patterns, worked examples, question bank
 │   ├── research-playbook.md          # sources per lens, reliability tiers, techniques
 │   ├── architecture-inference.md     # behavior → mechanism; hard problems and open building blocks
-│   ├── legal-and-licensing.md        # what can be reimplemented, clean room, naming, licenses
+│   ├── legal-and-licensing.md        # what can be reimplemented, clean room, codenames, licenses
+│   ├── ui-design.md                  # UI research, design direction, the slop list, screenshot review
 │   ├── product-types.md              # SaaS, desktop, mobile, devtools, infrastructure, AI, hardware, games…
 │   ├── build-and-release.md          # scaffold, definition of done, docs, CI, packaging, launch
 │   └── releasing-your-own.md         # open-sourcing a project you already own
-└── assets/templates/                 # charter, dossier, parity matrix, brief, provenance, ADR, README
+├── scripts/codename.py               # random project codenames (e.g. amber-otter)
+└── assets/templates/                 # charter, dossier, parity matrix, brief, provenance, ADR, design direction, README
 evals/
 ├── evals.json                        # behavioral test prompts with assertions
 └── trigger-evals.json                # should / shouldn't trigger queries
@@ -163,11 +171,12 @@ Until it's used, the skill costs about 300 tokens of context. The full workflow 
 1. **Identity before effort.** Building the wrong product is the most expensive mistake, so the skill never calls an identity "confirmed" on its own.
 2. **Evidence over memory.** Products change weekly. Claims are verified live, cited and dated.
 3. **Understand the job, not the screens.** People pay for outcomes, so the concept, core loop and data model come before UI.
-4. **Learn from the outside, write everything fresh.** Ideas and functionality are free to rebuild. Code, assets, text and trademarks are not.
+4. **The product, not the company.** Ideas and functionality are free to rebuild. Code, assets, text, trademarks, the company's look and its pricing are not. Projects get a random codename, and every feature is available to whoever runs it.
 5. **Always build.** Research decides *what* to build, never *whether*. Competitors, open or proprietary, are studied to find the gap, never offered as a substitute.
 6. **Start with a wedge.** Ship the core loop first, then close the gaps that stop people from switching.
 7. **Build for strangers.** One-command self-hosting, open formats, an importer, docs a newcomer can follow.
 8. **Be honest about what software can't capture.** Networks, content catalogs and licenses are named plainly, and the skill finds the part software *can* deliver.
+9. **A design of its own, never slop.** The category's UI is research for inspiration. The direction is written down before any UI code, and screens are judged by looking at them.
 
 ## FAQ
 
@@ -180,7 +189,13 @@ Generally yes, if you rebuild the *functionality* and not the *expression*. Copy
 <details>
 <summary><b>Will it make it look exactly like the original?</b></summary>
 
-No. It keeps the familiar *workflows and conventions* that help people switch, and gives your project its own name, visual identity and words. As the test run above shows, it explains why and offers the closest safe version.
+No. It studies how the product and its category look, keeps the familiar *workflows and conventions* that help people switch, and designs its own visual identity on top: its own type, color tokens, spacing and copy voice, written down before any UI code. Screens are reviewed against an anti-slop checklist and against the incumbent, so it looks neither generic nor like a copy.
+</details>
+
+<details>
+<summary><b>What will my project be called? Will it copy their pricing?</b></summary>
+
+It gets a random codename such as `amber-otter`, like a branch name, generated by `scripts/codename.py`. There's no brand research, and you can rename it whenever you like. It doesn't copy pricing either: the incumbent's plans are studied only to understand what users value, and the open version ships every feature to whoever runs it.
 </details>
 
 <details>
@@ -242,6 +257,8 @@ This skill stands on other people's work.
 - **Geoffrey Moore, *Crossing the Chasm* (1991).** The better-thesis sentence adapts his positioning-statement template.
 - **Jobs to Be Done** (Clayton Christensen) and the **job story** format ("When…, I want to…, so I can…") popularized by Intercom and Alan Klement, used in the users-and-jobs lens.
 - **Clean-room design**, the practice made famous by Phoenix Technologies' IBM PC BIOS, is the basis of the independent-creation discipline.
+- **[Anthropic's frontend-design skill](https://github.com/anthropics/skills)** shaped the UI guidance (`ui-design.md`). Its framing is that generic AI aesthetics are "defaults rather than choices". Its catalog of those defaults includes identical rounded SaaS cards with soft shadows, gradient washes and template chrome, and it recommends committing to a written design plan before coding.
+- **WCAG 2** contrast guidance (AA 4.5:1 for body text) is the accessibility floor in the design direction.
 
 **Standards and conventions the skill points to**
 [Open Source Definition (OSI)](https://opensource.org/osd) · [Contributor Covenant](https://www.contributor-covenant.org/) · [Developer Certificate of Origin](https://developercertificate.org/) · [Keep a Changelog](https://keepachangelog.com/) · [Semantic Versioning](https://semver.org/) · [REUSE](https://reuse.software/) · [OpenSSF Scorecard](https://scorecard.dev/) · [Fair Source / FSL](https://fair.io/licenses/)

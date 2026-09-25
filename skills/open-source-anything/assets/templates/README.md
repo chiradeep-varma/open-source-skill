@@ -1,15 +1,16 @@
-<!-- README skeleton for the new open-source project. Replace everything in <angle brackets>. Delete this comment. -->
+<!-- README skeleton for the new open-source project. Replace everything in <angle brackets>. Delete this comment.
+     Describe the project by what it does. Mention the incumbent only where it's factually needed
+     (the import section), and keep the non-affiliation line whenever it's mentioned. -->
 
-# <Project name>
+# <codename>
 
-**<One line: what it is and who it's for.>**
-An open-source, self-hostable alternative to <incumbent>, for <audience> who <pain the better-thesis addresses>.
+**<One line: what it does and who it's for, e.g. "A self-hosted URL shortener with click analytics for small teams.">**
 
-<Screenshot or GIF made from your own demo data>
+<Screenshot from docs/design/screenshots/, made with realistic demo data>
 
 ## Why
 
-<Two to four sentences built on the better-thesis. Which concrete problem with the status quo does this solve: data ownership, pricing, lock-in, privacy, extensibility? Keep it factual and positive, never disparaging.>
+<Two to four sentences on the problem it solves for its users (owning their data, running it themselves, changing it, no usage caps), stated positively and in the project's own terms.>
 
 ## Quickstart
 
@@ -21,35 +22,30 @@ Then open <URL> and <first action>. For production setup see [docs/self-hosting.
 
 ## Status
 
-<Project> is **<alpha / beta / stable>**. What works today:
+<codename> is **<alpha / beta / stable>**. What works today:
 
 | Area | Status |
 |---|---|
 | <Core workflow 1> | ✅ |
 | <Core workflow 2> | ✅ |
-| Import from <incumbent> | 🟡 partial: <what's missing> |
+| <Import> | 🟡 partial: <what's missing> |
 | <Later feature> | ⏳ planned ([roadmap](ROADMAP.md)) |
 
-## Coming from <incumbent>?
-
-See [docs/importing-from-<incumbent>.md](docs/importing-from-<incumbent>.md). <One line on what carries over.>
-
-### How it compares (as of <YYYY-MM>)
-
-| | <Project> | <Incumbent> |
-|---|---|---|
-| Self-hostable | ✅ | ❌ |
-| License | <SPDX> | Proprietary |
-| <Honest row where the incumbent is ahead> | ❌ not yet | ✅ |
+Every feature is available to whoever runs it. There are no plans or tiers.
 
 ## Features
 
 - **<Feature>**: <what it lets you do>
 - …
 
+<!-- Optional: keep only if there is an importer or compatibility layer. -->
+## Importing your data
+
+<How to bring existing data in, e.g. from an export of another service. See [docs/importing.md](docs/importing.md).>
+
 ## Architecture
 
-<Two or three sentences, and a link to [docs/architecture.md](docs/architecture.md).>
+<Two or three sentences, and a link to [docs/architecture.md](docs/architecture.md). The design direction is in [docs/design/direction.md](docs/design/direction.md).>
 
 ## Contributing
 
@@ -61,8 +57,7 @@ Please report vulnerabilities privately. See [SECURITY.md](SECURITY.md).
 
 ## License
 
-<SPDX identifier>. See [LICENSE](LICENSE).
+<SPDX identifier>. See [LICENSE](LICENSE). "<codename>" is a working name; rename the project freely.
 
----
-
-<Project> is an independent project. It is not affiliated with or endorsed by <incumbent's owner>. <Incumbent> is a trademark of its owner, used here only for identification.
+<!-- Keep this line if the README mentions any other product by name: -->
+<sub>Not affiliated with or endorsed by <incumbent>. <Incumbent> is a trademark of its owner, mentioned only for identification.</sub>

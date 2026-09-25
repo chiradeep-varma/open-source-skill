@@ -9,7 +9,7 @@ This is careful orientation, mostly under US and EU law, not legal advice. Say s
 2. What never to copy
 3. Independent-creation discipline, and AI
 4. Reverse engineering, terms of service and access
-5. Trademarks and naming
+5. Trademarks and codenames
 6. Patents
 7. Content, data, privacy and AI models
 8. Regulated domains
@@ -86,7 +86,7 @@ Copyright protects the *expression* of an idea: the code, the text, the artwork.
 4. Don't scrape content or personal data. You need understanding, not their data.
 5. If you use their API, including for an importer, stay within the API terms. Some forbid building competing products. **The user's own data export is the safest input for designing and testing importers.**
 
-## 5. Trademarks and naming
+## 5. Trademarks and codenames
 
 Trademarks protect names, logos, slogans and sometimes distinctive trade dress, to prevent consumer confusion.
 
@@ -98,10 +98,16 @@ Trademarks protect names, logos, slogans and sometimes distinctive trade dress, 
 - **Do:** refer to them factually when you need to. "An open-source alternative to Notion" and "Import from Notion" are referential uses, protected as nominative fair use in the US and as honest-practices referential use under the EU Trade Mark Regulation (2017/1001, Art. 14). Use no more of the mark than needed, never their logo, and add a line such as *"Not affiliated with or endorsed by X. X is a trademark of its owner."*
 - **Comparison pages:** keep claims truthful and dated ("as of 2026-09"), avoid disparagement, and link to sources.
 
-**Name check**
-- Look for conflicts in the national trademark registers where the project will be used (USPTO, EUIPO/TMview, WIPO Global Brand Database), mainly in the software classes (Nice classes 9 and 42).
-- Also check a general web search, GitHub, the package registries the project will publish to (npm, PyPI, crates.io, Docker Hub and others), domains and social handles.
-- Coined, distinctive names are safest and easiest to find. In this skill's own test runs, every common-word name collided with an existing product in the same category, and every coined name came back clean (see `runs/` in the skill's repository).
+**Codenames instead of brand names**
+
+The skill doesn't brand what it builds. Each project gets a random two-word codename (`scripts/codename.py`), the same way branch names are generated, and the user renames it whenever and however they like.
+
+- A random codename can't echo the incumbent's mark, which removes the most common naming mistake.
+- It also keeps the project from presenting itself as a product brand.
+
+If the user later picks a brand name for a public launch, that's their decision. Point them to the trademark registers where they'll operate: USPTO, EUIPO/TMview and the WIPO Global Brand Database, in the software classes (Nice classes 9 and 42).
+
+In earlier versions of this skill, names chosen by the model were researched instead. The logged test runs showed that common-word names routinely collided with existing products, which is part of why this approach was dropped (see `runs/` in the skill's repository).
 
 ## 6. Patents
 

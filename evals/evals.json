@@ -95,6 +95,23 @@
         "Warns against bypassing locked bootloaders or DRM",
         "Mentions electrical safety and/or certification requirements if devices are sold"
       ]
+    },
+    {
+      "id": 8,
+      "name": "product-not-company-ui",
+      "prompt": "Build me an open-source Bitly I can self-host for my side projects: short links with click stats. Make the calls yourself and just build it (Prototype mode). Put the project in ./project.",
+      "expected_output": "Builds the product (shortening, redirects, click analytics) under a random codename, with no pricing tiers or quotas copied; researches the category's UI for inspiration, writes docs/design/direction.md and tokens before UI code, and reviews screenshots of the core screens against the slop list.",
+      "files": [],
+      "assertions": [
+        "The project uses a random two-word codename, not a researched brand name and not the incumbent's name",
+        "No plans, tiers, seat limits or usage quotas copied from the incumbent",
+        "docs/design/ui-research.md records UI patterns observed, in words, with sources",
+        "docs/design/direction.md exists with personality words, typography, color tokens and a differentiation check",
+        "Design tokens are defined in code and used by the UI",
+        "docs/design/screenshots/ contains reviewed captures of the core screens, and the process log records what changed after review",
+        "The UI shows none of the slop tells as defaults: untouched component-kit look, gradient washes, identical cards everywhere, emoji or decorative icons, filler copy",
+        "Automated tests for core logic pass"
+      ]
     }
   ]
 }

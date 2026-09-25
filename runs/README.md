@@ -45,7 +45,7 @@ The skill's biggest problems weren't missing knowledge. They were **process inst
 | Research subagents inflating tags | (none) | Pass the tag rules to subagents and **audit tags against actual fetches before merging** (Run 08) |
 | "Does it already exist?" habit | Removing the instruction | An explicit contrary instruction: don't open with alternatives, don't justify the build against others, anchor the thesis in the incumbent's users (Runs 03, 08) |
 | Wrong facts in chat (Arc "dropped Linux", Nest "can't be reflashed") | The evidence standard, dossier only | The evidence standard now applies to **what you tell the user** (Run 04) |
-| Names colliding (Trimly, SlotPilot, Corkboard) | "Check the name" | Separate searches per location, a sound-alike check, and **prefer coined names** (Runs 05, 06, 10, 11) |
+| Names colliding (Trimly, SlotPilot, Corkboard) | "Check the name" | Separate searches per location, a sound-alike check, and prefer coined names (Runs 05, 06, 10, 11). **Superseded in v1.4 by an owner decision:** no name research at all. Projects get a random codename (`scripts/codename.py`), because what users call it later is up to them. |
 | No tests in a working prototype | "Tests on core logic" in the quality bar | The **passing test command must appear in the process log** before Phase 7 counts as done (Run 10 → held in 11) |
 
 **Self-audit.** The fact-checks also caught a stale fact in the skill's *own* legal reference. Cal.com was listed as an AGPL example, but it went proprietary in April 2026. It's fixed, and license examples now carry an "as of" date.

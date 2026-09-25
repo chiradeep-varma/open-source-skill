@@ -69,7 +69,8 @@ When sources disagree, prefer the more recent tier-1 source. Record the conflict
 - The regulatory landscape, from government and regulator sites, for regulated domains such as finance, health, education, telecom and children's data.
 
 ### 4. Business model
-- **The pricing page and its plan-comparison table.** For each feature, note which tier it first appears in. Features gated to higher tiers mark what the company believes customers value most. The "SSO tax" (single sign-on only on enterprise plans) and audit-log gating are classic open-source opportunities.
+This lens is context for understanding the product and its users. The open version doesn't reproduce the incumbent's plans, tiers, quotas or billing.
+- **The pricing page and its plan-comparison table.** For each feature, note which tier it first appears in. Features gated to higher tiers mark what the company believes customers value most. The "SSO tax" (single sign-on only on enterprise plans) and audit-log gating are classic cases: in the open version, those features simply exist for everyone.
 - Pricing history through the Wayback Machine. Price increases often come with a wave of users looking for alternatives, which is your audience.
 - Limits and quotas pages, which show the cost drivers.
 - The enterprise and security pages: compliance certifications, SLAs, data residency.
