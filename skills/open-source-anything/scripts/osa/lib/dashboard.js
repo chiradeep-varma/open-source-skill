@@ -6,6 +6,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const http = require('node:http');
+const os = require('node:os');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 
@@ -15,10 +16,16 @@ const env = require('./env');
 
 const DEFAULT_PORT = 4747;
 
+// "~/Documents/open-source-anything" reads better than a full path on macOS and Linux.
+function friendlyPath(p, platform = process.platform, home = os.homedir()) {
+  if (platform === 'win32' || !home || !p.startsWith(`${home}/`)) return p;
+  return `~${p.slice(home.length)}`;
+}
+
 function openExternal(target) {
   const [cmd, args] =
     process.platform === 'darwin' ? ['open', [target]]
-      : process.platform === 'win32' ? ['cmd', ['/c', 'start', '""', target]]
+      : process.platform === 'win32' ? ['explorer.exe', [target]] // opens URLs in the default browser, folders in Explorer
         : ['xdg-open', [target]];
   try {
     spawn(cmd, args, { detached: true, stdio: 'ignore', windowsHide: true }).unref();
@@ -36,7 +43,8 @@ function createDashboard({ home }) {
   function snapshot() {
     const projects = discover(home).map((p) => {
       const base = { id: p.id, dir: p.dir, name: p.manifest?.name ?? p.id, summary: p.manifest?.summary ?? '', kind: p.manifest?.kind ?? 'other', usage: p.manifest?.usage ?? '' };
-      if (p.error) return { ...base, state: 'broken', error: p.error };
+      // The row already names the project, so drop its folder from the message.
+      if (p.error) return { ...base, state: 'broken', error: p.error.split(p.dir + path.sep).join('') };
       const b = busy.get(p.id);
       const s = runner.status(p.dir);
       const out = { ...base, state: s.state, url: s.url ?? null, port: s.port ?? null };
@@ -50,7 +58,7 @@ function createDashboard({ home }) {
       }
       return out;
     });
-    return { home, projects };
+    return { home, homeLabel: friendlyPath(home), projects };
   }
 
   function takenPorts() {
@@ -177,4 +185,4 @@ async function serve({ home, port = DEFAULT_PORT, open = true, log = console.log
   return server;
 }
 
-module.exports = { createDashboard, serve, openExternal, DEFAULT_PORT };
+module.exports = { createDashboard, serve, openExternal, friendlyPath, DEFAULT_PORT };

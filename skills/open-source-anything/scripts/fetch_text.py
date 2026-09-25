@@ -143,7 +143,7 @@ def main():
     lic.add_argument("-o", "--output")
     coc = sub.add_parser("coc", help="the Contributor Covenant code of conduct")
     coc.add_argument("--version", default="3.0", help="3.0 (current, default) or 2.1")
-    coc.add_argument("--contact", help="how to report a problem: an email address or a private form URL")
+    coc.add_argument("--contact", help="a private way to report a problem: an email address or a private form URL, never a public issue tracker")
     coc.add_argument("-o", "--output")
     args = parser.parse_args()
 

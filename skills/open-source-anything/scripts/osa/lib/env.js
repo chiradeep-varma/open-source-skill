@@ -14,7 +14,7 @@ function parse(text) {
   for (const line of text.split(/\r?\n/)) {
     const m = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
     if (!m) continue;
-    let v = m[2];
+    let v = m[2].trim();
     if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
     else v = v.replace(/\s+#.*$/, '');
     values[m[1]] = v;

@@ -64,6 +64,7 @@ li.project { border-bottom: 1px solid var(--line); padding: calc(var(--space) * 
 .actions { display: flex; gap: var(--space); flex-wrap: wrap; justify-content: flex-end; }
 .secret { margin-top: var(--space); font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space); }
 .secret code { font-family: var(--mono); background: var(--accent-soft); padding: 2px 8px; border-radius: 4px; }
+.secret .value { display: inline-flex; align-items: center; gap: 2px; }
 .problem { margin-top: var(--space); background: var(--danger-soft); color: var(--text); border-left: 3px solid var(--danger); padding: var(--space) calc(var(--space) * 1.5); border-radius: 0 var(--radius) var(--radius) 0; font-size: 14px; }
 details { margin-top: var(--space); }
 summary { cursor: pointer; color: var(--muted); font-size: 14px; width: fit-content; }
@@ -111,6 +112,7 @@ const post = (path) => fetch(path, { method: 'POST', headers: { 'x-osa-token': T
 const label = { SESSION_SECRET: 'Session secret', ADMIN_PASSWORD: 'Sign-in password', ADMIN_EMAIL: 'Sign-in email' };
 const humanize = (key) => label[key] || key.toLowerCase().replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
 const busyText = { installing: 'Installing what it needs. The first start can take a few minutes.', preparing: 'Preparing…', starting: 'Starting…', stopping: 'Stopping…' };
+const busyButton = { installing: 'Installing…', preparing: 'Preparing…', starting: 'Starting…', stopping: 'Stopping…' };
 const openLogs = new Set();
 
 function statusLine(p) {
@@ -129,7 +131,7 @@ function actions(p) {
   if (p.state === 'running') return [
     $('a', { class: 'button primary', href: p.url, target: '_blank', rel: 'noopener' }, 'Open'),
     $('button', { class: 'secondary', type: 'button', onclick: act(`${base}/stop`) }, 'Stop'), folder];
-  if (busyText[p.state]) return [$('button', { class: 'secondary', type: 'button', disabled: true }, busyText[p.state].split('.')[0].replace('…', '') + '…'), folder];
+  if (busyText[p.state]) return [$('button', { class: 'secondary', type: 'button', disabled: true }, busyButton[p.state]), folder];
   if (p.kind === 'web' && p.state !== 'broken') return [$('button', { class: 'primary', type: 'button', onclick: act(`${base}/start`) }, p.state === 'error' ? 'Try again' : 'Start'), folder];
   return [folder];
 }
@@ -155,8 +157,8 @@ function row(p) {
   const extra = [];
   if (p.reveal && Object.keys(p.reveal).length) {
     for (const [k, v] of Object.entries(p.reveal)) {
-      extra.push($('div', { class: 'secret' }, humanize(k) + ':', $('code', {}, v),
-        $('button', { class: 'quiet', type: 'button', onclick: (e) => { navigator.clipboard?.writeText(v); e.currentTarget.textContent = 'Copied'; } }, 'Copy')));
+      extra.push($('div', { class: 'secret' }, $('span', {}, humanize(k) + ':'), $('span', { class: 'value' }, $('code', {}, v),
+        $('button', { class: 'quiet', type: 'button', onclick: (e) => { navigator.clipboard?.writeText(v); e.currentTarget.textContent = 'Copied'; } }, 'Copy'))));
     }
   }
   if (p.state === 'error') extra.push($('div', { class: 'problem', role: 'alert' }, p.error, p.detail ? $('details', {}, $('summary', {}, 'Details'), $('pre', {}, p.detail)) : null));
@@ -176,7 +178,9 @@ async function refresh() {
   const key = JSON.stringify(data);
   if (key === last) return; // re-render only on change, so focus and open panels stay put
   last = key;
-  document.getElementById('home').textContent = data.home;
+  const homeEl = document.getElementById('home');
+  homeEl.textContent = data.homeLabel || data.home;
+  homeEl.title = data.home;
   const list = document.getElementById('list');
   list.replaceChildren();
   if (!data.projects.length) {

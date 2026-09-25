@@ -9,7 +9,11 @@ const { projectsHome } = require('./lib/home');
 const { discover, loadManifest, addToRegistry } = require('./lib/manifest');
 const runner = require('./lib/runner');
 const { serve, openExternal, DEFAULT_PORT } = require('./lib/dashboard');
-const { setup } = require('./lib/setup');
+const { setup, LAUNCHER_DIR } = require('./lib/setup');
+
+// A copy of the launcher inside a projects folder (<folder>/.launcher/osa.js) always
+// manages that folder, wherever it's run from.
+const INSTALLED_HOME = path.basename(__dirname) === LAUNCHER_DIR ? path.dirname(__dirname) : null;
 
 const HELP = `osa: start, stop and open your projects
 
@@ -64,7 +68,7 @@ function printReveal(reveal) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  const home = path.resolve(args.home || projectsHome());
+  const home = path.resolve(args.home || INSTALLED_HOME || projectsHome());
   const [cmd = 'dashboard', target] = args._;
 
   switch (cmd) {

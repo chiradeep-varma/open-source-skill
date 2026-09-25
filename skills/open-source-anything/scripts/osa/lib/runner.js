@@ -6,6 +6,7 @@ const { spawn, execFile, execFileSync } = require('node:child_process');
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const http = require('node:http');
+const os = require('node:os');
 const path = require('node:path');
 
 const { pickCommand } = require('./manifest');
@@ -50,14 +51,28 @@ function writeJson(file, value) {
   fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n');
 }
 
+// Apps are started as the leader of their own process group (POSIX), so the group
+// is what counts: it lives as long as any part of the app does.
 function isAlive(pid) {
   if (!pid) return false;
   try {
-    process.kill(pid, 0);
+    process.kill(process.platform === 'win32' ? pid : -pid, 0);
     return true;
   } catch (err) {
     return err.code === 'EPERM';
   }
+}
+
+// A run.json written before the computer last started is stale, even if its PID has
+// since been reused by something else. Never treat that process as ours.
+function startedThisBoot(run) {
+  const bootedAt = Date.now() - os.uptime() * 1000;
+  const startedAt = Date.parse(run.startedAt);
+  return Number.isFinite(startedAt) && startedAt > bootedAt - 120000;
+}
+
+function isOurs(run) {
+  return Boolean(run) && startedThisBoot(run) && isAlive(run.pid);
 }
 
 // ---- prerequisites ------------------------------------------------------------
@@ -160,20 +175,25 @@ async function install(dir, manifest, { force = false } = {}) {
 
 function status(dir) {
   const run = readJson(runFile(dir), null);
-  if (run && isAlive(run.pid)) return { state: 'running', ...run };
+  if (isOurs(run)) return { state: 'running', ...run };
   if (run) fs.rmSync(runFile(dir), { force: true });
   return { state: 'stopped' };
 }
 
-function httpUp(url) {
+function httpUpOn(host, port, pathname) {
   return new Promise((resolve) => {
-    const req = http.get(url, { timeout: 2000 }, (res) => {
+    const req = http.get({ host, port, path: pathname, timeout: 2000, headers: { host: `localhost:${port}` } }, (res) => {
       res.resume();
       resolve(res.statusCode < 500);
     });
     req.on('timeout', () => req.destroy());
     req.on('error', () => resolve(false));
   });
+}
+
+// "localhost" can mean 127.0.0.1 or ::1, and an app may listen on only one of them.
+async function httpUp(port, pathname = '/') {
+  return (await httpUpOn('127.0.0.1', port, pathname)) || httpUpOn('::1', port, pathname);
 }
 
 // ---- start / stop ---------------------------------------------------------------------
@@ -209,7 +229,9 @@ async function start(dir, manifest, { onPhase = () => {}, takenPorts = new Set()
     cwd: dir,
     env,
     shell: true,
-    detached: process.platform !== 'win32', // own process group, so stop() can end the whole tree
+    // POSIX: its own process group, so stop() ends the whole tree and closing the
+    // launcher's window doesn't. Windows: its own hidden console, for the same reason.
+    detached: true,
     stdio: ['ignore', fd, fd],
     windowsHide: true,
   });
@@ -219,7 +241,8 @@ async function start(dir, manifest, { onPhase = () => {}, takenPorts = new Set()
   child.on('error', (err) => { exited = err.message; });
   child.unref();
 
-  const url = `http://localhost:${port}${manifest.open.startsWith('/') ? manifest.open : `/${manifest.open}`}`;
+  const openPath = manifest.open.startsWith('/') ? manifest.open : `/${manifest.open}`;
+  const url = `http://localhost:${port}${openPath}`;
   const run = { pid: child.pid, port, url, startedAt: new Date().toISOString() };
   writeJson(runFile(dir), run);
 
@@ -229,7 +252,7 @@ async function start(dir, manifest, { onPhase = () => {}, takenPorts = new Set()
       fs.rmSync(runFile(dir), { force: true });
       throw new FriendlyError('The app stopped right after starting.', tail(logPath));
     }
-    if (await httpUp(`http://127.0.0.1:${port}${manifest.open.startsWith('/') ? manifest.open : `/${manifest.open}`}`)) {
+    if (await httpUp(port, openPath)) {
       return { state: 'running', ...run, reveal };
     }
     await new Promise((r) => setTimeout(r, 500));
@@ -243,16 +266,14 @@ function killTree(pid, signal) {
     return new Promise((resolve) => execFile('taskkill', ['/PID', String(pid), '/T', '/F'], () => resolve()));
   }
   try {
-    process.kill(-pid, signal); // the whole process group
-  } catch {
-    try { process.kill(pid, signal); } catch { /* already gone */ }
-  }
+    process.kill(-pid, signal); // the whole process group, and nothing else
+  } catch { /* already gone */ }
   return Promise.resolve();
 }
 
 async function stop(dir) {
   const run = readJson(runFile(dir), null);
-  if (!run || !isAlive(run.pid)) {
+  if (!isOurs(run)) {
     fs.rmSync(runFile(dir), { force: true });
     return false;
   }

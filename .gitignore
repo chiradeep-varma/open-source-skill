@@ -13,3 +13,7 @@ __pycache__/
 # Generated clients and native engine binaries (recreated by the project's own tooling)
 **/src/generated/
 *.so.node
+
+# Launcher state and secrets, if a run ever leaves them behind
+.osa/
+.env

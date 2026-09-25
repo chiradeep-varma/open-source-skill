@@ -95,7 +95,7 @@ Show the user a short demo at each milestone: a screenshot, recording or transcr
 ## 5. Community files
 
 - **CONTRIBUTING.md.** Dev setup, how to run tests, the coding conventions, how to propose changes, the DCO sign-off (or the CLA, with the reason for it), and "good first issue" guidance.
-- **CODE_OF_CONDUCT.md.** Use the Contributor Covenant: `python3 scripts/fetch_text.py coc --contact <how to report> -o CODE_OF_CONDUCT.md` fetches the current official text and fills in the contact. Never write it from memory.
+- **CODE_OF_CONDUCT.md.** Use the Contributor Covenant: `python3 scripts/fetch_text.py coc --contact <a private way to report> -o CODE_OF_CONDUCT.md` fetches the current official text and fills in the contact. Use an email address or a private form, never a public issue tracker. Never write it from memory.
 - **SECURITY.md.** A private reporting channel (for example, the forge's private vulnerability reporting, or an email address), supported versions, and the response process.
 - **Issue and pull-request templates.** Bug report (version, environment, steps), feature request (the problem before the solution), and a pull-request checklist.
 - **Optional:** `GOVERNANCE.md` (who decides, and how maintainers are added), `CODEOWNERS` and a funding file.

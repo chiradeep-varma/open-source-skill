@@ -100,3 +100,33 @@ test('setup creates the launcher copy, a starter file and a readme', () => {
   const win = setup(home, { platform: 'win32' });
   assert.ok(fs.readFileSync(win.starter, 'utf8').includes('.launcher\\osa.js'));
 });
+
+test('env values lose surrounding spaces; quoted values keep inner ones', () => {
+  assert.deepEqual(env.parse('A=abc   \nB="x y"  \nC=d # note\n'), { A: 'abc', B: 'x y', C: 'd' });
+});
+
+test('findFreePort skips a port held on 127.0.0.1 only', async () => {
+  const blocker = net.createServer();
+  await new Promise((r) => blocker.listen(0, '127.0.0.1', r));
+  const busy = blocker.address().port;
+  assert.notEqual(await findFreePort(busy), busy);
+  blocker.close();
+});
+
+test('starter files point the launcher at their own folder', () => {
+  const home = path.join(tempHome(), 'projects');
+  for (const platform of ['darwin', 'linux', 'win32']) {
+    const { starter } = setup(home, { platform });
+    assert.match(fs.readFileSync(starter, 'utf8'), /osa\.js" dashboard --home \./);
+  }
+  assert.match(fs.readFileSync(path.join(home, 'README.txt'), 'utf8'), /Start projects\.cmd/);
+  setup(home, { platform: 'linux' });
+  assert.match(fs.readFileSync(path.join(home, 'README.txt'), 'utf8'), /Run as a Program/);
+});
+
+test('friendlyPath shortens the home folder on macOS and Linux only', () => {
+  const { friendlyPath } = require('../lib/dashboard');
+  assert.equal(friendlyPath('/Users/sam/Documents/open-source-anything', 'darwin', '/Users/sam'), '~/Documents/open-source-anything');
+  assert.equal(friendlyPath('/Users/samantha/x', 'darwin', '/Users/sam'), '/Users/samantha/x');
+  assert.equal(friendlyPath('C:\\Users\\sam\\x', 'win32', 'C:\\Users\\sam'), 'C:\\Users\\sam\\x');
+});

@@ -30,7 +30,7 @@ function writeStarter(home, platform = process.platform) {
       'cd /d "%~dp0"',
       'where node >nul 2>nul',
       `if errorlevel 1 (echo ${NEED_NODE} & pause & exit /b 1)`,
-      'node ".launcher\\osa.js" dashboard',
+      'node ".launcher\\osa.js" dashboard --home .',
       'pause',
       '',
     ].join('\r\n'));
@@ -45,21 +45,23 @@ function writeStarter(home, platform = process.platform) {
     '  read -n 1 -s -r -p "Press any key to close."',
     '  exit 1',
     'fi',
-    'node ".launcher/osa.js" dashboard',
+    'node ".launcher/osa.js" dashboard --home .',
     '',
   ].join('\n'));
   fs.chmodSync(file, 0o755);
   return file;
 }
 
-function writeReadme(home, starterName) {
+function writeReadme(home, starterName, platform = process.platform) {
   const text = `Your projects
 =============
 
 This folder holds the projects Claude built for you with the open-source-anything skill.
 Each project is a folder, and the launcher starts and stops them for you.
 
-To see your projects, double-click "${starterName}".
+To see your projects, double-click "${starterName}".${platform === 'linux' ? `
+If that opens it in a text editor instead, right-click it and choose "Run as a Program",
+or open a terminal in this folder and type: ./${starterName}` : ''}
 A page opens in your browser, listing every project with Start, Stop and Open buttons.
 The first start of a project installs what it needs, which can take a few minutes.
 After that, starting takes seconds.
@@ -78,7 +80,7 @@ function setup(home, { platform = process.platform } = {}) {
   fs.mkdirSync(home, { recursive: true });
   const launcher = copyLauncher(home);
   const starter = writeStarter(home, platform);
-  writeReadme(home, path.basename(starter));
+  writeReadme(home, path.basename(starter), platform);
   return { home, launcher, starter };
 }
 
