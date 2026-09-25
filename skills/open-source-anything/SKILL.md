@@ -204,7 +204,7 @@ Open `assets/templates/parity-matrix.md` and `assets/templates/brief.md`, then t
 - **Hard parts**, each with the approach and the proven open-source building blocks you'll use.
 - **Wedge test for M1.** The charter's team must be able to ship M1 in weeks, not quarters, and it must do one real job well enough that someone would choose it for that job today. If M1 lists most of the incumbent's core, it isn't a wedge yet. Cut it down to one workflow for one audience, and move the rest to later milestones.
 
-Show the user a **one-page brief** (`assets/templates/brief.md`): what the product is, why people use it, what we'll build, what we won't, the hard parts, the proposed name and license, and the milestones. The full dossier stays in the repository. Questions that come up here, such as competing theses or scope forks, deserve another round of questions.
+Show the user a **one-page brief** (`assets/templates/brief.md` → `docs/brief.md`): what the product is, why people use it, what we'll build, what we won't, the hard parts, the proposed name and license, and the milestones. The full dossier stays in the repository. Questions that come up here, such as competing theses or scope forks, deserve another round of questions.
 
 ## Phase 5: Guardrails (independence, name, license)
 
@@ -220,7 +220,7 @@ Read `references/legal-and-licensing.md` before this phase. The essentials:
   - a near-identical overall look;
   - trade secrets.
 - **Independent-creation discipline.** Implement only from your own dossier and specs. Keep `docs/legal/provenance.md` (template provided) listing which sources informed the work and confirming which were never accessed. This log is how the project proves independent creation. It matters more now that AI-assisted "clean-room" rewrites are publicly contested.
-- **Naming.** Choose a distinct name, then **check it before using it anywhere**. Run each of these as a separate search, one name at a time (a combined OR query misses results):
+- **Naming.** Choose a distinct name, preferring a coined word over a common one. Common words and obvious compounds ("Corkboard", "SlotPilot", "Trimly") almost always already belong to someone in the category. Then **check it before using it anywhere**. Run each of these as a separate search, one name at a time (a combined OR query misses results):
   - the name together with the product category, on the general web;
   - "<name> app";
   - GitHub;
@@ -276,6 +276,7 @@ Publishing, launch posts and directory listings are outward-facing and hard to u
 docs/charter.md                 # intent, scope, assumptions
 docs/process-log.md             # what was actually done in each phase: fetches, checks, tests
 docs/research/dossier.md        # the eight lenses, sourced and dated
+docs/brief.md                   # the one-page plan the user approves
 docs/product/parity-matrix.md   # features × tier × status
 docs/legal/provenance.md        # sources used; what was never accessed
 docs/adr/NNNN-*.md              # architecture decisions

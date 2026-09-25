@@ -30,6 +30,7 @@ Everyone has looked at a product and thought *"I could do that better, and I'd o
 - ⚖️ **Legally clean by construction.** It learns only from public behavior and documentation, never from the target's code. It keeps a provenance log, picks trademark-safe names, and chooses a license with you.
 - 🏗️ **Builds for self-hosters.** One-command start, few moving parts, open formats, an importer from the product you're leaving, and honest parity tracking.
 - 🚀 **Ships it properly.** README, docs, CI, community files and packaging. You decide when to publish.
+- 🧪 **Tested in public.** 11 logged test runs, from first-reply checks to full builds of a link shortener, a scheduler, Linear, Figma, the Nest thermostat, Typeform and Trello. Each one is fact-checked claim by claim and each drove a skill fix. See [`runs/`](runs/).
 
 ## Install
 

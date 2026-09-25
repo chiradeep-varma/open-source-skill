@@ -8,3 +8,8 @@ __pycache__/
 *.sqlite
 *.sqlite3
 .DS_Store
+.next/
+*.tsbuildinfo
+# Generated clients and native engine binaries (recreated by the project's own tooling)
+**/src/generated/
+*.so.node

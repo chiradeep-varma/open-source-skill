@@ -28,6 +28,6 @@ python3 "$TOOLS_DIR/trace_summary.py" "$OUT_DIR/transcript.jsonl" "$OUT_DIR/fina
 mkdir -p "$OUT_DIR/workspace"
 tar -C "$WORK" --exclude='.git' --exclude='node_modules' --exclude='.venv' --exclude='venv' \
     --exclude='__pycache__' --exclude='*.db' --exclude='*.sqlite*' --exclude='.pytest_cache' \
-    --exclude='data' -cf - . | tar -C "$OUT_DIR/workspace" -xf -
+    --exclude='data' --exclude='.next' --exclude='*.tsbuildinfo' --exclude='generated' --exclude='*.so.node' -cf - . | tar -C "$OUT_DIR/workspace" -xf -
 gzip -f "$OUT_DIR/transcript.jsonl"   # read with: zcat transcript.jsonl.gz
 echo "workspace kept at $WORK for manual verification"

@@ -31,5 +31,41 @@ Every test of this skill is logged here in full: the prompt, the skill version, 
 | [08](run-08/) | v0.9 | Deep | Big | Figma (Brief) | Research thorough and every checked fact correct, but 43 claims tagged `confirmed` with only 2/21 fetches succeeding (subagents); thesis anchored to a rival; "wedge" was most of the core | 8/8 (tags inflated) |
 | [09](run-09/) | v1.0 | Deep | Hardware | Nest thermostat (Brief) | `reported` fix worked (10 confirmed all earned, 52 reported); generations and lifecycle handled; careful DMCA §1201 reasoning; no ADRs (Brief scope ambiguous) | 6/6 |
 | [10](run-10/) | v1.1 | Deep (verification) | Small–medium | Typeform-style form builder (Prototype) | Run 05/06 fixes held (templates, name check, process log, honest tags); app works incl. path-aware branching; but no automated tests (broken `npm test`), log claimed floor "met" with 0 fetches, stale pricing, sound-alike name | 2/4 (1 stale, 1 name risk) |
+| [11](run-11/) | v1.2 | Deep (confirmation) | Medium | Trello-style board (Prototype) | v1.2 fixes held (16/16 tests, refuses to start without a secret, honest tags, README lines); most complete build; common-word name "Corkboard" check incomplete; skill files unopened | 4/4 (+1 incomplete name check) |
 
-Deep runs are added as they complete.
+## What the runs taught
+
+The skill's biggest problems weren't missing knowledge. They were **process instructions that the model skipped when told to "just build it"**. What fixed them was turning each process step into something **visible in the output**.
+
+| Problem | Instruction that didn't work | Change that did |
+|---|---|---|
+| Namesakes silently picked ("Bolt") | "Search for collisions" (a process step) | "**Your first reply opens with identity**" (an output rule), plus "never call it confirmed unless…" (Runs 01–03) |
+| Research skipped under "just build it" | A research-depth table in a reference file | A research floor inside SKILL.md, plus a **process log** that must show the floor was met (Runs 05–07) |
+| Search snippets tagged `confirmed` | A definition of `confirmed` | A new, honest **`reported`** tag. The model needed a truthful label for "seen in search results, not opened" (Runs 06, 08 → fixed in 09) |
+| Research subagents inflating tags | (none) | Pass the tag rules to subagents and **audit tags against actual fetches before merging** (Run 08) |
+| "Does it already exist?" habit | Removing the instruction | An explicit contrary instruction: don't open with alternatives, don't justify the build against others, anchor the thesis in the incumbent's users (Runs 03, 08) |
+| Wrong facts in chat (Arc "dropped Linux", Nest "can't be reflashed") | The evidence standard, dossier only | The evidence standard now applies to **what you tell the user** (Run 04) |
+| Names colliding (Trimly, SlotPilot, Corkboard) | "Check the name" | Separate searches per location, a sound-alike check, and **prefer coined names** (Runs 05, 06, 10, 11) |
+| No tests in a working prototype | "Tests on core logic" in the quality bar | The **passing test command must appear in the process log** before Phase 7 counts as done (Run 10 → held in 11) |
+
+**Self-audit.** The fact-checks also caught a stale fact in the skill's *own* legal reference. Cal.com was listed as an AGPL example, but it went proprietary in April 2026. It's fixed, and license examples now carry an "as of" date.
+
+## Accuracy trend (deep runs)
+
+| Run | Checked claims correct | Main source of error |
+|---|---|---|
+| 05 | 3/6 | Memory, pricing basis, name |
+| 06 | 3/8 | Snippets tagged `confirmed`, a stale license, name |
+| 07 | 7/8 | One tier-gating contradiction |
+| 08 | 8/8 | Content correct, but tags inflated |
+| 09 | 6/6 | None |
+| 10 | 2/4 | Stale pricing snippets, sound-alike name |
+| 11 | 4/4 | Incomplete name check |
+
+## Known limitations of this evaluation
+
+- **This sandbox blocked most primary sites** (vendor sites, GitHub pages, G2, web.archive.org). Most research ran on search snippets. The skill handled that honestly from Run 07 on, but the `confirmed` path was rarely exercised. Runs with open web access should show more `confirmed` evidence.
+- **Headless runs can't answer questions**, so the checkpoints and the grilling after the first reply were tested only through "make the calls yourself". Runs 01–04 test the first reply itself.
+- **Docker, OAuth and real hardware couldn't be exercised** here. Those parts were verified only by the agents' own reasoning and file checks.
+- **Reference files are opened inconsistently** (Runs 07–10 yes; 05, 06 and 11 no). SKILL.md therefore carries every requirement a run must meet; the reference files add depth.
+- Each deep run is a single sample, so a behavior that passed once may still vary.
