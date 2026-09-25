@@ -27,5 +27,6 @@ Every test of this skill is logged here in full: the prompt, the skill version, 
 | [04](run-04/) | v0.5 | First reply | n/a | Arc, Calendly, Nest | Evidence standard didn't reach chat replies; no device sub-scope; stale fact in the skill's own legal reference | 2/7 |
 | [05](run-05/) | v0.6 | Deep | Small | Bitly-style link shortener (Prototype) | Research collapsed to 1 search under "just build it"; 0 reference files opened; name collided with a live shortener; the build itself fully worked | 3/6 (+2 misleading, 1 wrong) |
 | [06](run-06/) | v0.7 | Deep | Small–medium | Calendly-style team scheduler (Prototype) | Reference files still never opened; `confirmed` stamped on unfetched snippets (2 wrong); name collision again; no non-affiliation line. Build: DST-correct, 8/8 tests | 3/8 (4 wrong, 1 unverified) |
+| [07](run-07/) | v0.8 | Deep | Medium | Linear (Brief) | Best so far: 22 searches, 8 skill files, 12-search name check, honest process log. Minor tier-gating contradiction; research playbook still unopened; primary sources blocked by the sandbox (handled well) | 7/8 (1 partly wrong, 1 unverified) |
 
 Deep runs are added as they complete.

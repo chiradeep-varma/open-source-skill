@@ -152,8 +152,9 @@ Also record the **legal surface**: trademarks, relevant terms-of-service clauses
 
 - **Evidence standard.** Every material claim carries a source and an access date and is tagged `confirmed`, `inferred`, `assumption` or `memory` (from your own knowledge, still to be verified).
   - **`confirmed` means you opened the source page itself and it says this.** A search-result snippet is a lead, not a confirmation. Fetch the page, or tag the claim `inferred`.
-  - Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries.
+  - Prefer primary sources (docs, changelogs, pricing pages, the company's own posts) over third-party summaries. When an aggregator and the vendor's own changelog or pricing page disagree, the vendor wins. Record the disagreement.
   - Record contradictions instead of silently resolving them.
+  - **If a primary source is unreachable** (blocked, paywalled, removed), try an archived copy (the Wayback Machine) or ask the user to paste the page. If that fails too, tag the claim `inferred`, say so in the dossier, and add it to a "verify before building" list in the brief.
 - **Access rules.** Public material is fair game. The user's own account and data exports are useful for observing behavior and designing importers. First check the target's terms for clauses against reverse engineering or competitive use, and tell the user what you find.
 - **Never use**:
   - proprietary source code, including leaked, decompiled or de-minified code and source maps;
