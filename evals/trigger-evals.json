@@ -1,0 +1,22 @@
+[
+  {"query": "ok so we're paying like $15/seat for linear and honestly we could just build our own. can you help me make an open source version we can self host on our k8s cluster?", "should_trigger": true},
+  {"query": "I genuinely think I could build a better Figma. Where would I even start?", "should_trigger": true},
+  {"query": "build me a self-hosted alternative to google photos that runs on my synology NAS, I have about 400GB of family pics", "should_trigger": true},
+  {"query": "i want an open source version of bolt", "should_trigger": true},
+  {"query": "can you research how Superhuman works and build an open-source email client that feels like it but works with my fastmail account", "should_trigger": true},
+  {"query": "we're sunsetting our SaaS product next quarter and want to open-source the codebase so existing customers can self-host. help me plan it", "should_trigger": true},
+  {"query": "make a FOSS clone of the kindle app that reads my epubs and syncs highlights between my phone and laptop", "should_trigger": true},
+  {"query": "I want to start an open-source company competing with Intercom. Help me figure out the market and build v1", "should_trigger": true},
+  {"query": "design an open hardware version of the Ring doorbell that doesn't send video to amazon", "should_trigger": true},
+  {"query": "Notion but open source and local-first — could you build that for me? I mostly use databases and linked pages", "should_trigger": true},
+  {"query": "what exactly does the AGPL require if I modify a library and use it inside my SaaS backend?", "should_trigger": false},
+  {"query": "git clone the linear/linear repo and get the dev environment running with pnpm", "should_trigger": false},
+  {"query": "write a CONTRIBUTING.md for my existing open source rust crate, we use conventional commits", "should_trigger": false},
+  {"query": "compare Plausible and Umami for my personal blog analytics, which is lighter to run?", "should_trigger": false},
+  {"query": "fix the bug in our self-hosted Cal.com where bookings show in UTC instead of the invitee's timezone", "should_trigger": false},
+  {"query": "explain how Figma's multiplayer sync works under the hood, just curious", "should_trigger": false},
+  {"query": "summarize the Google v. Oracle supreme court decision in 3 bullet points", "should_trigger": false},
+  {"query": "clone this landing page's layout for my portfolio site: https://stripe.com", "should_trigger": false},
+  {"query": "help me choose between MIT and Apache-2.0 for a new npm package I'm publishing", "should_trigger": false},
+  {"query": "open a PR on immich adding a face-blur option when sharing albums", "should_trigger": false}
+]

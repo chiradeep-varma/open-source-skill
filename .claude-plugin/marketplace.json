@@ -1,0 +1,14 @@
+{
+  "name": "open-source-skill",
+  "description": "The open-source-anything skill: build an open alternative to any product.",
+  "owner": {
+    "name": "Chiradeep Varma"
+  },
+  "plugins": [
+    {
+      "name": "open-source-anything",
+      "source": "./",
+      "description": "Build an open-source alternative to any product: disambiguate, research, stay legally clean, design, build and release."
+    }
+  ]
+}

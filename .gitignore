@@ -1,0 +1,10 @@
+# Artifacts from evaluation runs that shouldn't be committed
+node_modules/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store

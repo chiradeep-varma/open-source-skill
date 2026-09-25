@@ -1,0 +1,100 @@
+{
+  "skill_name": "open-source-anything",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ambiguous-name-bolt",
+      "prompt": "make me an open source bolt",
+      "expected_output": "Searches before asking, finds several products called Bolt, opens with identity by presenting them with fingerprints and what building each would involve, gives a best guess, and asks which one before any deep research or code.",
+      "files": [],
+      "assertions": [
+        "Opens with identity: lists at least three distinct products named Bolt (e.g. bolt.new, Bolt checkout, Bolt ride-hailing, Bolt CMS) or clearly states an assumption and names the others",
+        "Notes that the ride-hailing Bolt's value is mostly network and operations, not software",
+        "Asks the user which one they mean, with a recommended guess",
+        "Does not recommend using, deploying or contributing to an existing open-source project instead of building",
+        "Does not start building before identity is settled"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "dominant-candidate-arc",
+      "prompt": "yo build me an open source version of Arc, i'm sick of it",
+      "expected_output": "Assumes the Arc browser, names unlikely namesakes in one line, surfaces its maintenance-mode status and Chromium base, and asks what 'sick of it' means so the build has a clear better-thesis.",
+      "files": [],
+      "assertions": [
+        "States the assumption that Arc means the Arc browser, mentioning at least one other 'Arc' briefly",
+        "Mentions that Arc is built on Chromium and that the open version would build on an existing open engine rather than a new one",
+        "Asks what specifically the user dislikes or needs, to shape what gets built",
+        "Does not recommend switching to an existing browser instead of building"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "clear-target-calendly",
+      "prompt": "I want an open-source Calendly for my 6-person consulting firm. I know some Python and we have a small VPS. Can you build it?",
+      "expected_output": "Clear identity without unnecessary questions; moves toward building a lean, self-hostable Python scheduler sized for a small VPS; asks only plan-changing questions with recommended answers; flags calendar OAuth/CalDAV, time zones and double-booking as hard parts.",
+      "files": [],
+      "assertions": [
+        "Identifies Calendly without unnecessary disambiguation questions",
+        "Proposes building (e.g. a Python stack the user can maintain) rather than deploying an existing product",
+        "Asks a small number of plan-changing questions, each with a recommended answer",
+        "Mentions calendar integration (OAuth or CalDAV) and time zones as hard parts",
+        "Designs for a small VPS (one-command start, few services)"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "release-own-project",
+      "prompt": "We built an internal feature-flag service at my startup and our CTO wants to open source it. Where do we start?",
+      "expected_output": "Routes to the release-your-own path: confirms ownership and authority, secret scanning across git history with rotation, internal-reference cleanup, license choice with trade-offs, contribution terms, fresh-machine runnability, and a release plan.",
+      "files": [],
+      "assertions": [
+        "Addresses who owns the code and who must approve the release",
+        "Recommends scanning the full git history for secrets and rotating any found",
+        "Recommends a license with a reason (e.g. Apache-2.0 for adoption vs AGPL-3.0 to protect a hosted offering)",
+        "Mentions contribution terms (DCO or CLA)",
+        "Does not start a competitive research dossier on another company's product"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "venture-docusign",
+      "prompt": "I want to build an open-source competitor to DocuSign and eventually raise a seed round. Help me figure out the market and build v1.",
+      "expected_output": "Venture mode: charter questions, market and business-model research including the competitive field, e-signature legal frameworks (e.g. ESIGN/UETA, eIDAS), license strategy for a business (AGPL + hosted vs open core), a differentiated better-thesis, and a recommendation to get legal counsel.",
+      "files": [],
+      "assertions": [
+        "Treats this as Venture mode with market sizing or business-model analysis",
+        "Mentions legal frameworks for electronic signatures (e.g. ESIGN, UETA, eIDAS)",
+        "Discusses license strategy in business terms (AGPL/hosted, open core, CLA trade-offs)",
+        "Proposes or asks for a differentiated better-thesis",
+        "Recommends legal counsel for the commercial venture"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "exact-replica-request",
+      "prompt": "clone notion exactly, same UI, same icons, call it Notion Open, and copy their template gallery so people feel at home",
+      "expected_output": "Explains briefly why the name, icons, exact look and templates are off-limits, and offers the closest safe version (familiar workflows, importer, own identity and templates), then continues toward building.",
+      "files": [],
+      "assertions": [
+        "Declines the name 'Notion Open' and explains the trademark issue",
+        "Declines copying icons and templates",
+        "Offers a safe alternative that preserves familiarity (workflows, keyboard conventions, importer)",
+        "Continues toward building rather than refusing the project or suggesting an existing product"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "hardware-thermostat",
+      "prompt": "open source the nest thermostat, I want local control without google",
+      "expected_output": "Uses the hardware playbook: offers build paths (open firmware where legitimately reflashable, off-the-shelf module device with ESPHome/Home Assistant integration, full custom), flags anti-circumvention limits, electrical safety, and certification if selling.",
+      "files": [],
+      "assertions": [
+        "Presents more than one build path, including building from off-the-shelf modules",
+        "Mentions Home Assistant, ESPHome or Matter for local control",
+        "Warns against bypassing locked bootloaders or DRM",
+        "Mentions electrical safety and/or certification requirements if devices are sold"
+      ]
+    }
+  ]
+}
