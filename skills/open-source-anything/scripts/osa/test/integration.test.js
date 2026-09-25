@@ -31,40 +31,51 @@ const request = (port, method, p, headers = {}) => new Promise((resolve, reject)
   req.end();
 });
 
-test('start installs once, generates secrets, serves, and stop ends the process', async () => {
-  const home = tempHome();
-  const dir = makeProject(home, 'amber-otter');
-  const m = loadManifest(dir);
-  const phases = [];
+// Windows always uses the keeper process (see launch() in runner.js); elsewhere the
+// app runs directly, and the keeper path is tested too so every platform covers it.
+const MODES = process.platform === 'win32' ? [{ keeper: true }] : [{ keeper: false }, { keeper: true }];
 
-  const r = await runner.start(dir, m, { onPhase: (p) => phases.push(p) });
-  assert.deepEqual(phases, ['installing', 'starting']);
-  assert.equal(r.state, 'running');
-  assert.ok(r.reveal.ADMIN_PASSWORD);
-  const res = await get(r.url);
-  assert.equal(res.body, `ok 64 http://localhost:${r.port}`);
-  assert.equal(runner.status(dir).state, 'running');
+for (const mode of MODES) {
+  const how = mode.keeper ? 'through the keeper' : 'directly';
 
-  assert.equal(await runner.stop(dir), true);
-  assert.equal(runner.status(dir).state, 'stopped');
-  await assert.rejects(get(r.url));
+  test(`start installs once, generates secrets, serves, and stop ends the process (${how})`, async () => {
+    const home = tempHome();
+    const dir = makeProject(home, 'amber-otter');
+    const m = loadManifest(dir);
+    const phases = [];
 
-  // Second start: no reinstall, same secret.
-  const secret = fs.readFileSync(path.join(dir, '.env'), 'utf8');
-  const phases2 = [];
-  const r2 = await runner.start(dir, m, { onPhase: (p) => phases2.push(p) });
-  assert.deepEqual(phases2, ['starting']);
-  assert.equal(fs.readFileSync(path.join(dir, 'installs.txt'), 'utf8'), 'x');
-  assert.equal(fs.readFileSync(path.join(dir, '.env'), 'utf8'), secret);
-  await runner.stop(r2 && dir);
-});
+    const r = await runner.start(dir, m, { ...mode, onPhase: (p) => phases.push(p) });
+    assert.deepEqual(phases, ['installing', 'starting']);
+    assert.equal(r.state, 'running');
+    assert.ok(r.reveal.ADMIN_PASSWORD);
+    const res = await get(r.url);
+    assert.equal(res.body, `ok 64 http://localhost:${r.port}`);
+    assert.equal(runner.status(dir).state, 'running');
+    // Through the keeper, output reaches the log via a pipe, a moment after the app answers.
+    for (let i = 0; i < 40 && !/listening on/.test(runner.logs(dir).app); i++) await new Promise((r) => setTimeout(r, 50));
+    assert.match(runner.logs(dir).app, /listening on/);
 
-test('a crashing app gives a friendly error with the log tail', async () => {
-  const home = tempHome();
-  const dir = makeProject(home, 'crashy', { crash: true });
-  await assert.rejects(runner.start(dir, loadManifest(dir)), (err) => /stopped right after starting/.test(err.message) && /boom: missing config/.test(err.detail));
-  assert.equal(runner.status(dir).state, 'stopped');
-});
+    assert.equal(await runner.stop(dir), true);
+    assert.equal(runner.status(dir).state, 'stopped');
+    await assert.rejects(get(r.url));
+
+    // Second start: no reinstall, same secret.
+    const secret = fs.readFileSync(path.join(dir, '.env'), 'utf8');
+    const phases2 = [];
+    await runner.start(dir, m, { ...mode, onPhase: (p) => phases2.push(p) });
+    assert.deepEqual(phases2, ['starting']);
+    assert.equal(fs.readFileSync(path.join(dir, 'installs.txt'), 'utf8'), 'x');
+    assert.equal(fs.readFileSync(path.join(dir, '.env'), 'utf8'), secret);
+    await runner.stop(dir);
+  });
+
+  test(`a crashing app gives a friendly error with the log tail (${how})`, async () => {
+    const home = tempHome();
+    const dir = makeProject(home, 'crashy', { crash: true });
+    await assert.rejects(runner.start(dir, loadManifest(dir), mode), (err) => /stopped right after starting/.test(err.message) && /boom: missing config/.test(err.detail));
+    assert.equal(runner.status(dir).state, 'stopped');
+  });
+}
 
 test('a failing install explains what failed', async () => {
   const home = tempHome();

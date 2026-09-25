@@ -198,7 +198,28 @@ async function httpUp(port, pathname = '/') {
 
 // ---- start / stop ---------------------------------------------------------------------
 
-async function start(dir, manifest, { onPhase = () => {}, takenPorts = new Set(), timeoutMs = 120000 } = {}) {
+// Starts the app so it outlives the launcher, with its output in logPath.
+// POSIX: the app leads its own process group (so stop() ends the whole tree, and
+// closing the launcher's terminal doesn't) and writes straight to the log.
+// Windows: a detached process has no console, so a console app it starts gets a
+// fresh console that swallows the output and can pop up a window. A small keeper
+// (keeper.js) runs detached instead and starts the app through pipes.
+function launch(command, { cwd, env, logPath, keeper }) {
+  if (keeper) {
+    fs.writeFileSync(logPath, '');
+    return spawn(process.execPath, [path.join(__dirname, 'keeper.js'), logPath, command], {
+      cwd, env, detached: true, stdio: 'ignore', windowsHide: true,
+    });
+  }
+  const fd = fs.openSync(logPath, 'w');
+  try {
+    return spawn(command, { cwd, env, shell: true, detached: true, stdio: ['ignore', fd, fd], windowsHide: true });
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
+async function start(dir, manifest, { onPhase = () => {}, takenPorts = new Set(), timeoutMs = 120000, keeper = process.platform === 'win32' } = {}) {
   const current = status(dir);
   if (current.state === 'running') return { ...current, alreadyRunning: true, reveal: ensureEnv(dir, manifest.env).reveal };
   if (manifest.kind !== 'web') throw new FriendlyError('This project has nothing to start: it is a command-line tool or library. Open its folder to use it.');
@@ -224,18 +245,7 @@ async function start(dir, manifest, { onPhase = () => {}, takenPorts = new Set()
   onPhase('starting');
   fs.mkdirSync(logsDir(dir), { recursive: true });
   const logPath = path.join(logsDir(dir), 'app.log');
-  const fd = fs.openSync(logPath, 'w');
-  const child = spawn(pickCommand(manifest.start), {
-    cwd: dir,
-    env,
-    shell: true,
-    // POSIX: its own process group, so stop() ends the whole tree and closing the
-    // launcher's window doesn't. Windows: its own hidden console, for the same reason.
-    detached: true,
-    stdio: ['ignore', fd, fd],
-    windowsHide: true,
-  });
-  fs.closeSync(fd);
+  const child = launch(pickCommand(manifest.start), { cwd: dir, env, logPath, keeper });
   let exited = null;
   child.on('exit', (code) => { exited = code ?? 'signal'; });
   child.on('error', (err) => { exited = err.message; });
