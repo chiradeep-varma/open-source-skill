@@ -206,9 +206,20 @@ Yes, with reduced confidence. It says so up front, asks you to share links or sc
 Yes. There is a dedicated path covering ownership and authority, scrubbing secrets from git history, license and dependency audits, contribution terms, and making it runnable by strangers.
 </details>
 
-## Testing
+## Testing and transparency
 
-`evals/evals.json` holds realistic prompts with checkable assertions covering an ambiguous name, a dominant candidate, a clear target, releasing your own project, a venture, a replica request and hardware. `evals/trigger-evals.json` holds should-trigger and near-miss should-not-trigger queries for tuning the skill description. Both follow the format used by Anthropic's [skill-creator](https://github.com/anthropics/skills).
+Every test run of this skill is published in [`runs/`](runs/), including the failures. Each run logs:
+- the prompt, and the skill version it ran against;
+- the raw output, plus the full trace for deep runs;
+- a claim-by-claim fact-check with source links;
+- the flaws found, and exactly what changed in the skill because of them.
+
+Runs go one after another, from first-reply tests to full builds of targets ranging from a small link shortener up to Figma, with each run's fixes applied before the next run starts.
+
+- `evals/evals.json` holds realistic prompts with checkable assertions. They cover an ambiguous name, a dominant candidate, a clear target, releasing your own project, a venture, a replica request and hardware.
+- `evals/trigger-evals.json` holds should-trigger and near-miss should-not-trigger queries for tuning the skill description.
+- Both follow the format used by Anthropic's [skill-creator](https://github.com/anthropics/skills).
+- [`runs/tools/run_eval.sh`](runs/tools/run_eval.sh) reproduces any run.
 
 ## Contributing
 
