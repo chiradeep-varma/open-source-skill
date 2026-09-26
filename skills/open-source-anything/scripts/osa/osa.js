@@ -107,7 +107,7 @@ async function main() {
       });
       console.log(`${p.id} is ${r.alreadyRunning ? 'already ' : ''}running at ${r.url}`);
       printReveal(r.reveal);
-      if (args.openAfter) openExternal(r.url);
+      if (args.openAfter && !(await openExternal(r.url))) console.log('Open that address in your browser.');
       return;
     }
     case 'stop': {
@@ -124,8 +124,8 @@ async function main() {
       const p = findProject(home, target || '');
       const s = runner.status(p.dir);
       if (s.state !== 'running') throw new runner.FriendlyError(`${p.id} isn't running. Start it with: osa start ${p.id}`);
-      openExternal(s.url);
       console.log(s.url);
+      if (!(await openExternal(s.url))) console.log('Open that address in your browser.');
       return;
     }
     case 'logs': {

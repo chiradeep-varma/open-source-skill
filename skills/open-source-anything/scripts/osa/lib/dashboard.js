@@ -22,17 +22,27 @@ function friendlyPath(p, platform = process.platform, home = os.homedir()) {
   return `~${p.slice(home.length)}`;
 }
 
+// Runs a command in the background and resolves to whether it could start. A missing
+// command (say, Linux without xdg-open) reports false instead of crashing the launcher.
+function launchDetached(cmd, args) {
+  return new Promise((resolve) => {
+    try {
+      const child = spawn(cmd, args, { detached: true, stdio: 'ignore', windowsHide: true });
+      child.once('spawn', () => { child.unref(); resolve(true); });
+      child.once('error', () => resolve(false));
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+// Opens a URL in the default browser, or a folder in the file manager.
 function openExternal(target) {
   const [cmd, args] =
     process.platform === 'darwin' ? ['open', [target]]
       : process.platform === 'win32' ? ['explorer.exe', [target]] // opens URLs in the default browser, folders in Explorer
         : ['xdg-open', [target]];
-  try {
-    spawn(cmd, args, { detached: true, stdio: 'ignore', windowsHide: true }).unref();
-    return true;
-  } catch {
-    return false;
-  }
+  return launchDetached(cmd, args);
 }
 
 function createDashboard({ home }) {
@@ -113,7 +123,7 @@ function createDashboard({ home }) {
 
     if (url.pathname === '/api/open-home') {
       fs.mkdirSync(home, { recursive: true });
-      return send(200, { ok: openExternal(home) });
+      return send(200, { ok: await openExternal(home), path: home });
     }
     if (url.pathname === '/api/stop-all') {
       for (const p of discover(home)) if (p.manifest) await runner.stop(p.dir);
@@ -137,10 +147,10 @@ function createDashboard({ home }) {
         return send(200, { ok: true });
       case 'open': {
         const s = runner.status(p.dir);
-        return send(200, { ok: s.state === 'running' && openExternal(s.url) });
+        return send(200, { ok: s.state === 'running' && (await openExternal(s.url)), url: s.url ?? null });
       }
       case 'folder':
-        return send(200, { ok: openExternal(p.dir) });
+        return send(200, { ok: await openExternal(p.dir), path: p.dir });
     }
   });
 
@@ -166,7 +176,7 @@ async function serve({ home, port = DEFAULT_PORT, open = true, log = console.log
   if (await probe(port)) {
     const url = `http://localhost:${port}/`;
     log(`The launcher is already running at ${url}`);
-    if (open) openExternal(url);
+    if (open && !(await openExternal(url))) log('Open that address in your browser.');
     return null;
   }
   const { server } = createDashboard({ home });
@@ -181,8 +191,8 @@ async function serve({ home, port = DEFAULT_PORT, open = true, log = console.log
   log(`Your projects: ${url}`);
   log(`Projects folder: ${home}`);
   log('Keep this window open while you use the launcher. Your projects keep running if you close it.');
-  if (open) openExternal(url);
+  if (open && !(await openExternal(url))) log(`Couldn't open a browser here. Open ${url} in your browser.`);
   return server;
 }
 
-module.exports = { createDashboard, serve, openExternal, friendlyPath, DEFAULT_PORT };
+module.exports = { createDashboard, serve, openExternal, launchDetached, friendlyPath, DEFAULT_PORT };
