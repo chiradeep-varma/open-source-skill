@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if event_type else 'New' }} meeting type — SlotPilot{% endblock %}
+{% block content %}
+  <h1>{{ 'Edit' if event_type else 'New' }} meeting type</h1>
+  <form method="post" action="{{ '/admin/event-types/%d/edit' % event_type.id if event_type else '/admin/event-types/new' }}">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value="{{ event_type.name if event_type else '' }}" required>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="3">{{ event_type.description if event_type else '' }}</textarea>
+
+    <label for="duration_minutes">Duration (minutes)</label>
+    <input type="number" id="duration_minutes" name="duration_minutes" min="5" step="5"
+           value="{{ event_type.duration_minutes if event_type else 30 }}">
+
+    <label for="buffer_before_minutes">Buffer before (minutes)</label>
+    <input type="number" id="buffer_before_minutes" name="buffer_before_minutes" min="0" step="5"
+           value="{{ event_type.buffer_before_minutes if event_type else 0 }}">
+
+    <label for="buffer_after_minutes">Buffer after (minutes)</label>
+    <input type="number" id="buffer_after_minutes" name="buffer_after_minutes" min="0" step="5"
+           value="{{ event_type.buffer_after_minutes if event_type else 0 }}">
+
+    <label for="min_notice_hours">Minimum notice (hours)</label>
+    <input type="number" id="min_notice_hours" name="min_notice_hours" min="0"
+           value="{{ event_type.min_notice_hours if event_type else 4 }}">
+
+    <label for="booking_window_days">Bookable how many days out</label>
+    <input type="number" id="booking_window_days" name="booking_window_days" min="1"
+           value="{{ event_type.booking_window_days if event_type else 21 }}">
+
+    <label for="location_type">Location</label>
+    <select id="location_type" name="location_type">
+      {% for loc in locations %}
+        <option value="{{ loc.value }}" {% if event_type and event_type.location_type == loc %}selected{% endif %}>
+          {{ loc.value.replace('_', ' ') }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label for="location_detail">Location detail (phone number / custom instructions — ignored for Google Meet)</label>
+    <input type="text" id="location_detail" name="location_detail" value="{{ event_type.location_detail if event_type else '' }}">
+
+    {% if event_type %}
+      <label class="inline" style="display:inline-block;">
+        <input type="checkbox" name="is_active" {% if event_type.is_active %}checked{% endif %}> Active (visible for booking)
+      </label>
+    {% endif %}
+
+    <button type="submit">Save</button>
+  </form>
+
+  {% if event_type %}
+    <form method="post" action="/admin/event-types/{{ event_type.id }}/delete" onsubmit="return confirm('Delete this meeting type?');">
+      <button type="submit" class="danger">Delete</button>
+    </form>
+  {% endif %}
+{% endblock %}

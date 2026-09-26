@@ -1,0 +1,26 @@
+{
+  "name": "trimly",
+  "version": "0.1.0",
+  "description": "Self-hosted URL shortener with click analytics — an open-source alternative to Bitly's core loop.",
+  "license": "MIT",
+  "private": true,
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "cookie-session": "^2.1.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "geoip-lite": "^2.0.3",
+    "qrcode": "^1.5.4",
+    "ua-parser-js": "^1.0.39"
+  }
+}

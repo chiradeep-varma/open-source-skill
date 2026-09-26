@@ -1,0 +1,139 @@
+{
+  "skill_name": "open-source-anything",
+  "evals": [
+    {
+      "id": 1,
+      "name": "ambiguous-name-bolt",
+      "prompt": "make me an open source bolt",
+      "expected_output": "Searches before asking, finds several products called Bolt, opens with identity by presenting them with fingerprints and what building each would involve, gives a best guess, and asks which one before any deep research or code.",
+      "files": [],
+      "assertions": [
+        "Opens with identity: lists at least three distinct products named Bolt (e.g. bolt.new, Bolt checkout, Bolt ride-hailing, Bolt CMS) or clearly states an assumption and names the others",
+        "Notes that the ride-hailing Bolt's value is mostly network and operations, not software",
+        "Asks the user which one they mean, with a recommended guess",
+        "Does not recommend using, deploying or contributing to an existing open-source project instead of building",
+        "Does not start building before identity is settled"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "dominant-candidate-arc",
+      "prompt": "yo build me an open source version of Arc, i'm sick of it",
+      "expected_output": "Assumes the Arc browser, names unlikely namesakes in one line, surfaces its maintenance-mode status and Chromium base, and asks what 'sick of it' means so the build has a clear better-thesis.",
+      "files": [],
+      "assertions": [
+        "States the assumption that Arc means the Arc browser, mentioning at least one other 'Arc' briefly",
+        "Mentions that Arc is built on Chromium and that the open version would build on an existing open engine rather than a new one",
+        "Asks what specifically the user dislikes or needs, to shape what gets built",
+        "Does not recommend switching to an existing browser instead of building"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "clear-target-calendly",
+      "prompt": "I want an open-source Calendly for my 6-person consulting firm. I know some Python and we have a small VPS. Can you build it?",
+      "expected_output": "Clear identity without unnecessary questions; moves toward building a lean, self-hostable Python scheduler sized for a small VPS; asks only plan-changing questions with recommended answers; flags calendar OAuth/CalDAV, time zones and double-booking as hard parts.",
+      "files": [],
+      "assertions": [
+        "Identifies Calendly without unnecessary disambiguation questions",
+        "Proposes building (e.g. a Python stack the user can maintain) rather than deploying an existing product",
+        "Asks a small number of plan-changing questions, each with a recommended answer",
+        "Mentions calendar integration (OAuth or CalDAV) and time zones as hard parts",
+        "Designs for a small VPS (one-command start, few services)"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "release-own-project",
+      "prompt": "We built an internal feature-flag service at my startup and our CTO wants to open source it. Where do we start?",
+      "expected_output": "Routes to the release-your-own path: confirms ownership and authority, secret scanning across git history with rotation, internal-reference cleanup, license choice with trade-offs, contribution terms, fresh-machine runnability, and a release plan.",
+      "files": [],
+      "assertions": [
+        "Addresses who owns the code and who must approve the release",
+        "Recommends scanning the full git history for secrets and rotating any found",
+        "Recommends a license with a reason (e.g. Apache-2.0 for adoption vs AGPL-3.0 to protect a hosted offering)",
+        "Mentions contribution terms (DCO or CLA)",
+        "Does not start a competitive research dossier on another company's product"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "venture-docusign",
+      "prompt": "I want to build an open-source competitor to DocuSign and eventually raise a seed round. Help me figure out the market and build v1.",
+      "expected_output": "Venture mode: charter questions, market and business-model research including the competitive field, e-signature legal frameworks (e.g. ESIGN/UETA, eIDAS), license strategy for a business (AGPL + hosted vs open core), a differentiated better-thesis, and a recommendation to get legal counsel.",
+      "files": [],
+      "assertions": [
+        "Treats this as Venture mode with market sizing or business-model analysis",
+        "Mentions legal frameworks for electronic signatures (e.g. ESIGN, UETA, eIDAS)",
+        "Discusses license strategy in business terms (AGPL/hosted, open core, CLA trade-offs)",
+        "Proposes or asks for a differentiated better-thesis",
+        "Recommends legal counsel for the commercial venture"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "exact-replica-request",
+      "prompt": "clone notion exactly, same UI, same icons, call it Notion Open, and copy their template gallery so people feel at home",
+      "expected_output": "Explains briefly why the name, icons, exact look and templates are off-limits, and offers the closest safe version (familiar workflows, importer, own identity and templates), then continues toward building.",
+      "files": [],
+      "assertions": [
+        "Declines the name 'Notion Open' and explains the trademark issue",
+        "Declines copying icons and templates",
+        "Offers a safe alternative that preserves familiarity (workflows, keyboard conventions, importer)",
+        "Continues toward building rather than refusing the project or suggesting an existing product"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "hardware-thermostat",
+      "prompt": "open source the nest thermostat, I want local control without google",
+      "expected_output": "Uses the hardware playbook: offers build paths (open firmware where legitimately reflashable, off-the-shelf module device with ESPHome/Home Assistant integration, full custom), flags anti-circumvention limits, electrical safety, and certification if selling.",
+      "files": [],
+      "assertions": [
+        "Presents more than one build path, including building from off-the-shelf modules",
+        "Mentions Home Assistant, ESPHome or Matter for local control",
+        "Warns against bypassing locked bootloaders or DRM",
+        "Mentions electrical safety and/or certification requirements if devices are sold"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "product-not-company-ui",
+      "prompt": "Build me an open-source Bitly I can self-host for my side projects: short links with click stats. Make the calls yourself and just build it (Prototype mode). Put the project in ./project.",
+      "expected_output": "Builds the product (shortening, redirects, click analytics) under a random codename, with no pricing tiers or quotas copied; researches the category's UI for inspiration, writes docs/design/direction.md and tokens before UI code, and reviews screenshots of the core screens against the slop list.",
+      "files": [],
+      "assertions": [
+        "The project uses a random two-word codename, not a researched brand name and not the incumbent's name",
+        "No plans, tiers, seat limits or usage quotas copied from the incumbent",
+        "docs/design/ui-research.md records UI patterns observed, in words, with sources",
+        "docs/design/direction.md exists with personality words, typography, color tokens and a differentiation check",
+        "Design tokens are defined in code and used by the UI",
+        "docs/design/screenshots/ contains reviewed captures of the core screens, and the process log records what changed after review",
+        "The UI shows none of the slop tells as defaults: untouched component-kit look, gradient washes, identical cards everywhere, emoji or decorative icons, filler copy",
+        "Automated tests for core logic pass"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "launcher-handoff-and-verbatim-texts",
+      "prompt": "I'd love my own open-source Linktree that I can run myself. Make the calls yourself and just build it (Prototype mode).",
+      "expected_output": "Builds in the shared projects folder (runs osa setup), writes a valid osa.json, proves a fresh copy starts through the launcher, fetches LICENSE and CODE_OF_CONDUCT.md verbatim with scripts/fetch_text.py, writes docs/design/review.md with the long data set and a claims check, and ends with a hand-off message that leads with the launcher.",
+      "files": [],
+      "assertions": [
+        "The project is built in the projects folder reported by `osa where`, and `osa setup` was run",
+        "osa.json passes `osa check`, lists every required secret in env.generate, and a fresh copy starts with `osa start`",
+        "LICENSE matches the official SPDX text of the chosen license (check_artifacts.py --verify-texts)",
+        "CODE_OF_CONDUCT.md matches the Contributor Covenant apart from the filled-in contact",
+        "docs/design/review.md exists, covers every core screen, lists three weaknesses per screen, and records the phone overflow check with the long data set",
+        "Core screens were captured in a real browser (scripts/capture.js or equivalent) at desktop and phone widths, and the review cites the captures",
+        "The README's run section leads with the launcher, then exactly two manual commands (install, start)",
+        "At 390px wide with the longest allowed values, no screen scrolls horizontally",
+        "Every README claim is true of the running app",
+        "The final reply leads with the launcher route (projects folder, Start projects, Start), then the manual commands",
+        "Automated tests for core logic pass",
+        "The product's own pages never name the incumbent; the non-affiliation line is only in the README and docs",
+        "If a required secret is missing on first start, the app generates and saves one and prints the sign-in details, rather than refusing or asking the user to invent it"
+      ]
+    }
+  ]
+}

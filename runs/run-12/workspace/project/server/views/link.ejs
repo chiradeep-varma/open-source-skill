@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title><%= link.code %> · sunny-thicket</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/topbar') %>
+
+  <main class="page">
+    <a class="back-link" href="/">&larr; All links</a>
+
+    <section class="panel stats-header">
+      <div>
+        <h1 class="page-title"><a class="code code-lg" href="<%= baseUrl %>/<%= link.code %>" target="_blank" rel="noopener"><%= baseUrl.replace(/^https?:\/\//, '') %>/<%= link.code %></a></h1>
+        <p class="truncate destination" title="<%= link.long_url %>">&rarr; <%= link.long_url %></p>
+      </div>
+      <img class="qr" src="/api/links/<%= link.code %>/qrcode.png" alt="QR code for this link" width="120" height="120" />
+    </section>
+
+    <section class="stat-row">
+      <div class="stat-tile">
+        <span class="stat-number"><%= stats.total %></span>
+        <span class="stat-label">Total clicks</span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-number"><%= stats.uniqueVisitors %></span>
+        <span class="stat-label">Unique visitors</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">Clicks over time</h2>
+      <% if (stats.byDay.length === 0) { %>
+        <p class="empty-state">No clicks yet.</p>
+      <% } else {
+        const max = Math.max(...stats.byDay.map(d => d.n), 1);
+        const barW = 100 / stats.byDay.length;
+      %>
+        <svg class="chart" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="Clicks per day">
+          <% stats.byDay.forEach(function(d, i) { %>
+            <rect
+              x="<%= (i * barW).toFixed(2) %>"
+              y="<%= (32 - (d.n / max) * 30).toFixed(2) %>"
+              width="<%= Math.max(barW - 0.4, 0.2).toFixed(2) %>"
+              height="<%= ((d.n / max) * 30).toFixed(2) %>"
+              class="chart-bar"
+            >
+              <title><%= d.day %>: <%= d.n %> clicks</title>
+            </rect>
+          <% }) %>
+        </svg>
+        <div class="chart-labels">
+          <span><%= stats.byDay[0].day %></span>
+          <span><%= stats.byDay[stats.byDay.length - 1].day %></span>
+        </div>
+      <% } %>
+    </section>
+
+    <div class="stat-grid">
+      <section class="panel">
+        <h2 class="section-title">Referrers</h2>
+        <% if (stats.byReferrer.length === 0) { %>
+          <p class="empty-state">No data yet.</p>
+        <% } else { %>
+          <ul class="bar-list">
+            <% const refMax = Math.max(...stats.byReferrer.map(r => r.n), 1); %>
+            <% stats.byReferrer.forEach(function(r) { %>
+              <li>
+                <span class="bar-list-label truncate" title="<%= r.referrer %>"><%= r.referrer %></span>
+                <span class="bar-list-bar"><span style="width: <%= (r.n / refMax * 100).toFixed(0) %>%"></span></span>
+                <span class="bar-list-n"><%= r.n %></span>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">Devices</h2>
+        <% if (stats.byDevice.length === 0) { %>
+          <p class="empty-state">No data yet.</p>
+        <% } else { %>
+          <ul class="bar-list">
+            <% const devMax = Math.max(...stats.byDevice.map(r => r.n), 1); %>
+            <% stats.byDevice.forEach(function(r) { %>
+              <li>
+                <span class="bar-list-label"><%= r.device_type %></span>
+                <span class="bar-list-bar"><span style="width: <%= (r.n / devMax * 100).toFixed(0) %>%"></span></span>
+                <span class="bar-list-n"><%= r.n %></span>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">Browsers</h2>
+        <% if (stats.byBrowser.length === 0) { %>
+          <p class="empty-state">No data yet.</p>
+        <% } else { %>
+          <ul class="bar-list">
+            <% const brMax = Math.max(...stats.byBrowser.map(r => r.n), 1); %>
+            <% stats.byBrowser.forEach(function(r) { %>
+              <li>
+                <span class="bar-list-label"><%= r.browser %></span>
+                <span class="bar-list-bar"><span style="width: <%= (r.n / brMax * 100).toFixed(0) %>%"></span></span>
+                <span class="bar-list-n"><%= r.n %></span>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<p><a href="/admin">&larr; Admin</a></p>
+<h1><%= component ? 'Edit component' : 'New component' %></h1>
+<% if (typeof error !== 'undefined' && error) { %><div class="error-banner"><%= error %></div><% } %>
+
+<form method="post" action="<%= component ? '/admin/components/' + component.id : '/admin/components' %>">
+  <div class="field">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value="<%= component ? component.name : '' %>" required autofocus>
+  </div>
+  <div class="field">
+    <label for="description">Description</label>
+    <textarea id="description" name="description"><%= component ? component.description : '' %></textarea>
+  </div>
+  <div class="field">
+    <label for="group_name">Group (optional)</label>
+    <input type="text" id="group_name" name="group_name" value="<%= component ? component.group_name : '' %>" placeholder="e.g. Backend">
+    <p class="hint">Components that share a group are listed together on the status page.</p>
+  </div>
+  <div class="field">
+    <label for="position">Order</label>
+    <input type="text" id="position" name="position" value="<%= component ? component.position : 0 %>">
+  </div>
+  <% if (component) { %>
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <% componentStatuses.forEach(function (s) { %>
+          <option value="<%= s %>" <%= component.status === s ? 'selected' : '' %>><%= componentLabel(s) %></option>
+        <% }); %>
+      </select>
+      <p class="hint">You can also change this from an incident's update — it's here for quick manual fixes.</p>
+    </div>
+  <% } %>
+  <div class="actions">
+    <button type="submit"><%= component ? 'Save changes' : 'Add component' %></button>
+    <a class="button secondary" href="/admin">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

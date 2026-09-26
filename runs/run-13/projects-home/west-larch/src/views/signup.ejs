@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<%- include('partials/head', { title }) %>
+<body>
+  <%- include('partials/nav') %>
+  <main class="auth-page">
+    <h1>Create your account</h1>
+    <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+    <form method="post" action="/signup" class="stack-form">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label for="username">Username</label>
+      <input id="username" name="username" value="<%= values.username || '' %>" autocomplete="username" required>
+      <p class="field-hint">This becomes your page: <%= baseUrl %>/<strong>yourname</strong></p>
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8">
+
+      <label for="confirm">Confirm password</label>
+      <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="8">
+
+      <button class="button button--primary" type="submit">Create account</button>
+    </form>
+    <p>Already have an account? <a href="/login">Log in</a></p>
+  </main>
+</body>
+</html>

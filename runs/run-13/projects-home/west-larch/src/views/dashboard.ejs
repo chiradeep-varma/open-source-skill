@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<%- include('partials/head', { title }) %>
+<body>
+  <%- include('partials/nav') %>
+  <main class="dashboard">
+    <% if (error) { %><p class="form-error" role="alert"><%= error %></p><% } %>
+
+    <section class="panel">
+      <h2>Your page</h2>
+      <p class="share-row">
+        <code><%= baseUrl %>/<%= currentUser.username %></code>
+        <a class="button button--small" href="/<%= currentUser.username %>" target="_blank" rel="noopener">Open</a>
+        <a class="button button--small" href="/<%= currentUser.username %>/qr" target="_blank" rel="noopener">QR code</a>
+      </p>
+      <p class="stat-row">
+        <span><strong><%= currentUser.page_views %></strong> page views</span>
+        <span><strong><%= links.reduce((sum, l) => sum + l.clicks, 0) %></strong> total clicks</span>
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Profile</h2>
+      <form method="post" action="/dashboard/profile" class="stack-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <label for="displayName">Display name</label>
+        <input id="displayName" name="displayName" value="<%= currentUser.display_name %>" maxlength="80">
+
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" maxlength="280" rows="3"><%= currentUser.bio %></textarea>
+
+        <label for="avatarUrl">Avatar image URL (optional)</label>
+        <input id="avatarUrl" name="avatarUrl" value="<%= currentUser.avatar_url %>" maxlength="500" placeholder="https://...">
+
+        <label for="theme">Theme</label>
+        <select id="theme" name="theme">
+          <% themes.forEach(function(t) { %>
+            <option value="<%= t %>" <%= currentUser.theme === t ? 'selected' : '' %>><%= t[0].toUpperCase() + t.slice(1) %></option>
+          <% }) %>
+        </select>
+
+        <button class="button button--primary" type="submit">Save profile</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Links</h2>
+
+      <form method="post" action="/dashboard/links" class="stack-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label for="new-title">Title</label>
+        <input id="new-title" name="title" placeholder="My new video" required maxlength="100">
+        <label for="new-url">URL</label>
+        <input id="new-url" name="url" type="url" placeholder="https://example.com" required>
+        <button class="button button--primary" type="submit">Add link</button>
+      </form>
+
+      <ul class="link-list">
+        <% links.forEach(function(link, i) { %>
+          <li class="link-row <%= link.is_active ? '' : 'link-row--inactive' %>">
+            <div class="link-row__top">
+              <div class="link-row__order">
+                <form method="post" action="/dashboard/links/<%= link.id %>/move">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <input type="hidden" name="direction" value="up">
+                  <button class="icon-button" type="submit" aria-label="Move up" <%= i === 0 ? 'disabled' : '' %>>&#8593;</button>
+                </form>
+                <form method="post" action="/dashboard/links/<%= link.id %>/move">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <input type="hidden" name="direction" value="down">
+                  <button class="icon-button" type="submit" aria-label="Move down" <%= i === links.length - 1 ? 'disabled' : '' %>>&#8595;</button>
+                </form>
+              </div>
+
+              <form method="post" action="/dashboard/links/<%= link.id %>" class="link-row__fields">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input name="title" value="<%= link.title %>" maxlength="100" required placeholder="Title">
+                <input name="url" value="<%= link.url %>" type="url" required placeholder="https://...">
+                <button class="button button--small" type="submit">Save</button>
+              </form>
+            </div>
+
+            <div class="link-row__meta">
+              <span class="click-count"><%= link.clicks %> clicks</span>
+              <form method="post" action="/dashboard/links/<%= link.id %>/toggle">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="button button--small" type="submit"><%= link.is_active ? 'Hide' : 'Show' %></button>
+              </form>
+              <form method="post" action="/dashboard/links/<%= link.id %>/delete" onsubmit="return confirm('Delete this link?')">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="button button--small button--danger" type="submit">Delete</button>
+              </form>
+            </div>
+          </li>
+        <% }) %>
+        <% if (links.length === 0) { %>
+          <li class="empty-state">No links yet — add your first one above.</li>
+        <% } %>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

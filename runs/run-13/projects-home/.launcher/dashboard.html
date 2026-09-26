@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your projects</title>
+<style>
+/* Design direction: calm, plain, trustworthy.
+   A list of things you've built, each with a clear on/off state, like light switches.
+   No cards grid, no gradients, no emoji: rows on a quiet paper-like surface, one green
+   accent that only ever means "go" or "running". System UI type for a native feel;
+   monospace for project codenames, since they're identifiers. */
+:root {
+  --bg: #f6f5f1; --surface: #ffffff; --text: #1c1b19; --muted: #5e5b55; --line: #e3e0d8;
+  --accent: #1f6b4e; --accent-ink: #ffffff; --accent-soft: #e4efe9;
+  --warn: #8a5300; --danger: #b3261e; --danger-soft: #fbeceb;
+  --radius: 6px; --space: 8px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161614; --surface: #1e1e1b; --text: #edebe6; --muted: #a7a39b; --line: #2e2d29;
+    --accent: #5fbf95; --accent-ink: #0e1a14; --accent-soft: #1d2d25;
+    --warn: #e7b866; --danger: #f2a39b; --danger-soft: #3a2220;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--bg); color: var(--text); font: 15px/1.5 var(--font); }
+body { margin: 0; }
+main { max-width: 880px; margin: 0 auto; padding: calc(var(--space) * 6) calc(var(--space) * 3) calc(var(--space) * 8); }
+h1 { font-size: 24px; font-weight: 650; margin: 0 0 var(--space); letter-spacing: -0.01em; }
+.where { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space); color: var(--muted); font-size: 14px; margin-bottom: calc(var(--space) * 4); }
+.where code { font-family: var(--mono); font-size: 13px; overflow-wrap: anywhere; }
+button, a.button {
+  font: inherit; font-size: 14px; font-weight: 550; border-radius: var(--radius); cursor: pointer;
+  padding: 7px 14px; border: 1px solid transparent; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; white-space: nowrap;
+}
+button:focus-visible, a.button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.primary { background: var(--accent); color: var(--accent-ink); }
+.primary:hover { filter: brightness(1.08); }
+.secondary { background: transparent; color: var(--text); border-color: var(--line); }
+.secondary:hover { border-color: var(--muted); }
+.quiet { background: transparent; color: var(--muted); padding-left: 6px; padding-right: 6px; }
+.quiet:hover { color: var(--text); }
+button:disabled { opacity: 0.6; cursor: default; }
+
+ul.projects { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+li.project { border-bottom: 1px solid var(--line); padding: calc(var(--space) * 2.5) 0; }
+.row { display: flex; align-items: flex-start; gap: calc(var(--space) * 2); }
+.state { width: 10px; height: 10px; border-radius: 50%; margin-top: 7px; flex: none; border: 2px solid var(--muted); }
+.state.running { background: var(--accent); border-color: var(--accent); }
+.state.busy { border-color: var(--warn); border-top-color: transparent; animation: spin 0.9s linear infinite; }
+.state.error, .state.broken { border-color: var(--danger); background: var(--danger); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .state.busy { animation: none; border-top-color: var(--warn); } }
+.info { flex: 1; min-width: 0; }
+.name { font-family: var(--mono); font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.summary { color: var(--muted); margin: 2px 0 0; }
+.status { font-size: 14px; margin-top: 6px; }
+.status a { color: var(--accent); font-family: var(--mono); }
+.actions { display: flex; gap: var(--space); flex-wrap: wrap; justify-content: flex-end; }
+.secret { margin-top: var(--space); font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space); }
+.secret code { font-family: var(--mono); background: var(--accent-soft); padding: 2px 8px; border-radius: 4px; }
+.problem { margin-top: var(--space); background: var(--danger-soft); color: var(--text); border-left: 3px solid var(--danger); padding: var(--space) calc(var(--space) * 1.5); border-radius: 0 var(--radius) var(--radius) 0; font-size: 14px; }
+details { margin-top: var(--space); }
+summary { cursor: pointer; color: var(--muted); font-size: 14px; width: fit-content; }
+pre { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: calc(var(--space) * 1.5); font: 12.5px/1.45 var(--mono); max-height: 320px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.usage { font-family: var(--mono); font-size: 13px; }
+
+.empty { border-top: 1px solid var(--line); padding: calc(var(--space) * 4) 0; max-width: 560px; }
+.empty h2 { font-size: 18px; margin: 0 0 var(--space); font-weight: 600; }
+.empty p { color: var(--muted); margin: 0 0 calc(var(--space) * 2); }
+footer { margin-top: calc(var(--space) * 4); display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--space) * 2); color: var(--muted); font-size: 14px; }
+
+@media (max-width: 600px) {
+  main { padding: calc(var(--space) * 4) calc(var(--space) * 2) calc(var(--space) * 6); }
+  .row { flex-wrap: wrap; }
+  .actions { width: 100%; justify-content: flex-start; padding-left: 26px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Your projects</h1>
+  <div class="where">
+    <span>Saved in <code id="home"></code></span>
+    <button class="quiet" id="open-home" type="button">Open folder</button>
+  </div>
+  <div id="list" aria-live="polite"></div>
+  <footer id="footer" hidden>
+    <button class="secondary" id="stop-all" type="button">Stop all running projects</button>
+    <span>Projects keep running when you close this page or the launcher window.</span>
+  </footer>
+</main>
+<script>
+const TOKEN = '__OSA_TOKEN__';
+const $ = (tag, attrs = {}, ...children) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of children.flat()) if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return el;
+};
+const post = (path) => fetch(path, { method: 'POST', headers: { 'x-osa-token': TOKEN } }).then((r) => r.json()).catch(() => ({}));
+const label = { SESSION_SECRET: 'Session secret', ADMIN_PASSWORD: 'Sign-in password', ADMIN_EMAIL: 'Sign-in email' };
+const humanize = (key) => label[key] || key.toLowerCase().replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+const busyText = { installing: 'Installing what it needs. The first start can take a few minutes.', preparing: 'Preparing…', starting: 'Starting…', stopping: 'Stopping…' };
+const openLogs = new Set();
+
+function statusLine(p) {
+  if (p.state === 'running') return $('div', { class: 'status' }, 'Running at ', $('a', { href: p.url, target: '_blank', rel: 'noopener' }, p.url.replace(/^http:\/\//, '')));
+  if (busyText[p.state]) return $('div', { class: 'status' }, busyText[p.state]);
+  if (p.state === 'broken') return $('div', { class: 'status' }, 'This project’s osa.json has a problem.');
+  if (p.state === 'error') return $('div', { class: 'status' }, 'Couldn’t start');
+  if (p.kind !== 'web') return $('div', { class: 'status' }, 'Command-line tool: open its folder to use it.');
+  return $('div', { class: 'status' }, 'Stopped');
+}
+
+function actions(p) {
+  const act = (path) => async (e) => { e.currentTarget.disabled = true; await post(path); last = ''; refresh(); };
+  const base = `/api/projects/${encodeURIComponent(p.id)}`;
+  const folder = $('button', { class: 'quiet', type: 'button', onclick: () => post(`${base}/folder`) }, 'Folder');
+  if (p.state === 'running') return [
+    $('a', { class: 'button primary', href: p.url, target: '_blank', rel: 'noopener' }, 'Open'),
+    $('button', { class: 'secondary', type: 'button', onclick: act(`${base}/stop`) }, 'Stop'), folder];
+  if (busyText[p.state]) return [$('button', { class: 'secondary', type: 'button', disabled: true }, busyText[p.state].split('.')[0].replace('…', '') + '…'), folder];
+  if (p.kind === 'web' && p.state !== 'broken') return [$('button', { class: 'primary', type: 'button', onclick: act(`${base}/start`) }, p.state === 'error' ? 'Try again' : 'Start'), folder];
+  return [folder];
+}
+
+function logPanel(p) {
+  const pre = $('pre', {}, 'Loading…');
+  const d = $('details', { open: openLogs.has(p.id), ontoggle: async () => {
+    if (d.open) openLogs.add(p.id); else openLogs.delete(p.id);
+    if (!d.open) return;
+    const l = await fetch(`/api/projects/${encodeURIComponent(p.id)}/log`).then((r) => r.json()).catch(() => ({}));
+    const parts = [];
+    if (l.install) parts.push('Install\n' + l.install);
+    if (l.setup) parts.push('Setup\n' + l.setup);
+    if (l.app) parts.push('App\n' + l.app);
+    pre.textContent = parts.join('\n\n') || 'Nothing logged yet.';
+  } }, $('summary', {}, 'Log'), pre);
+  if (d.open) setTimeout(() => d.dispatchEvent(new Event('toggle')), 0);
+  return d;
+}
+
+function row(p) {
+  const dotClass = p.state === 'running' ? 'running' : busyText[p.state] ? 'busy' : (p.state === 'error' || p.state === 'broken') ? p.state : '';
+  const extra = [];
+  if (p.reveal && Object.keys(p.reveal).length) {
+    for (const [k, v] of Object.entries(p.reveal)) {
+      extra.push($('div', { class: 'secret' }, humanize(k) + ':', $('code', {}, v),
+        $('button', { class: 'quiet', type: 'button', onclick: (e) => { navigator.clipboard?.writeText(v); e.currentTarget.textContent = 'Copied'; } }, 'Copy')));
+    }
+  }
+  if (p.state === 'error') extra.push($('div', { class: 'problem', role: 'alert' }, p.error, p.detail ? $('details', {}, $('summary', {}, 'Details'), $('pre', {}, p.detail)) : null));
+  if (p.state === 'broken') extra.push($('div', { class: 'problem' }, p.error));
+  if (p.kind !== 'web' && p.usage) extra.push($('pre', { class: 'usage' }, p.usage));
+  return $('li', { class: 'project' },
+    $('div', { class: 'row' },
+      $('span', { class: `state ${dotClass}`, 'aria-hidden': 'true' }),
+      $('div', { class: 'info' }, $('div', { class: 'name' }, p.name), p.summary ? $('p', { class: 'summary' }, p.summary) : null, statusLine(p), ...extra, p.kind === 'web' ? logPanel(p) : null),
+      $('div', { class: 'actions' }, ...actions(p))));
+}
+
+let last = '';
+async function refresh() {
+  const data = await fetch('/api/projects').then((r) => r.json()).catch(() => null);
+  if (!data) return;
+  const key = JSON.stringify(data);
+  if (key === last) return; // re-render only on change, so focus and open panels stay put
+  last = key;
+  document.getElementById('home').textContent = data.home;
+  const list = document.getElementById('list');
+  list.replaceChildren();
+  if (!data.projects.length) {
+    list.append($('div', { class: 'empty' },
+      $('h2', {}, 'No projects yet'),
+      $('p', {}, 'When Claude builds something with the open-source-anything skill and saves it in this folder, it shows up here, ready to start with one click.'),
+      $('p', {}, 'To make your first one, ask Claude something like “Build me an open-source version of [a product you use]”, and say yes when it offers to save it here.')));
+  } else {
+    list.append($('ul', { class: 'projects' }, data.projects.map(row)));
+  }
+  document.getElementById('footer').hidden = !data.projects.some((p) => p.state === 'running');
+}
+
+document.getElementById('open-home').addEventListener('click', () => post('/api/open-home'));
+document.getElementById('stop-all').addEventListener('click', async (e) => { e.currentTarget.disabled = true; await post('/api/stop-all'); e.currentTarget.disabled = false; last = ''; refresh(); });
+refresh();
+setInterval(refresh, 2000);
+</script>
+</body>
+</html>

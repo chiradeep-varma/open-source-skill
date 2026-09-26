@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trimly — Log in</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="centered">
+  <main class="card auth-card">
+    <h1>Trimly</h1>
+    <p class="muted">Self-hosted link shortener</p>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <form method="post" action="/login">
+      <label for="password">Admin password</label>
+      <input type="password" id="password" name="password" autofocus required />
+      <button type="submit">Log in</button>
+    </form>
+  </main>
+</body>
+</html>

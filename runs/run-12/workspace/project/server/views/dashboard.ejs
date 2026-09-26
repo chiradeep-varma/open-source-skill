@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Links · sunny-thicket</title>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/topbar') %>
+
+  <main class="page">
+    <section class="panel">
+      <h1 class="page-title">Create a link</h1>
+      <form id="create-form" class="create-form">
+        <label class="field field-grow">
+          <span>Destination URL</span>
+          <input type="url" name="url" placeholder="https://example.com/your-page" required />
+        </label>
+        <label class="field">
+          <span>Custom code <span class="text-muted">(optional)</span></span>
+          <input type="text" name="code" placeholder="my-link" pattern="[a-zA-Z0-9_-]{1,64}" />
+        </label>
+        <button type="submit" class="btn btn-primary">Create link</button>
+      </form>
+      <p id="create-error" class="alert alert-danger" hidden></p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="page-title">Your links</h2>
+        <span class="text-muted"><%= links.length %> total</span>
+      </div>
+
+      <% if (links.length === 0) { %>
+        <p class="empty-state">No links yet. Create your first one above.</p>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Short link</th>
+              <th>Destination</th>
+              <th class="num">Clicks</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% links.forEach(function(link) { %>
+              <tr class="<%= link.disabled ? 'row-disabled' : '' %>">
+                <td>
+                  <a class="code" href="/links/<%= link.code %>"><%= link.code %></a>
+                  <% if (link.disabled) { %><span class="badge">disabled</span><% } %>
+                </td>
+                <td class="truncate" title="<%= link.long_url %>"><%= link.title || link.long_url %></td>
+                <td class="num"><%= link.click_count %></td>
+                <td class="text-muted"><%= new Date(link.created_at).toLocaleDateString() %></td>
+                <td class="row-actions">
+                  <a class="btn btn-ghost btn-sm" href="/links/<%= link.code %>">Stats</a>
+                  <button class="btn btn-ghost btn-sm btn-delete" data-code="<%= link.code %>">Delete</button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

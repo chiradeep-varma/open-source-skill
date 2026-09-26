@@ -1,0 +1,56 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  launcher:
+    name: Launcher on ${{ matrix.os }}, Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [18, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Unit and integration tests (start, stop, secrets, the launcher page)
+        run: npm test
+      - name: Install the package and run the CLI
+        shell: bash
+        run: |
+          npm install -g .
+          osa help
+          OSA_HOME="$RUNNER_TEMP/projects" osa setup
+          OSA_HOME="$RUNNER_TEMP/projects" osa list
+
+  skill:
+    name: Skill scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile the Python scripts
+        run: python -m py_compile skills/open-source-anything/scripts/*.py runs/tools/*.py
+      - name: Check the capture script parses
+        run: node --check skills/open-source-anything/scripts/capture.js
+      - name: Generate codenames
+        run: python skills/open-source-anything/scripts/codename.py --count 3 --avoid doodle
+      - name: Fetch a license and the code of conduct verbatim
+        run: |
+          python skills/open-source-anything/scripts/fetch_text.py license MIT --holder "The amber-otter contributors" -o "$RUNNER_TEMP/LICENSE"
+          python skills/open-source-anything/scripts/fetch_text.py license AGPL-3.0-only -o "$RUNNER_TEMP/AGPL"
+          python skills/open-source-anything/scripts/fetch_text.py coc --contact conduct@example.org -o "$RUNNER_TEMP/COC.md"
+          grep -q "Copyright (c) $(date +%Y) The amber-otter contributors" "$RUNNER_TEMP/LICENSE"
+          grep -q "This Corresponding Source shall include the Corresponding Source" "$RUNNER_TEMP/AGPL"
+          grep -q "email conduct@example.org" "$RUNNER_TEMP/COC.md"

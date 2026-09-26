@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+
+<h1>Incident history</h1>
+
+<% if (monthGroups.length === 0) { %>
+  <div class="empty-state">No incidents have been recorded yet.</div>
+<% } %>
+
+<% monthGroups.forEach(function (group) { %>
+  <h2 class="month-heading"><%= group.month %></h2>
+  <div class="incident-list">
+    <% group.items.forEach(function (incident) { %>
+      <article class="incident-card">
+        <div class="incident-header">
+          <h3 class="incident-title"><a href="/incidents/<%= incident.id %>"><%= incident.title %></a></h3>
+          <span class="badge"><span class="dot status-<%= incident.status %>"></span><%= incident.status.replace('_', ' ') %></span>
+        </div>
+        <span class="impact-tag"><%= incident.impact %> &middot; <%= new Date(incident.created_at).toLocaleDateString('en-US', { dateStyle: 'medium' }) %></span>
+      </article>
+    <% }); %>
+  </div>
+<% }); %>
+
+<%- include('../partials/footer') %>

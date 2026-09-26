@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+
+<p><a href="/admin">&larr; Admin</a></p>
+
+<div class="incident-header">
+  <h1><%= incident.title %></h1>
+  <span class="badge"><span class="dot status-<%= incident.status %>"></span><%= incident.status.replace('_', ' ') %></span>
+</div>
+<span class="impact-tag"><%= incident.impact %> impact <% if (linkedComponents.length) { %>&middot; affects <%= linkedComponents.map(function (c) { return c.name; }).join(', ') %><% } %></span>
+
+<% if (typeof error !== 'undefined' && error) { %><div class="error-banner"><%= error %></div><% } %>
+
+<ul class="timeline">
+  <% updates.slice().reverse().forEach(function (u) { %>
+    <li>
+      <time><%= new Date(u.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) %></time>
+      <strong><%= u.status.replace('_', ' ') %></strong> — <%= u.body %>
+    </li>
+  <% }); %>
+</ul>
+
+<% var statuses = incident.impact === 'maintenance' ? maintenanceStatuses : incidentStatuses; %>
+<% var isDone = incident.status === 'resolved' || incident.status === 'completed'; %>
+
+<% if (!isDone) { %>
+  <section class="admin-section">
+    <h2>Post an update</h2>
+    <form method="post" action="/admin/incidents/<%= incident.id %>/updates">
+      <div class="field">
+        <label for="status">New status</label>
+        <select id="status" name="status">
+          <% statuses.forEach(function (s) { %>
+            <option value="<%= s %>" <%= incident.status === s ? 'selected' : '' %>><%= s.replace('_', ' ') %></option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="field">
+        <label for="body">Message</label>
+        <textarea id="body" name="body" required autofocus></textarea>
+      </div>
+      <div class="actions">
+        <button type="submit">Post update</button>
+      </div>
+    </form>
+  </section>
+<% } else { %>
+  <p class="notice">This <%= incident.impact === 'maintenance' ? 'maintenance window' : 'incident' %> is closed.</p>
+<% } %>
+
+<%- include('../partials/footer') %>

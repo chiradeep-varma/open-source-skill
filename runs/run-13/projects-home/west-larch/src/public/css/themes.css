@@ -1,0 +1,61 @@
+/* Five flat, high-contrast themes — no gradients, no pastel washes. */
+
+:root, [data-theme="paper"] {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --text: #211d18;
+  --text-muted: #6b6156;
+  --border: #e4ddd1;
+  --accent: #b3521f;
+  --success: #3f7d4a;
+  --warning: #a3690a;
+  --danger: #a83b2f;
+}
+
+[data-theme="ink"] {
+  --bg: #15130f;
+  --surface: #1e1b16;
+  --text: #f4efe6;
+  --text-muted: #a89d8d;
+  --border: #332e26;
+  --accent: #e08a4f;
+  --success: #6bbf7b;
+  --warning: #e0a94f;
+  --danger: #e07a6a;
+}
+
+[data-theme="moss"] {
+  --bg: #10160f;
+  --surface: #182018;
+  --text: #eaf1e6;
+  --text-muted: #9db29a;
+  --border: #2c3a2a;
+  --accent: #7fae5a;
+  --success: #7fae5a;
+  --warning: #cfa24a;
+  --danger: #c96a5a;
+}
+
+[data-theme="clay"] {
+  --bg: #f5ece3;
+  --surface: #fffaf4;
+  --text: #3a2a1e;
+  --text-muted: #8a6f57;
+  --border: #e3cdb5;
+  --accent: #ae4b34;
+  --success: #4c7c4a;
+  --warning: #a36a1f;
+  --danger: #ae4b34;
+}
+
+[data-theme="slate"] {
+  --bg: #10141a;
+  --surface: #171d25;
+  --text: #e7edf3;
+  --text-muted: #92a1b3;
+  --border: #29323d;
+  --accent: #5a8fc9;
+  --success: #5aae7c;
+  --warning: #c9a05a;
+  --danger: #c96666;
+}

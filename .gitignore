@@ -1,0 +1,19 @@
+# Artifacts from evaluation runs that shouldn't be committed
+node_modules/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
+.next/
+*.tsbuildinfo
+# Generated clients and native engine binaries (recreated by the project's own tooling)
+**/src/generated/
+*.so.node
+
+# Launcher state and secrets, if a run ever leaves them behind
+.osa/
+.env

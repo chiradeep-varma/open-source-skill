@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trimly — /<%= link.slug %> stats</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1><a href="/">Trimly</a></h1>
+    <form method="post" action="/logout"><button class="link-btn" type="submit">Log out</button></form>
+  </header>
+
+  <main class="container">
+    <a href="/">&larr; All links</a>
+
+    <section class="card">
+      <h2><%= baseUrl %>/<%= link.slug %></h2>
+      <p class="muted truncate" title="<%= link.long_url %>">&rarr; <%= link.long_url %></p>
+      <p>
+        <a href="/api/stats/<%= link.slug %>/export.csv">Export CSV</a>
+        &nbsp;·&nbsp;
+        <a href="/qr/<%= link.slug %>.png" target="_blank" rel="noopener">QR code</a>
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Clicks over time</h2>
+      <canvas id="clicksChart" height="80"></canvas>
+    </section>
+
+    <div class="grid">
+      <section class="card"><h3>Top referrers</h3><table id="tbl-referrers"></table></section>
+      <section class="card"><h3>Browsers</h3><table id="tbl-browsers"></table></section>
+      <section class="card"><h3>Operating systems</h3><table id="tbl-os"></table></section>
+      <section class="card"><h3>Device types</h3><table id="tbl-devices"></table></section>
+      <section class="card"><h3>Countries</h3><table id="tbl-countries"></table></section>
+    </div>
+  </main>
+
+  <script>window.TRIMLY_SLUG = <%- JSON.stringify(link.slug) %>;</script>
+  <script src="/stats.js"></script>
+</body>
+</html>

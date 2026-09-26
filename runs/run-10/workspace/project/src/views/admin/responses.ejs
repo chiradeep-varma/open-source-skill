@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Responses · <%= form.title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <%- include('../partials/admin-nav') %>
+  <div class="container">
+    <p><a href="/admin/forms/<%= form.id %>/edit">&larr; Back to <%= form.title %></a></p>
+    <h1>Responses</h1>
+    <p class="muted"><%= responses.length %> response<%= responses.length === 1 ? '' : 's' %> — no limit, ever.</p>
+
+    <div class="btn-row" style="margin-bottom:16px;">
+      <a class="btn secondary" href="/admin/forms/<%= form.id %>/responses/export.csv">Export CSV</a>
+    </div>
+
+    <% if (responses.length === 0) { %>
+      <p class="muted">No responses yet.</p>
+    <% } else { %>
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Submitted</th>
+              <% questions.forEach(function(q) { %><th><%= q.title %></th><% }); %>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% responses.forEach(function(r) { %>
+              <tr>
+                <td><%= r.submitted_at %></td>
+                <% questions.forEach(function(q) { %>
+                  <td><%= (byResponse.get(r.id) || {})[q.id] || '' %></td>
+                <% }); %>
+                <td>
+                  <form method="post" action="/admin/forms/<%= form.id %>/responses/<%= r.id %>/delete" onsubmit="return confirm('Delete this response?');">
+                    <button type="submit" class="btn small danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

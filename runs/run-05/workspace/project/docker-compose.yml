@@ -1,0 +1,17 @@
+services:
+  trimly:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      BASE_URL: ${BASE_URL:-http://localhost:3000}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET in .env}
+      DATABASE_PATH: /data/trimly.db
+    volumes:
+      - trimly-data:/data
+    restart: unless-stopped
+
+volumes:
+  trimly-data:

@@ -1,0 +1,24 @@
+{
+  "name": "open-source-anything",
+  "version": "1.8.0",
+  "description": "Launcher for projects built with the open-source-anything skill: see them all, start, stop and open them with one click.",
+  "license": "MIT",
+  "bin": {
+    "osa": "skills/open-source-anything/scripts/osa/osa.js"
+  },
+  "files": [
+    "skills/open-source-anything/scripts/osa/osa.js",
+    "skills/open-source-anything/scripts/osa/dashboard.html",
+    "skills/open-source-anything/scripts/osa/lib/"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test skills/open-source-anything/scripts/osa/test/unit.test.js skills/open-source-anything/scripts/osa/test/integration.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiradeep-varma/open-source-skill.git"
+  }
+}

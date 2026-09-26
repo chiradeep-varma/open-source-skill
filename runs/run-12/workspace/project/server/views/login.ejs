@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Sign in · sunny-thicket</title>
+  <%- include('partials/head') %>
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <h1 class="brand">sunny-thicket</h1>
+    <p class="brand-sub">Self-hosted link shortener</p>
+
+    <% if (error) { %>
+      <p class="alert alert-danger" role="alert"><%= error %></p>
+    <% } %>
+
+    <form method="post" action="/login" class="stack">
+      <input type="hidden" name="next" value="<%= next %>" />
+      <label class="field">
+        <span>Username</span>
+        <input type="text" name="username" autocomplete="username" value="<%= adminUser %>" required />
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="current-password" required autofocus />
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    </form>
+  </main>
+</body>
+</html>

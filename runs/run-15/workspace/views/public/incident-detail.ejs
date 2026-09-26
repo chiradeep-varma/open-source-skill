@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+
+<p><a href="/incidents">&larr; All incidents</a></p>
+
+<div class="incident-header">
+  <h1><%= incident.title %></h1>
+  <span class="badge"><span class="dot status-<%= incident.status %>"></span><%= incident.status.replace('_', ' ') %></span>
+</div>
+<span class="impact-tag"><%= incident.impact %> impact</span>
+
+<% if (incident.components.length) { %>
+  <p class="hint">Affected: <%= incident.components.map(function (c) { return c.name; }).join(', ') %></p>
+<% } %>
+
+<ul class="timeline">
+  <% incident.updates.slice().reverse().forEach(function (u) { %>
+    <li>
+      <time><%= new Date(u.created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) %></time>
+      <strong><%= u.status.replace('_', ' ') %></strong> — <%= u.body %>
+    </li>
+  <% }); %>
+</ul>
+
+<%- include('../partials/footer') %>

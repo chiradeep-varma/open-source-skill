@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book {{ event_type.name }} with {{ host.name }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>{{ event_type.name }}</h1>
+    <p class="muted">with {{ host.name }} · {{ event_type.duration_minutes }} minutes · times shown in {{ tz }}</p>
+    {% if event_type.description %}<p>{{ event_type.description }}</p>{% endif %}
+
+    <div id="picker">
+      {% for day_label, slots in days.items() %}
+        <div class="day-group">
+          <div class="day-label">{{ day_label }}</div>
+          <div class="slot-grid">
+            {% for slot in slots %}
+              <button type="button" class="slot-btn" data-iso="{{ slot.iso }}">{{ slot.label }}</button>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <p class="muted">No available times in the next {{ event_type.booking_window_days }} days.</p>
+      {% endfor %}
+    </div>
+
+    <form id="book-form" method="post" action="/{{ host.slug }}/{{ event_type.slug }}/book" style="display:none;">
+      <input type="hidden" name="start" id="start-input">
+      <input type="hidden" name="tz" value="{{ tz }}">
+      <p><strong id="chosen-label"></strong> <a href="#" id="change-time">change</a></p>
+      <label for="invitee_name">Your name</label>
+      <input type="text" id="invitee_name" name="invitee_name" required>
+      <label for="invitee_email">Your email</label>
+      <input type="email" id="invitee_email" name="invitee_email" required>
+      <button type="submit">Confirm booking</button>
+    </form>
+  </main>
+  <script>
+    var picker = document.getElementById("picker");
+    var form = document.getElementById("book-form");
+    var startInput = document.getElementById("start-input");
+    var chosenLabel = document.getElementById("chosen-label");
+
+    picker.addEventListener("click", function (e) {
+      if (!e.target.classList.contains("slot-btn")) return;
+      startInput.value = e.target.getAttribute("data-iso");
+      chosenLabel.textContent = e.target.textContent;
+      picker.style.display = "none";
+      form.style.display = "block";
+    });
+
+    document.getElementById("change-time").addEventListener("click", function (e) {
+      e.preventDefault();
+      form.style.display = "none";
+      picker.style.display = "block";
+    });
+  </script>
+</body>
+</html>
