@@ -130,3 +130,9 @@ test('friendlyPath shortens the home folder on macOS and Linux only', () => {
   assert.equal(friendlyPath('/Users/samantha/x', 'darwin', '/Users/sam'), '/Users/samantha/x');
   assert.equal(friendlyPath('C:\\Users\\sam\\x', 'win32', 'C:\\Users\\sam'), 'C:\\Users\\sam\\x');
 });
+
+test('a missing browser or file-manager command reports false instead of crashing', async () => {
+  const { launchDetached } = require('../lib/dashboard');
+  assert.equal(await launchDetached('surely-not-an-installed-opener', ['http://localhost:1/']), false);
+  assert.equal(await launchDetached(process.execPath, ['-e', '']), true);
+});

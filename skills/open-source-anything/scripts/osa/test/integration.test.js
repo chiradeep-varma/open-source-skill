@@ -116,6 +116,12 @@ test('dashboard lists projects and refuses actions without the token or from oth
     }
     assert.equal(state.state, 'running');
     assert.ok(state.reveal.ADMIN_PASSWORD);
+    // Folder answers with the path, so the page can show it when no file manager opens,
+    // and the launcher keeps running either way.
+    const folder = JSON.parse((await request(port, 'POST', '/api/projects/amber-otter/folder', { 'x-osa-token': token })).body);
+    assert.equal(folder.path, path.join(home, 'amber-otter'));
+    assert.equal(typeof folder.ok, 'boolean');
+    assert.equal((await request(port, 'GET', '/api/ping')).status, 200);
     assert.equal((await request(port, 'POST', '/api/stop-all', { 'x-osa-token': token })).status, 200);
     assert.equal(JSON.parse((await request(port, 'GET', '/api/projects')).body).projects[0].state, 'stopped');
   } finally {

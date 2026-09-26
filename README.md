@@ -35,9 +35,13 @@ What it rebuilds is **the product, not the company**. For a URL shortener, that 
 - 🏗️ **Builds for self-hosters.** One-command start, few moving parts, open formats, an importer from the product you're leaving, no plans or paywalls, and honest parity tracking.
 - ▶️ **One click to run.** Every project lands in one folder (`~/Documents/open-source-anything/`) and shows up in a small launcher page: press **Start** and it installs what's needed, fills in secrets, starts the app and shows your sign-in details. No Docker, no terminal.
 - 🚀 **Ships it properly.** README, docs, CI, community files and packaging. You decide when to publish.
-- 🧪 **Tested in public.** 11 logged test runs, from first-reply checks to full builds of a link shortener, a scheduler, Linear, Figma, the Nest thermostat, Typeform and Trello. Each one is fact-checked claim by claim and each drove a skill fix. See [`runs/`](runs/).
+- 🧪 **Tested in public.** 15 logged test runs, from first-reply checks to full builds of a link shortener, a scheduler, Linear, Figma, the Nest thermostat, Typeform, Trello, a link-in-bio page, a group poll and a status page. Each one is fact-checked claim by claim and each drove a skill fix. See [`runs/`](runs/).
 
 ## Install
+
+There are two parts: the **skill**, which tells Claude how to build, and the **launcher**, which runs what it builds on your computer.
+
+### 1. The skill
 
 <details open>
 <summary><b>Claude Code: plugin marketplace (recommended)</b></summary>
@@ -68,6 +72,27 @@ cp -r open-source-skill/skills/open-source-anything .claude/skills/       # this
 Custom skills require a plan with code execution enabled.
 </details>
 
+### 2. The launcher (once per computer)
+
+1. Install [Node.js](https://nodejs.org) (the LTS version) if you don't have it. It's the only thing the launcher needs.
+2. Open a terminal and run:
+
+   ```bash
+   npx github:chiradeep-varma/open-source-skill setup
+   ```
+
+This creates your **projects folder** and puts a **Start projects** file in it:
+
+| | Projects folder | Double-click this |
+|---|---|---|
+| macOS | `~/Documents/open-source-anything/` | `Start projects.command` |
+| Windows | `Documents\open-source-anything\` | `Start projects.cmd` |
+| Linux | `~/Documents/open-source-anything/` | `start-projects.sh` |
+
+If you have no Documents folder, it uses `open-source-anything` in your home folder instead. `npx github:chiradeep-varma/open-source-skill where` prints the exact location.
+
+The launcher copies itself into that folder, so nothing is installed globally. If Claude builds a project on your own computer, it runs this setup for you the first time.
+
 ## Usage
 
 Describe what you want. The skill triggers on its own:
@@ -84,25 +109,52 @@ You can also invoke it directly in Claude Code with `/open-source-anything` (or 
 
 ## Run your projects
 
-Everything the skill builds is saved, by default, in one folder: `~/Documents/open-source-anything/`, one subfolder per project. The folder includes a **Start projects** file. Double-click it to get this page:
+**1. Put the project in your projects folder.** Each project is one folder inside `open-source-anything/`, for example `open-source-anything/amber-otter/`.
+- Projects Claude builds on your computer are saved there automatically.
+- If Claude built it somewhere else, such as a cloud session on claude.ai, get the project folder onto your computer (download it, or clone its repository) and move it into `open-source-anything/`. It appears on the launcher page within a few seconds.
+- Any folder with an `osa.json` file inside shows up in the launcher. To keep a project somewhere else, run `npx github:chiradeep-varma/open-source-skill add <path to the project>` once.
+
+**2. Double-click Start projects** in the projects folder. A small terminal window opens; keep it open while you use the launcher. Your browser shows this page, usually at `http://localhost:4747`:
 
 ![The project launcher](docs/launcher/projects.png)
 
-- **Start** installs what the project needs (first time only), generates its secrets and passwords, picks a free port, and waits until it's up.
-- **Open** takes you to it, and the sign-in details are shown right there.
-- **Stop** ends it cleanly. Projects keep running if you close the page.
-- If something fails, the launcher says so in plain words, with the log one click away.
+**3. Press Start** next to a project. The first start installs what the project needs, which can take a few minutes. After that it starts in seconds.
 
-It needs only [Node.js](https://nodejs.org). No Docker and no per-project setup. Every project also has plain `install` and `start` commands, and Docker as an option, for people who prefer those.
+**4. Press Open** once it says *Running at localhost:…*. If the project has a sign-in, the details are shown under it, with a **Copy** button.
 
-From a terminal, the same launcher is available as a command:
+**5. Press Stop** when you're done, or **Stop all running projects** at the bottom of the page. Projects keep running when you close the page or the terminal window, so stop them from here.
+
+| On the page | What it does |
+|---|---|
+| **Start** / **Try again** | Installs what's needed (first time only), fills in secrets and passwords, picks a free port, and starts the project |
+| **Open** | Opens the running project in your browser |
+| **Stop** | Stops the project |
+| **Folder** | Opens the project's folder |
+| **Log** | Shows the project's latest output, which is useful when something goes wrong |
+| **Open folder** (top) | Opens your projects folder |
+
+**If something goes wrong:**
+- **"Node.js is needed to run the launcher"**: install [Node.js](https://nodejs.org) (LTS) and double-click again.
+- **"Couldn't start"**: open **Details** or **Log** under the project. The message says what's missing, for example Python for a Python project, and where to get it. Then press **Try again**.
+- **Linux opens the file in a text editor**: right-click it and choose **Run as a Program**, or run `./start-projects.sh` in a terminal in that folder.
+- **The browser doesn't open**: go to the address shown in the terminal window, usually `http://localhost:4747`.
+
+Every project can also run without the launcher: its README lists the install and start commands, with Docker as an option.
+
+<details>
+<summary><b>From a terminal</b></summary>
+
+The same launcher works as a command:
 
 ```bash
-npx github:chiradeep-varma/open-source-skill           # open the launcher page
-npx github:chiradeep-varma/open-source-skill list      # or: start <name>, stop <name>, logs <name>
+npx github:chiradeep-varma/open-source-skill               # open the launcher page
+npx github:chiradeep-varma/open-source-skill list          # list projects and whether they're running
+npx github:chiradeep-varma/open-source-skill start <name>  # also: stop <name>, stop --all, open <name>, logs <name>
+npx github:chiradeep-varma/open-source-skill where         # print the projects folder
 ```
 
-It's a single dependency-free Node script that ships inside the skill (`scripts/osa/`), so Claude uses it too: every build is test-started from a fresh copy through the launcher before it's handed over. [Launcher docs](skills/open-source-anything/scripts/osa/README.md).
+It's a single dependency-free Node script that ships inside the skill (`scripts/osa/`). Claude uses it too: every build is test-started from a fresh copy through the launcher before it's handed over. See the [launcher docs](skills/open-source-anything/scripts/osa/README.md) for every command and the `osa.json` format.
+</details>
 
 ## How it works
 

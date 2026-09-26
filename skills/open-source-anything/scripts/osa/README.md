@@ -18,14 +18,13 @@
 
 ## Using it
 
-```bash
-# Once: create the projects folder and its double-click launcher
-node scripts/osa/osa.js setup
+The step-by-step guide, with what each button does and what to do when something goes wrong, is in the main README: [Install the launcher](../../../../README.md#2-the-launcher-once-per-computer) and [Run your projects](../../../../README.md#run-your-projects). In short:
 
-# Or run it directly from GitHub, no install
-npx github:chiradeep-varma/open-source-skill            # opens the launcher page
-npx github:chiradeep-varma/open-source-skill list
-```
+1. Once per computer, with [Node.js](https://nodejs.org) installed: `npx github:chiradeep-varma/open-source-skill setup`.
+2. Put each project's folder in the projects folder, which `npx github:chiradeep-varma/open-source-skill where` prints.
+3. Double-click **Start projects** in that folder, then press **Start** and **Open** next to a project.
+
+Every command, from a terminal:
 
 | Command | What it does |
 |---|---|

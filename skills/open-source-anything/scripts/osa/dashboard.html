@@ -127,7 +127,7 @@ function statusLine(p) {
 function actions(p) {
   const act = (path) => async (e) => { e.currentTarget.disabled = true; await post(path); last = ''; refresh(); };
   const base = `/api/projects/${encodeURIComponent(p.id)}`;
-  const folder = $('button', { class: 'quiet', type: 'button', onclick: () => post(`${base}/folder`) }, 'Folder');
+  const folder = $('button', { class: 'quiet', type: 'button', onclick: () => showFolder(`${base}/folder`) }, 'Folder');
   if (p.state === 'running') return [
     $('a', { class: 'button primary', href: p.url, target: '_blank', rel: 'noopener' }, 'Open'),
     $('button', { class: 'secondary', type: 'button', onclick: act(`${base}/stop`) }, 'Stop'), folder];
@@ -194,7 +194,12 @@ async function refresh() {
   document.getElementById('footer').hidden = !data.projects.some((p) => p.state === 'running');
 }
 
-document.getElementById('open-home').addEventListener('click', () => post('/api/open-home'));
+// Opens a folder on this computer; if no file manager can be started, says where it is instead.
+async function showFolder(path) {
+  const r = await post(path);
+  if (!r.ok && r.path) window.alert(`Couldn't open the folder automatically. It's here:\n\n${r.path}`);
+}
+document.getElementById('open-home').addEventListener('click', () => showFolder('/api/open-home'));
 document.getElementById('stop-all').addEventListener('click', async (e) => { e.currentTarget.disabled = true; await post('/api/stop-all'); e.currentTarget.disabled = false; last = ''; refresh(); });
 refresh();
 setInterval(refresh, 2000);

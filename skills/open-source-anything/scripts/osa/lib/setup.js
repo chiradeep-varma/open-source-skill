@@ -68,6 +68,9 @@ After that, starting takes seconds.
 
 If a project needs a password to sign in, the launcher shows it next to the project.
 
+To add a project that was built somewhere else (for example in a cloud session),
+move its folder into this folder. It appears in the launcher within a few seconds.
+
 The launcher needs Node.js (https://nodejs.org, the LTS version). Some projects also
 need Python or another tool; the launcher tells you if one is missing.
 
