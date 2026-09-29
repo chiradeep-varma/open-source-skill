@@ -92,7 +92,16 @@ function createDashboard({ home }) {
     }
   }
 
-  const server = http.createServer(async (req, res) => {
+  // Project names arrive percent-encoded in the URL; a malformed one is simply not found.
+  function decodeId(raw) {
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  async function handle(req, res) {
     const host = req.headers.host || '';
     const addr = server.address();
     const allowed = [`localhost:${addr.port}`, `127.0.0.1:${addr.port}`];
@@ -114,7 +123,7 @@ function createDashboard({ home }) {
 
     const logMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/log$/);
     if (req.method === 'GET' && logMatch) {
-      const p = find(decodeURIComponent(logMatch[1]));
+      const p = find(decodeId(logMatch[1]));
       return p ? send(200, runner.logs(p.dir, 200)) : send(404, { error: 'Not found' });
     }
 
@@ -133,7 +142,7 @@ function createDashboard({ home }) {
 
     const m = url.pathname.match(/^\/api\/projects\/([^/]+)\/(start|stop|open|folder)$/);
     if (!m) return send(404, { error: 'Not found' });
-    const p = find(decodeURIComponent(m[1]));
+    const p = find(decodeId(m[1]));
     if (!p || !p.manifest) return send(404, { error: 'Project not found' });
 
     switch (m[2]) {
@@ -152,6 +161,15 @@ function createDashboard({ home }) {
       case 'folder':
         return send(200, { ok: await openExternal(p.dir), path: p.dir });
     }
+  }
+
+  // Whatever goes wrong with one request (an unreadable folder, a bad address sent by
+  // another web page), answer with an error and keep the launcher running.
+  const server = http.createServer((req, res) => {
+    handle(req, res).catch(() => {
+      if (!res.headersSent) res.writeHead(500, { 'content-type': 'application/json', 'cache-control': 'no-store' });
+      res.end(JSON.stringify({ error: 'Something went wrong in the launcher. Try again, or restart it.' }));
+    });
   });
 
   return { server, token };

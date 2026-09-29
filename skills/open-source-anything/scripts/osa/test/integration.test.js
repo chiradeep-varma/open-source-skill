@@ -169,3 +169,35 @@ test('an app listening only on IPv6 localhost counts as up', async (t) => {
     server.close();
   }
 });
+
+test('a malformed address or an unexpected error gets an error reply, and the launcher keeps running', async () => {
+  const home = tempHome();
+  makeProject(home, 'amber-otter');
+  const { server, token } = createDashboard({ home });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const { port } = server.address();
+  // Unlike the token-checked actions, any web page can make the browser send this one.
+  const other = { host: `127.0.0.1:${port}` };
+  try {
+    assert.equal((await request(port, 'GET', '/api/projects/%E0%A4%A/log', other)).status, 404);
+    assert.equal((await request(port, 'POST', '/api/projects/%E0%A4%A/start', { 'x-osa-token': token })).status, 404);
+    assert.equal((await request(port, 'GET', '/api/ping')).status, 200);
+  } finally {
+    server.close();
+  }
+
+  // A projects folder that can't be read (here, a file where the folder should be).
+  const notAFolder = path.join(tempHome(), 'file');
+  fs.writeFileSync(notAFolder, '');
+  const broken = createDashboard({ home: notAFolder });
+  await new Promise((r) => broken.server.listen(0, '127.0.0.1', r));
+  const brokenPort = broken.server.address().port;
+  try {
+    const res = await request(brokenPort, 'GET', '/api/projects');
+    assert.equal(res.status, 500);
+    assert.match(JSON.parse(res.body).error, /Something went wrong/);
+    assert.equal((await request(brokenPort, 'GET', '/api/ping')).status, 200);
+  } finally {
+    broken.server.close();
+  }
+});
